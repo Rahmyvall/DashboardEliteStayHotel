@@ -49,447 +49,211 @@
 
                     <li class="menu-title">Menu</li>
 
+                    <!-- Dashboard -->
                     <li class="menu-item">
-                        <a href="index.html" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-home-smile"></i></span>
-                            <span class="menu-text"> Dashboards </span>
-                            <span class="badge bg-primary rounded ms-auto">01</span>
+                        <a href="dashboard.html" class="menu-link waves-effect waves-light">
+                            <span class="menu-icon">
+                                <i class="bx bx-home-smile"></i>
+                            </span>
+
+                            <span class="menu-text" data-key="dashboard">
+                                Dashboard
+                            </span>
                         </a>
                     </li>
 
-                    <li class="menu-title">Custom</li>
+                    <!-- Data Master -->
+                    <li class="menu-title">Data Master</li>
 
                     <li class="menu-item">
-                        <a href="apps-calendar.html" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-calendar"></i></span>
-                            <span class="menu-text"> Calendar </span>
-                        </a>
-                    </li>
+                        <a href="#menuMaster" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
 
-                    <li class="menu-item">
-                        <a href="#menuExpages" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-file"></i></span>
-                            <span class="menu-text"> Extra Pages </span>
+                            <span class="menu-icon">
+                                <i class="bx bx-data"></i>
+                            </span>
+
+                            <span class="menu-text" data-key="data_master">
+                                Master Data
+                            </span>
+
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="menuExpages">
+
+                        <div class="collapse" id="menuMaster">
                             <ul class="sub-menu">
+
                                 <li class="menu-item">
-                                    <a href="pages-starter.html" class="menu-link">
-                                        <span class="menu-text">Starter</span>
+                                    <a href="users.html" class="menu-link">
+                                        <span class="menu-text" data-key="users">
+                                            Users
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="pages-invoice.html" class="menu-link">
-                                        <span class="menu-text">Invoice</span>
+                                    <a href="pelanggan.html" class="menu-link">
+                                        <span class="menu-text" data-key="pelanggan">
+                                            Pelanggan
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="pages-login.html" class="menu-link">
-                                        <span class="menu-text">Log In</span>
+                                    <a href="tipe_kamar.html" class="menu-link">
+                                        <span class="menu-text" data-key="tipe_kamar">
+                                            Tipe Kamar
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="pages-register.html" class="menu-link">
-                                        <span class="menu-text">Register</span>
+                                    <a href="kamar.html" class="menu-link">
+                                        <span class="menu-text" data-key="kamar">
+                                            Kamar
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="pages-recoverpw.html" class="menu-link">
-                                        <span class="menu-text">Recover Password</span>
+                                    <a href="fasilitas.html" class="menu-link">
+                                        <span class="menu-text" data-key="fasilitas">
+                                            Fasilitas
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="pages-lock-screen.html" class="menu-link">
-                                        <span class="menu-text">Lock Screen</span>
+                                    <a href="tipe_kamar_fasilitas.html" class="menu-link">
+                                        <span class="menu-text" data-key="tipe_kamar_fasilitas">
+                                            Tipe Kamar Fasilitas
+                                        </span>
                                     </a>
                                 </li>
-                                <li class="menu-item">
-                                    <a href="pages-404.html" class="menu-link">
-                                        <span class="menu-text">Error 404</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="pages-500.html" class="menu-link">
-                                        <span class="menu-text">Error 500</span>
-                                    </a>
-                                </li>
+
                             </ul>
                         </div>
                     </li>
 
-                    <li class="menu-item">
-                        <a href="#menuLayouts" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-layout"></i></span>
-                            <span class="menu-text"> Layouts </span>
-                            <span class="badge bg-blue ms-auto">New</span>
-                        </a>
-                        <div class="collapse" id="menuLayouts">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="layout-horizontal.html" class="menu-link">
-                                        <span class="menu-text">Horizontal</span>
-                                    </a>
-                                </li>
-
-                                <li class="menu-item">
-                                    <a href="layout-sidenav-light.html" class="menu-link">
-                                        <span class="menu-text">Sidenav Light</span>
-                                    </a>
-                                </li>
-
-                                <li class="menu-item">
-                                    <a href="layout-sidenav-dark.html" class="menu-link">
-                                        <span class="menu-text">Sidenav Dark</span>
-                                    </a>
-                                </li>
-
-                                <li class="menu-item">
-                                    <a href="layout-topbar-dark.html" class="menu-link">
-                                        <span class="menu-text">Topbar Dark</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="menu-title">Components</li>
+                    <!-- Transaksi -->
+                    <li class="menu-title">Transaksi</li>
 
                     <li class="menu-item">
-                        <a href="#menuComponentsui" data-bs-toggle="collapse"
-                            class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-cookie"></i></span>
-                            <span class="menu-text"> UI Elements </span>
+                        <a href="#menuTransaksi" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
+
+                            <span class="menu-icon">
+                                <i class="bx bx-cart"></i>
+                            </span>
+
+                            <span class="menu-text" data-key="transaksi">
+                                Reservasi
+                            </span>
+
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="menuComponentsui">
+
+                        <div class="collapse" id="menuTransaksi">
                             <ul class="sub-menu">
+
                                 <li class="menu-item">
-                                    <a href="ui-alerts.html" class="menu-link">
-                                        <span class="menu-text">Alerts</span>
+                                    <a href="reservasi.html" class="menu-link">
+                                        <span class="menu-text" data-key="reservasi">
+                                            Reservasi
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="ui-buttons.html" class="menu-link">
-                                        <span class="menu-text">Buttons</span>
+                                    <a href="detail_reservasi.html" class="menu-link">
+                                        <span class="menu-text" data-key="detail_reservasi">
+                                            Detail Reservasi
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="ui-cards.html" class="menu-link">
-                                        <span class="menu-text">Cards</span>
+                                    <a href="pembayaran.html" class="menu-link">
+                                        <span class="menu-text" data-key="pembayaran">
+                                            Pembayaran
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="ui-carousel.html" class="menu-link">
-                                        <span class="menu-text">Carousel</span>
+                                    <a href="checkin_checkout.html" class="menu-link">
+                                        <span class="menu-text" data-key="checkin_checkout">
+                                            Checkin Checkout
+                                        </span>
                                     </a>
                                 </li>
-                                <li class="menu-item">
-                                    <a href="ui-dropdowns.html" class="menu-link">
-                                        <span class="menu-text">Dropdowns</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-video.html" class="menu-link">
-                                        <span class="menu-text">Embed Video</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-general.html" class="menu-link">
-                                        <span class="menu-text">General UI</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-grid.html" class="menu-link">
-                                        <span class="menu-text">Grid</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-images.html" class="menu-link">
-                                        <span class="menu-text">Images</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-list-group.html" class="menu-link">
-                                        <span class="menu-text">List Group</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-modals.html" class="menu-link">
-                                        <span class="menu-text">Modals</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-offcanvas.html" class="menu-link">
-                                        <span class="menu-text">Offcanvas</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-placeholders.html" class="menu-link">
-                                        <span class="menu-text">Placeholders</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-progress.html" class="menu-link">
-                                        <span class="menu-text">Progress</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-spinners.html" class="menu-link">
-                                        <span class="menu-text">Spinners</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-tabs-accordions.html" class="menu-link">
-                                        <span class="menu-text">Tabs & Accordions</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-tooltips-popovers.html" class="menu-link">
-                                        <span class="menu-text">Tooltips & Popovers</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="ui-typography.html" class="menu-link">
-                                        <span class="menu-text">Typography</span>
-                                    </a>
-                                </li>
+
                             </ul>
                         </div>
                     </li>
 
-                    <li class="menu-item">
-                        <a href="#menuExtendedui" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-briefcase-alt-2"></i></span>
-                            <span class="menu-text"> Components </span>
-                            <span class="badge bg-info ms-auto">Hot</span>
-                        </a>
-                        <div class="collapse" id="menuExtendedui">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="components-range-slider.html" class="menu-link">
-                                        <span class="menu-text">Range Slider</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="components-sweet-alert.html" class="menu-link">
-                                        <span class="menu-text">Sweet Alert</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="components-loading-buttons.html" class="menu-link">
-                                        <span class="menu-text">Loading Buttons</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                    <!-- Lainnya -->
+                    <li class="menu-title">Lainnya</li>
 
                     <li class="menu-item">
-                        <a href="#menuIcons" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-aperture"></i></span>
-                            <span class="menu-text"> Icons </span>
+                        <a href="#menuLainnya" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
+
+                            <span class="menu-icon">
+                                <i class="bx bx-cog"></i>
+                            </span>
+
+                            <span class="menu-text" data-key="fitur_lainnya">
+                                Fitur Lainnya
+                            </span>
+
                             <span class="menu-arrow"></span>
                         </a>
-                        <div class="collapse" id="menuIcons">
+
+                        <div class="collapse" id="menuLainnya">
                             <ul class="sub-menu">
+
                                 <li class="menu-item">
-                                    <a href="icons-feather.html" class="menu-link">
-                                        <span class="menu-text">Feather Icons</span>
+                                    <a href="review.html" class="menu-link">
+                                        <span class="menu-text" data-key="review">
+                                            Review
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="icons-mdi.html" class="menu-link">
-                                        <span class="menu-text">Material Design Icons</span>
+                                    <a href="promo.html" class="menu-link">
+                                        <span class="menu-text" data-key="promo">
+                                            Promo
+                                        </span>
                                     </a>
                                 </li>
+
                                 <li class="menu-item">
-                                    <a href="icons-dripicons.html" class="menu-link">
-                                        <span class="menu-text">Dripicons</span>
+                                    <a href="reservasi_promo.html" class="menu-link">
+                                        <span class="menu-text" data-key="reservasi_promo">
+                                            Reservasi Promo
+                                        </span>
                                     </a>
                                 </li>
+
+                                <li class="menu-item">
+                                    <a href="log_aktivitas.html" class="menu-link">
+                                        <span class="menu-text" data-key="log_aktivitas">
+                                            Log Aktivitas
+                                        </span>
+                                    </a>
+                                </li>
+
+                                <li class="menu-item">
+                                    <a href="notifikasi.html" class="menu-link">
+                                        <span class="menu-text" data-key="notifikasi">
+                                            Notifikasi
+                                        </span>
+                                    </a>
+                                </li>
+
                             </ul>
                         </div>
                     </li>
 
-                    <li class="menu-item">
-                        <a href="#menuForms" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bxs-eraser"></i></span>
-                            <span class="menu-text"> Forms </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="menuForms">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="forms-elements.html" class="menu-link">
-                                        <span class="menu-text">General Elements</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="forms-advanced.html" class="menu-link">
-                                        <span class="menu-text">Advanced</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="forms-validation.html" class="menu-link">
-                                        <span class="menu-text">Validation</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="forms-quilljs.html" class="menu-link">
-                                        <span class="menu-text">Editor</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="forms-file-uploads.html" class="menu-link">
-                                        <span class="menu-text">File Uploads</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#menuTables" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-table"></i></span>
-                            <span class="menu-text"> Tables </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="menuTables">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="tables-basic.html" class="menu-link">
-                                        <span class="menu-text">Basic Tables</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="tables-datatables.html" class="menu-link">
-                                        <span class="menu-text">Data Tables</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#menuCharts" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-doughnut-chart"></i></span>
-                            <span class="menu-text"> Charts </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="menuCharts">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="charts-apex.html" class="menu-link">
-                                        <span class="menu-text">Apex Charts</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="charts-morris.html" class="menu-link">
-                                        <span class="menu-text">Morris Charts</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="charts-chartjs.html" class="menu-link">
-                                        <span class="menu-text">Chartjs Charts</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#menuMaps" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-map-alt"></i></span>
-                            <span class="menu-text"> Maps </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="menuMaps">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="maps-google.html" class="menu-link">
-                                        <span class="menu-text">Google Maps</span>
-                                    </a>
-                                </li>
-                                <li class="menu-item">
-                                    <a href="maps-vector.html" class="menu-link">
-                                        <span class="menu-text">Vector Maps</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-
-                    <li class="menu-item">
-                        <a href="#menuMultilevel" data-bs-toggle="collapse" class="menu-link waves-effect waves-light">
-                            <span class="menu-icon"><i class="bx bx-share-alt"></i></span>
-                            <span class="menu-text"> Multi Level </span>
-                            <span class="menu-arrow"></span>
-                        </a>
-                        <div class="collapse" id="menuMultilevel">
-                            <ul class="sub-menu">
-                                <li class="menu-item">
-                                    <a href="#menuMultilevel2" data-bs-toggle="collapse"
-                                        class="menu-link waves-effect waves-light">
-                                        <span class="menu-text"> Second Level </span>
-                                        <span class="menu-arrow"></span>
-                                    </a>
-                                    <div class="collapse" id="menuMultilevel2">
-                                        <ul class="sub-menu">
-                                            <li class="menu-item">
-                                                <a href="javascript: void(0);" class="menu-link">
-                                                    <span class="menu-text">Item 1</span>
-                                                </a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a href="javascript: void(0);" class="menu-link">
-                                                    <span class="menu-text">Item 2</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-
-                                <li class="menu-item">
-                                    <a href="#menuMultilevel3" data-bs-toggle="collapse"
-                                        class="menu-link waves-effect waves-light">
-                                        <span class="menu-text">Third Level</span>
-                                        <span class="menu-arrow"></span>
-                                    </a>
-                                    <div class="collapse" id="menuMultilevel3">
-                                        <ul class="sub-menu">
-                                            <li class="menu-item">
-                                                <a href="javascript: void(0);" class="menu-link">
-                                                    <span class="menu-text">Item 1</span>
-                                                </a>
-                                            </li>
-                                            <li class="menu-item">
-                                                <a href="#menuMultilevel4" data-bs-toggle="collapse"
-                                                    class="menu-link waves-effect waves-light">
-                                                    <span class="menu-text">Item 2</span>
-                                                    <span class="menu-arrow"></span>
-                                                </a>
-                                                <div class="collapse" id="menuMultilevel4">
-                                                    <ul class="sub-menu">
-                                                        <li class="menu-item">
-                                                            <a href="javascript: void(0);" class="menu-link">
-                                                                <span class="menu-text">Item 1</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="menu-item">
-                                                            <a href="javascript: void(0);" class="menu-link">
-                                                                <span class="menu-text">Item 2</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -928,86 +692,191 @@
         const currentFlag = document.getElementById("current-language-flag");
         const currentText = document.getElementById("current-language-text");
 
+        // =========================
+        // TRANSLATIONS
+        // =========================
         const translations = {
 
+            // ENGLISH
             en: {
-                dashboard: "Dashboards",
-                calendar: "Calendar",
-                forms: "Forms",
-                tables: "Tables",
-                charts: "Charts",
-                maps: "Maps",
-                components: "Components",
-                ui: "UI Elements",
-                extra: "Extra Pages"
-            },
+                menu: "Menu",
+                data_master: "Master Data",
+                transaksi: "Transactions",
+                lainnya: "Others",
+                fitur_lainnya: "Other Features",
 
-            id: {
-                dashboard: "Dasbor",
-                calendar: "Kalender",
-                forms: "Formulir",
-                tables: "Tabel",
-                charts: "Grafik",
-                maps: "Peta",
-                components: "Komponen",
-                ui: "Elemen UI",
-                extra: "Halaman Tambahan"
-            },
-
-            de: {
-                dashboard: "Instrumententafel",
-                calendar: "Kalender",
-                forms: "Formulare",
-                tables: "Tabellen",
-                charts: "Diagramme",
-                maps: "Karten",
-                components: "Komponenten",
-                ui: "UI Elemente",
-                extra: "Zusätzliche Seiten"
-            },
-
-            es: {
-                dashboard: "Panel",
-                calendar: "Calendario",
-                forms: "Formularios",
-                tables: "Tablas",
-                charts: "Gráficos",
-                maps: "Mapas",
-                components: "Componentes",
-                ui: "Elementos UI",
-                extra: "Páginas Extra"
-            },
-
-            it: {
                 dashboard: "Dashboard",
-                calendar: "Calendario",
-                forms: "Moduli",
-                tables: "Tabelle",
-                charts: "Grafici",
-                maps: "Mappe",
-                components: "Componenti",
-                ui: "Elementi UI",
-                extra: "Pagine Extra"
+                users: "Users",
+                pelanggan: "Customers",
+                tipe_kamar: "Room Types",
+                kamar: "Rooms",
+                fasilitas: "Facilities",
+                tipe_kamar_fasilitas: "Room Type Facilities",
+
+                reservasi: "Reservations",
+                detail_reservasi: "Reservation Details",
+                pembayaran: "Payments",
+                checkin_checkout: "Check In / Check Out",
+
+                review: "Reviews",
+                promo: "Promos",
+                reservasi_promo: "Promo Reservations",
+                log_aktivitas: "Activity Logs",
+                notifikasi: "Notifications"
             },
 
+            // INDONESIA
+            id: {
+                menu: "Menu",
+                data_master: "Data Master",
+                transaksi: "Transaksi",
+                lainnya: "Lainnya",
+                fitur_lainnya: "Fitur Lainnya",
+
+                dashboard: "Dashboard",
+                users: "Users",
+                pelanggan: "Pelanggan",
+                tipe_kamar: "Tipe Kamar",
+                kamar: "Kamar",
+                fasilitas: "Fasilitas",
+                tipe_kamar_fasilitas: "Tipe Kamar Fasilitas",
+
+                reservasi: "Reservasi",
+                detail_reservasi: "Detail Reservasi",
+                pembayaran: "Pembayaran",
+                checkin_checkout: "Check In / Check Out",
+
+                review: "Review",
+                promo: "Promo",
+                reservasi_promo: "Reservasi Promo",
+                log_aktivitas: "Log Aktivitas",
+                notifikasi: "Notifikasi"
+            },
+
+            // GERMAN
+            de: {
+                menu: "Menü",
+                data_master: "Masterdaten",
+                transaksi: "Transaktionen",
+                lainnya: "Andere",
+                fitur_lainnya: "Weitere Funktionen",
+
+                dashboard: "Instrumententafel",
+                users: "Benutzer",
+                pelanggan: "Kunden",
+                tipe_kamar: "Zimmertypen",
+                kamar: "Zimmer",
+                fasilitas: "Einrichtungen",
+                tipe_kamar_fasilitas: "Zimmertyp Einrichtungen",
+
+                reservasi: "Reservierungen",
+                detail_reservasi: "Reservierungsdetails",
+                pembayaran: "Zahlungen",
+                checkin_checkout: "Check-In / Check-Out",
+
+                review: "Bewertungen",
+                promo: "Promo",
+                reservasi_promo: "Promo Reservierungen",
+                log_aktivitas: "Aktivitätsprotokoll",
+                notifikasi: "Benachrichtigungen"
+            },
+
+            // SPANISH
+            es: {
+                menu: "Menú",
+                data_master: "Datos Maestros",
+                transaksi: "Transacciones",
+                lainnya: "Otros",
+                fitur_lainnya: "Otras Funciones",
+
+                dashboard: "Panel",
+                users: "Usuarios",
+                pelanggan: "Clientes",
+                tipe_kamar: "Tipos de Habitación",
+                kamar: "Habitaciones",
+                fasilitas: "Instalaciones",
+                tipe_kamar_fasilitas: "Instalaciones del Tipo de Habitación",
+
+                reservasi: "Reservas",
+                detail_reservasi: "Detalles de Reserva",
+                pembayaran: "Pagos",
+                checkin_checkout: "Check In / Check Out",
+
+                review: "Reseñas",
+                promo: "Promociones",
+                reservasi_promo: "Reservas Promocionales",
+                log_aktivitas: "Registro de Actividades",
+                notifikasi: "Notificaciones"
+            },
+
+            // ITALIAN
+            it: {
+                menu: "Menu",
+                data_master: "Dati Principali",
+                transaksi: "Transazioni",
+                lainnya: "Altro",
+                fitur_lainnya: "Altre Funzioni",
+
+                dashboard: "Dashboard",
+                users: "Utenti",
+                pelanggan: "Clienti",
+                tipe_kamar: "Tipi di Camera",
+                kamar: "Camere",
+                fasilitas: "Servizi",
+                tipe_kamar_fasilitas: "Servizi Tipo Camera",
+
+                reservasi: "Prenotazioni",
+                detail_reservasi: "Dettagli Prenotazione",
+                pembayaran: "Pagamenti",
+                checkin_checkout: "Check In / Check Out",
+
+                review: "Recensioni",
+                promo: "Promozioni",
+                reservasi_promo: "Prenotazioni Promo",
+                log_aktivitas: "Registro Attività",
+                notifikasi: "Notifiche"
+            },
+
+            // RUSSIAN
             ru: {
+                menu: "Меню",
+                data_master: "Основные Данные",
+                transaksi: "Транзакции",
+                lainnya: "Другое",
+                fitur_lainnya: "Другие Функции",
+
                 dashboard: "Панель",
-                calendar: "Календарь",
-                forms: "Формы",
-                tables: "Таблицы",
-                charts: "Графики",
-                maps: "Карты",
-                components: "Компоненты",
-                ui: "UI Элементы",
-                extra: "Дополнительные страницы"
+                users: "Пользователи",
+                pelanggan: "Клиенты",
+                tipe_kamar: "Типы Комнат",
+                kamar: "Комнаты",
+                fasilitas: "Удобства",
+                tipe_kamar_fasilitas: "Удобства Типа Комнаты",
+
+                reservasi: "Бронирования",
+                detail_reservasi: "Детали Бронирования",
+                pembayaran: "Платежи",
+                checkin_checkout: "Заезд / Выезд",
+
+                review: "Отзывы",
+                promo: "Акции",
+                reservasi_promo: "Акционные Бронирования",
+                log_aktivitas: "Журнал Активности",
+                notifikasi: "Уведомления"
             }
 
         };
 
+        // =========================
+        // DEFAULT LANGUAGE
+        // =========================
         const savedLang = localStorage.getItem("dashboard_language") || "en";
 
         applyLanguage(savedLang);
 
+        // =========================
+        // CLICK LANGUAGE
+        // =========================
         languageButtons.forEach(button => {
 
             button.addEventListener("click", function() {
@@ -1017,80 +886,41 @@
                 localStorage.setItem("dashboard_language", lang);
 
                 applyLanguage(lang);
+
             });
 
         });
 
+        // =========================
+        // APPLY LANGUAGE
+        // =========================
         function applyLanguage(lang) {
 
+            const t = translations[lang];
+
+            if (!t) return;
+
+            // FLAG & TEXT
             const selected = document.querySelector(`[data-lang="${lang}"]`);
 
             currentFlag.src = selected.dataset.flag;
             currentText.innerText = selected.dataset.text;
 
-            const t = translations[lang];
+            // MENU TITLE
+            const menuTitles = document.querySelectorAll(".menu-title");
 
+            if (menuTitles[0]) menuTitles[0].innerText = t.menu;
+            if (menuTitles[1]) menuTitles[1].innerText = t.data_master;
+            if (menuTitles[2]) menuTitles[2].innerText = t.transaksi;
+            if (menuTitles[3]) menuTitles[3].innerText = t.lainnya;
+
+            // MENU TEXT
             document.querySelectorAll(".menu-text").forEach(el => {
 
-                const text = el.innerText.trim();
+                const key = el.dataset.key;
 
-                if (
-                    text === "Dashboards" ||
-                    text === "Dasbor" ||
-                    text === "Instrumententafel" ||
-                    text === "Panel" ||
-                    text === "Панель"
-                ) {
-                    el.innerText = t.dashboard;
-                }
-
-                if (
-                    text === "Calendar" ||
-                    text === "Kalender" ||
-                    text === "Calendario" ||
-                    text === "Календарь"
-                ) {
-                    el.innerText = t.calendar;
-                }
-
-                if (
-                    text === "Forms" ||
-                    text === "Formulir" ||
-                    text === "Formulare" ||
-                    text === "Formularios" ||
-                    text === "Формы"
-                ) {
-                    el.innerText = t.forms;
-                }
-
-                if (
-                    text === "Tables" ||
-                    text === "Tabel" ||
-                    text === "Tabellen" ||
-                    text === "Tablas" ||
-                    text === "Таблицы"
-                ) {
-                    el.innerText = t.tables;
-                }
-
-                if (
-                    text === "Charts" ||
-                    text === "Grafik" ||
-                    text === "Diagramme" ||
-                    text === "Gráficos" ||
-                    text === "Графики"
-                ) {
-                    el.innerText = t.charts;
-                }
-
-                if (
-                    text === "Maps" ||
-                    text === "Peta" ||
-                    text === "Karten" ||
-                    text === "Mapas" ||
-                    text === "Карты"
-                ) {
-                    el.innerText = t.maps;
+                if (key && t[key]) {
+                    el.innerText = t[key];
                 }
 
             });
