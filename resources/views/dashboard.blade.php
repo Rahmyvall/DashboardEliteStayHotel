@@ -9,7 +9,7 @@
     <meta content="Myra Studio" name="author" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('dashtrap/admin/dist/assets/images/favicon.ico')}}">
+    <link rel="shortcut icon" href="{{asset('dashtrap/admin/dist/assets/images/logo3.png')}}">
 
     <!-- App css -->
     <link href="{{asset('dashtrap/admin/dist/assets/css/style.min.css')}}" rel="stylesheet" type="text/css">
@@ -28,18 +28,18 @@
             <div class="logo-box">
                 <!-- Brand Logo Light -->
                 <a href="index.html" class="logo-light">
-                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo-light.png')}}" alt="logo" class="logo-lg"
-                        height="28">
-                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo-sm.png')}}" alt="small logo"
-                        class="logo-sm" height="28">
+                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo.png')}}" alt="logo" class="logo-lg"
+                        height="50">
+                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo.png')}}" alt="small logo" class="logo-sm"
+                        height="50">
                 </a>
 
                 <!-- Brand Logo Dark -->
                 <a href="index.html" class="logo-dark">
-                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo-dark.png')}}" alt="dark logo"
-                        class="logo-lg" height="28">
-                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo-sm.png')}}" alt="small logo"
-                        class="logo-sm" height="28">
+                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo3.png')}}" alt="dark logo" class="logo-lg"
+                        height="30">
+                    <img src="{{asset('dashtrap/admin/dist/assets/images/logo3.png')}}" alt="small logo" class="logo-sm"
+                        height="30">
                 </a>
             </div>
 
@@ -551,41 +551,84 @@
                             </div>
                         </li>
 
-
                         <li class="dropdown d-none d-md-inline-block">
                             <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none"
-                                data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
-                                aria-expanded="false">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/flags/us.jpg')}}" alt="user-image"
-                                    class="me-0 me-sm-1" height="18">
+                                data-bs-toggle="dropdown" href="#" role="button">
+
+                                <img id="current-language-flag"
+                                    src="{{ asset('dashtrap/admin/dist/assets/images/flags/us.jpg') }}" class="me-1"
+                                    height="18">
+
+                                <span id="current-language-text" class="align-middle">
+                                    English
+                                </span>
                             </a>
+
                             <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated">
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('dashtrap/admin/dist/assets/images/flags/germany.jpg')}}"
-                                        alt="user-image" class="me-1" height="12"> <span
-                                        class="align-middle">German</span>
+                                <!-- Indonesia -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="id"
+                                    data-text="Indonesia"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/indonesia.png') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/indonesia.png') }}"
+                                        alt="Indonesia" class="me-2 rounded" width="20" height="14">
+
+                                    <span class="align-middle">Indonesia</span>
                                 </a>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('dashtrap/admin/dist/assets/images/flags/italy.jpg')}}"
-                                        alt="user-image" class="me-1" height="12">
-                                    <span class="align-middle">Italian</span>
+                                <!-- English -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="en"
+                                    data-text="English"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/us.jpg') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/us.jpg') }}"
+                                        class="me-1" height="12">
+
+                                    <span class="align-middle">English</span>
                                 </a>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('dashtrap/admin/dist/assets/images/flags/spain.jpg')}}"
-                                        alt="user-image" class="me-1" height="12">
+                                <!-- German -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="de"
+                                    data-text="German"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/germany.jpg') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/germany.jpg') }}"
+                                        class="me-1" height="12">
+
+                                    <span class="align-middle">German</span>
+                                </a>
+
+                                <!-- Spanish -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="es"
+                                    data-text="Spanish"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/spain.jpg') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/spain.jpg') }}"
+                                        class="me-1" height="12">
+
                                     <span class="align-middle">Spanish</span>
                                 </a>
 
-                                <!-- item-->
-                                <a href="javascript:void(0);" class="dropdown-item">
-                                    <img src="{{asset('dashtrap/admin/dist/assets/images/flags/russia.jpg')}}"
-                                        alt="user-image" class="me-1" height="12">
+                                <!-- Italian -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="it"
+                                    data-text="Italian"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/italy.jpg') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/italy.jpg') }}"
+                                        class="me-1" height="12">
+
+                                    <span class="align-middle">Italian</span>
+                                </a>
+
+                                <!-- Russian -->
+                                <a href="javascript:void(0);" class="dropdown-item change-language" data-lang="ru"
+                                    data-text="Russian"
+                                    data-flag="{{ asset('dashtrap/admin/dist/assets/images/flags/russia.jpg') }}">
+
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/russia.jpg') }}"
+                                        class="me-1" height="12">
+
                                     <span class="align-middle">Russian</span>
                                 </a>
 
@@ -829,22 +872,33 @@
             </div> <!-- content -->
 
             <!-- Footer Start -->
-            <footer class="footer">
+            <footer class="footer bg-light border-top py-3">
                 <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div>
-                                <script>
+                    <div class="row align-items-center">
+
+                        <!-- Copyright -->
+                        <div class="col-md-6 text-center text-md-start">
+                            <p class="mb-0 text-muted">
+                                &copy; <script>
                                 document.write(new Date().getFullYear())
-                                </script> © Dashtrap
-                            </div>
+                                </script>
+                                <strong>EliteStayHotel</strong>. All Rights Reserved.
+                            </p>
                         </div>
+
+                        <!-- Developer Info -->
                         <div class="col-md-6">
-                            <div class="d-none d-md-flex gap-4 align-item-center justify-content-md-end">
-                                <p class="mb-0">Design & Develop by <a href="https://myrathemes.com/"
-                                        target="_blank">MyraStudio</a> </p>
+                            <div class="d-flex justify-content-center justify-content-md-end">
+                                <p class="mb-0 text-muted">
+                                    Designed & Developed by
+                                    <a href="https://github.com/Rahmyvall" target="_blank"
+                                        class="text-decoration-none fw-semibold">
+                                        GitHub
+                                    </a>
+                                </p>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </footer>
@@ -857,15 +911,194 @@
     </div>
     <!-- END wrapper -->
 
+    <!-- Vendor js -->
+    <script src="{{ asset('dashtrap/admin/dist/assets/js/vendor.min.js') }}"></script>
+
     <!-- App js -->
-  <!-- App js -->
-<script src="{{ asset('dashtrap/admin/dist/assets/js/vendor.min.js') }}"></script>
+    <script src="{{ asset('dashtrap/admin/dist/assets/js/app.js') }}"></script>
 
-<!-- Bootstrap Bundle -->
+    <!-- OPTIONAL: Bootstrap only jika vendor.min.js belum include bootstrap -->
+    {{--
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+--}}
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
 
-<!-- Main App -->
-<script src="{{ asset('dashtrap/admin/dist/assets/js/app.js') }}"></script>
+        const languageButtons = document.querySelectorAll(".change-language");
+        const currentFlag = document.getElementById("current-language-flag");
+        const currentText = document.getElementById("current-language-text");
+
+        const translations = {
+
+            en: {
+                dashboard: "Dashboards",
+                calendar: "Calendar",
+                forms: "Forms",
+                tables: "Tables",
+                charts: "Charts",
+                maps: "Maps",
+                components: "Components",
+                ui: "UI Elements",
+                extra: "Extra Pages"
+            },
+
+            id: {
+                dashboard: "Dasbor",
+                calendar: "Kalender",
+                forms: "Formulir",
+                tables: "Tabel",
+                charts: "Grafik",
+                maps: "Peta",
+                components: "Komponen",
+                ui: "Elemen UI",
+                extra: "Halaman Tambahan"
+            },
+
+            de: {
+                dashboard: "Instrumententafel",
+                calendar: "Kalender",
+                forms: "Formulare",
+                tables: "Tabellen",
+                charts: "Diagramme",
+                maps: "Karten",
+                components: "Komponenten",
+                ui: "UI Elemente",
+                extra: "Zusätzliche Seiten"
+            },
+
+            es: {
+                dashboard: "Panel",
+                calendar: "Calendario",
+                forms: "Formularios",
+                tables: "Tablas",
+                charts: "Gráficos",
+                maps: "Mapas",
+                components: "Componentes",
+                ui: "Elementos UI",
+                extra: "Páginas Extra"
+            },
+
+            it: {
+                dashboard: "Dashboard",
+                calendar: "Calendario",
+                forms: "Moduli",
+                tables: "Tabelle",
+                charts: "Grafici",
+                maps: "Mappe",
+                components: "Componenti",
+                ui: "Elementi UI",
+                extra: "Pagine Extra"
+            },
+
+            ru: {
+                dashboard: "Панель",
+                calendar: "Календарь",
+                forms: "Формы",
+                tables: "Таблицы",
+                charts: "Графики",
+                maps: "Карты",
+                components: "Компоненты",
+                ui: "UI Элементы",
+                extra: "Дополнительные страницы"
+            }
+
+        };
+
+        const savedLang = localStorage.getItem("dashboard_language") || "en";
+
+        applyLanguage(savedLang);
+
+        languageButtons.forEach(button => {
+
+            button.addEventListener("click", function() {
+
+                const lang = this.dataset.lang;
+
+                localStorage.setItem("dashboard_language", lang);
+
+                applyLanguage(lang);
+            });
+
+        });
+
+        function applyLanguage(lang) {
+
+            const selected = document.querySelector(`[data-lang="${lang}"]`);
+
+            currentFlag.src = selected.dataset.flag;
+            currentText.innerText = selected.dataset.text;
+
+            const t = translations[lang];
+
+            document.querySelectorAll(".menu-text").forEach(el => {
+
+                const text = el.innerText.trim();
+
+                if (
+                    text === "Dashboards" ||
+                    text === "Dasbor" ||
+                    text === "Instrumententafel" ||
+                    text === "Panel" ||
+                    text === "Панель"
+                ) {
+                    el.innerText = t.dashboard;
+                }
+
+                if (
+                    text === "Calendar" ||
+                    text === "Kalender" ||
+                    text === "Calendario" ||
+                    text === "Календарь"
+                ) {
+                    el.innerText = t.calendar;
+                }
+
+                if (
+                    text === "Forms" ||
+                    text === "Formulir" ||
+                    text === "Formulare" ||
+                    text === "Formularios" ||
+                    text === "Формы"
+                ) {
+                    el.innerText = t.forms;
+                }
+
+                if (
+                    text === "Tables" ||
+                    text === "Tabel" ||
+                    text === "Tabellen" ||
+                    text === "Tablas" ||
+                    text === "Таблицы"
+                ) {
+                    el.innerText = t.tables;
+                }
+
+                if (
+                    text === "Charts" ||
+                    text === "Grafik" ||
+                    text === "Diagramme" ||
+                    text === "Gráficos" ||
+                    text === "Графики"
+                ) {
+                    el.innerText = t.charts;
+                }
+
+                if (
+                    text === "Maps" ||
+                    text === "Peta" ||
+                    text === "Karten" ||
+                    text === "Mapas" ||
+                    text === "Карты"
+                ) {
+                    el.innerText = t.maps;
+                }
+
+            });
+
+        }
+
+    });
+    </script>
 </body>
 
 </html>
