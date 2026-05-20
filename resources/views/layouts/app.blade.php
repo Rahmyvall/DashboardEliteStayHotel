@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Starter | Dashtrap - Responsive Bootstrap 5 Admin Dashboard</title>
+    <title>EliteStayHotel | Sistem Reservasi Hotel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
     <meta content="Myra Studio" name="author" />
@@ -613,25 +613,26 @@
                 <!-- Start Content-->
                 <div class="container-fluid">
 
-                    <!-- start page title -->
                     <div class="py-3 py-lg-4">
                         <div class="row">
+
                             <div class="col-lg-6">
-                                <h4 class="page-title mb-0">Starter</h4>
+                                @yield('content')
                             </div>
-                            <div class="col-lg-6">
-                                <div class="d-none d-lg-block">
-                                    <ol class="breadcrumb m-0 float-end">
-                                        <li class="breadcrumb-item"><a href="javascript: void(0);">Extra Pages</a></li>
-                                        <li class="breadcrumb-item active">Starter</li>
-                                    </ol>
-                                </div>
+
+                            <div class="col-lg-6 text-end">
+
+                                <select id="changeLanguage" class="form-select w-auto d-inline">
+                                    <option value="id">Indonesia</option>
+                                    <option value="en">English</option>
+                                </select>
+
                             </div>
+
                         </div>
                     </div>
-                    <!-- end page title -->
 
-                </div> <!-- container -->
+                </div>
 
             </div> <!-- content -->
 
@@ -926,6 +927,43 @@
             });
 
         }
+
+    });
+    </script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const translations = {
+            en: {
+                dashboard: "Dashboard",
+                users: "Users"
+            },
+            id: {
+                dashboard: "Dashboard",
+                users: "Pengguna"
+            }
+        };
+
+        function applyLanguage(lang) {
+            const t = translations[lang];
+            if (!t) return;
+
+            document.querySelectorAll(".menu-text").forEach(el => {
+                const key = el.dataset.key;
+                if (t[key]) el.innerText = t[key];
+            });
+        }
+
+        const saved = localStorage.getItem("lang") || "en";
+        applyLanguage(saved);
+
+        document.querySelectorAll(".change-language").forEach(btn => {
+            btn.addEventListener("click", function() {
+                const lang = this.dataset.lang;
+                localStorage.setItem("lang", lang);
+                applyLanguage(lang);
+            });
+        });
 
     });
     </script>
