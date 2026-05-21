@@ -562,10 +562,31 @@
                             <a class="nav-link dropdown-toggle nav-user me-0 waves-effect waves-light"
                                 data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="false"
                                 aria-expanded="false">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg')}}"
+
+                                {{-- Foto Profile --}}
+                                @if(Auth::user()->foto_profile)
+
+                                <img src="{{ asset('storage/' . Auth::user()->foto_profile) }}" alt="user-image"
+                                    class="rounded-circle">
+
+                                @else
+
+                                <img src="{{ asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg') }}"
                                     alt="user-image" class="rounded-circle">
+
+                                @endif
+
                                 <span class="ms-1 d-none d-md-inline-block">
-                                    Jamie D. <i class="mdi mdi-chevron-down"></i>
+
+                                    {{-- Nama User --}}
+                                    {{ Auth::user()->nama_lengkap }}
+
+                                    {{-- Role --}}
+                                    <small class="text-muted">
+                                        ({{ ucfirst(Auth::user()->role) }})
+                                    </small>
+
+                                    <i class="mdi mdi-chevron-down"></i>
                                 </span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end profile-dropdown ">
@@ -595,10 +616,33 @@
                                 <div class="dropdown-divider"></div>
 
                                 <!-- item-->
-                                <a href="pages-login.html" class="dropdown-item notify-item">
-                                    <i class="fe-log-out"></i>
-                                    <span>Logout</span>
-                                </a>
+                                <!-- Loading Logout -->
+                                <div id="logoutLoading" class="loading-overlay d-none">
+                                    <div class="text-center text-white">
+
+                                        <div class="spinner-border loading-spinner mb-3" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+
+                                        <h5 class="fw-bold mb-1">
+                                            Sedang Logout...
+                                        </h5>
+
+                                        <p class="opacity-75 mb-0">
+                                            Sampai jumpa kembali 👋
+                                        </p>
+
+                                    </div>
+                                </div>
+
+                                <form id="logoutForm" action="{{ route('logout') }}" method="POST">
+                                    @csrf
+
+                                    <button type="button" id="btnLogout" class="dropdown-item">
+
+                                        Logout
+                                    </button>
+                                </form>
 
                             </div>
                         </li>
@@ -614,22 +658,17 @@
                 <div class="container-fluid">
 
                     <div class="py-3 py-lg-4">
-                        <div class="row">
 
-                            <div class="col-lg-6">
+                        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+
+                            {{-- CONTENT TITLE / AREA --}}
+                            <div class="flex-grow-1">
                                 @yield('content')
                             </div>
 
-                            <div class="col-lg-6 text-end">
-
-                                <select id="changeLanguage" class="form-select w-auto d-inline">
-                                    <option value="id">Indonesia</option>
-                                    <option value="en">English</option>
-                                </select>
-
-                            </div>
 
                         </div>
+
                     </div>
 
                 </div>
@@ -681,6 +720,25 @@
 
     <!-- App js -->
     <script src="{{ asset('dashtrap/admin/dist/assets/js/app.js') }}"></script>
+
+    <!-- Knob charts js -->
+    <script src="{{ asset('dashtrap/admin/dist/assets/libs/jquery-knob/jquery.knob.min.js') }}"></script>
+
+    <!-- Sparkline Js-->
+    <script src="{{ asset('dashtrap/admin/dist/assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
+
+    <script src="{{ asset('dashtrap/admin/dist/assets/libs/morris.js/morris.min.js') }}"></script>
+
+    <script src="{{ asset('dashtrap/admin/dist/assets/libs/raphael/raphael.min.js') }}"></script>
+    <script src="{{ asset('dashtrap/admin/dist/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
+    <script src="https://apexcharts.com/samples/assets/irregular-data-series.js"></script>
+    <script src="https://apexcharts.com/samples/assets/ohlc.js"></script>
+
+    <!-- Demo js -->
+    <script src="{{ asset('dashtrap/admin/dist/assets/js/pages/apexcharts.js') }}"></script>
+
+    <!-- Dashboard init-->
+    <script src="{{ asset('dashtrap/admin/dist/assets/js/pages/dashboard.js') }}"></script>
 
     <!-- OPTIONAL: Bootstrap only jika vendor.min.js belum include bootstrap -->
     {{--
@@ -966,6 +1024,28 @@
         });
 
     });
+    </script>
+    <script>
+    document.getElementById('btnLogout')
+        .addEventListener('click', function() {
+
+            // tampilkan loading
+            document.getElementById('logoutLoading')
+                .classList.remove('d-none');
+
+            // disable tombol
+            this.disabled = true;
+
+            this.innerHTML = 'Logging out...';
+
+            // delay sedikit agar loading terlihat
+            setTimeout(() => {
+
+                document.getElementById('logoutForm')
+                    .submit();
+
+            }, 500);
+        });
     </script>
 </body>
 

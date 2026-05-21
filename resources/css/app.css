@@ -1,3 +1,39 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* custom CSS kamu di bawah sini */
+.hover-shadow {
+    transition: all 0.2s ease;
+}
+
+.hover-shadow:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.transition {
+    transition: all 0.2s ease;
+}
+.modern-table thead th {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: #6c757d;
+    border-bottom: 1px solid #eee !important;
+    padding-bottom: 12px;
+}
+
+.modern-table tbody tr {
+    border-bottom: 1px solid #f3f3f3;
+}
+
+.modern-table tbody tr:hover {
+    background: #f9fafb;
+}
+
+.avatar-sm {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+}
