@@ -38,7 +38,7 @@ Hotel Management Dashboard merupakan aplikasi manajemen hotel modern yang dikemb
 ### ER Diagram
 
 <p align="center">
-  <img src="{{ asset('public/assets/0.png') }}" width="90%" alt="ER Diagram">
+  <img src="{{ asset('public/assets/erd.png') }}" width="90%" alt="ER Diagram">
 </p>
 
 ### Dashboard Utama
