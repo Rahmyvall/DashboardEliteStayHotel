@@ -8,7 +8,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        return $this->checkRole('admin', 'pages.admin.dashboard', 'Dashboard Admin');
+        return $this->checkRole('admin', 'pages.dashboard', 'Dashboard Admin');
     }
 
     public function resepsionis()

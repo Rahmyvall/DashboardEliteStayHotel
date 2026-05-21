@@ -35,9 +35,9 @@ Route::post('/logout', [AuthController::class, 'logout'])
 Route::middleware(['auth'])->group(function () {
 
     // admin only
-    Route::get('/admin/dashboard', [DashboardController::class, 'index'])
+    Route::get('/pages/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:admin')
-        ->name('admin.dashboard');
+        ->name('pages.dashboard');
 
     // resepsionis only
     Route::get('/resepsionis/dashboard', [DashboardController::class, 'resepsionis'])
