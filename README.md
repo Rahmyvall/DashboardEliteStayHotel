@@ -7,7 +7,7 @@
 <h1 align="center">Hotel Management Dashboard</h1>
 
 <p align="center">
-Dashboard manajemen hotel modern berbasis Laravel yang dirancang untuk memantau dan mengelola operasional hotel secara real-time.
+Dashboard manajemen hotel modern berbasis Laravel yang dirancang untuk memantau dan mengelola operasional hotel secara real-time secara efisien, terintegrasi, dan mudah digunakan.
 </p>
 
 <p align="center">
@@ -29,52 +29,89 @@ Dashboard manajemen hotel modern berbasis Laravel yang dirancang untuk memantau 
 
 ## 📌 Tentang Project
 
-Hotel Management Dashboard adalah sistem manajemen hotel modern yang dibangun menggunakan Laravel untuk membantu proses operasional hotel menjadi lebih efektif, terintegrasi, dan efisien.
+Hotel Management Dashboard merupakan aplikasi manajemen hotel modern yang dikembangkan menggunakan framework Laravel untuk membantu proses operasional hotel menjadi lebih efektif, cepat, dan terintegrasi dalam satu sistem.
 
-Sistem ini menyediakan fitur pemantauan dan pengelolaan hotel secara real-time dalam satu dashboard yang praktis dan mudah digunakan, meliputi:
+Aplikasi ini menyediakan fitur pengelolaan hotel secara real-time yang mencakup:
 
 - Manajemen reservasi kamar
 - Pengelolaan data tamu
 - Monitoring ketersediaan kamar
 - Transaksi pembayaran
-- Laporan performa hotel
 - Dashboard statistik operasional
+- Laporan performa hotel
 - Sistem administrasi terintegrasi
 
-Dengan antarmuka yang modern dan responsif, aplikasi ini dirancang untuk meningkatkan efisiensi kerja staf hotel serta memberikan pengalaman pengelolaan yang lebih optimal.
+Dengan desain antarmuka yang modern, responsif, dan user-friendly, sistem ini dirancang untuk meningkatkan efisiensi kerja staf hotel serta mempermudah proses monitoring dan pengambilan keputusan.
 
 ---
 
-## 🚀 Teknologi yang Digunakan
+# 🛠 Framework & Technology Stack
 
-- Laravel
-- PHP
-- MySQL
-- Bootstrap / Tailwind CSS
-- JavaScript
+| Technology                   | Description                            |
+| ---------------------------- | -------------------------------------- |
+| **Laravel**                  | Backend framework utama berbasis PHP   |
+| **PHP**                      | Bahasa pemrograman server-side         |
+| **MySQL**                    | Database management system             |
+| **Bootstrap / Tailwind CSS** | Framework UI & styling modern          |
+| **JavaScript**               | Interaktivitas dan manipulasi frontend |
+| **Blade Template Engine**    | Template engine bawaan Laravel         |
+| **Eloquent ORM**             | ORM Laravel untuk manajemen database   |
+| **Laravel Authentication**   | Sistem autentikasi dan keamanan user   |
 
 ---
 
-## ⚙️ Fitur Utama
+## 🚀 Fitur Utama
 
 - ✅ Dashboard Monitoring Real-Time
 - ✅ Sistem Reservasi Hotel
 - ✅ Manajemen Data Tamu
 - ✅ Status & Ketersediaan Kamar
-- ✅ Riwayat Transaksi Pembayaran
+- ✅ Manajemen Pembayaran
+- ✅ Riwayat Transaksi
 - ✅ Laporan dan Analitik
 - ✅ User Management & Authentication
+- ✅ Responsive Admin Dashboard
 
 ---
 
-## 📖 Dokumentasi Laravel
+## 📂 Struktur Sistem
 
-Framework ini menggunakan Laravel sebagai backend utama. Dokumentasi resmi Laravel dapat diakses melalui:
+```bash
+Hotel Management Dashboard
+│── Authentication System
+│── Reservation Management
+│── Guest Management
+│── Room Management
+│── Payment Transaction
+│── Reporting System
+│── Dashboard Analytics
+└── Admin Panel
+```
 
-- https://laravel.com/docs
+# Clone repository
 
----
+git clone https://github.com/Rahmyvall/DashboardEliteStayHotel.git
 
-## 📄 License
+# Masuk ke folder project
 
-Project ini menggunakan lisensi MIT.
+cd hotel-management-dashboard
+
+# Install dependency
+
+composer install
+
+# Copy environment
+
+cp .env.example .env
+
+# Generate application key
+
+php artisan key:generate
+
+# Migrasi database
+
+php artisan migrate
+
+# Jalankan server
+
+php artisan serve
