@@ -35,25 +35,25 @@ Hotel Management Dashboard merupakan aplikasi manajemen hotel modern yang dikemb
 
 ## 📸 Screenshot Aplikasi
 
-### ER Diagram
+### 🧩 ER Diagram
 
 <p align="center">
-  <img src="{{ asset('assets/erd.png') }}" width="90%" alt="ER Diagram">
+  <img src="/assets/erd.png" width="90%" alt="ER Diagram">
 </p>
 
-### Dashboard Utama
+### 🖥 Dashboard Utama
 
 <p align="center">
   <img src="https://via.placeholder.com/1000x500.png?text=Dashboard+Hotel+Management" width="90%" alt="Dashboard">
 </p>
 
-### Manajemen Reservasi
+### 🛎 Manajemen Reservasi
 
 <p align="center">
   <img src="https://via.placeholder.com/1000x500.png?text=Reservation+Management" width="90%" alt="Reservation">
 </p>
 
-### Manajemen Kamar
+### 🏨 Manajemen Kamar
 
 <p align="center">
   <img src="https://via.placeholder.com/1000x500.png?text=Room+Management" width="90%" alt="Room Management">
@@ -74,18 +74,18 @@ Hotel Management Dashboard merupakan aplikasi manajemen hotel modern yang dikemb
 
 ---
 
-## 🛠 Framework & Technology Stack
+## 🛠 Technology Stack (Client & HRD Overview)
 
-| Technology               | Role in System             | Benefit for Business                                           |
-| ------------------------ | -------------------------- | -------------------------------------------------------------- |
-| Laravel                  | Core backend system        | Sistem stabil, scalable, dan aman untuk aplikasi perusahaan    |
-| PHP 8 - 13               | Server-side processing     | Menjamin performa aplikasi yang cepat dan efisien              |
-| MySQL                    | Database management        | Penyimpanan data hotel yang terstruktur dan aman               |
-| Bootstrap / Tailwind CSS | UI & design system         | Tampilan modern, responsive, dan mudah digunakan user          |
-| JavaScript               | Frontend interaction       | Meningkatkan pengalaman pengguna (UX) yang lebih interaktif    |
-| Blade Template Engine    | UI rendering system        | Mempercepat pengembangan dan maintain UI                       |
-| Eloquent ORM             | Database interaction layer | Mempermudah pengelolaan data secara efisien dan aman           |
-| Laravel Authentication   | Security system            | Melindungi data dan akses user sesuai role (Admin, Staff, dll) |
+| Technology               | Role in System         | Business Value                                     |
+| ------------------------ | ---------------------- | -------------------------------------------------- |
+| Laravel                  | Core backend system    | Stabil, scalable, dan aman untuk sistem perusahaan |
+| PHP                      | Server-side processing | Performa cepat dan efisien                         |
+| MySQL                    | Database management    | Data hotel terstruktur dan aman                    |
+| Bootstrap / Tailwind CSS | UI design system       | Tampilan modern & mudah digunakan                  |
+| JavaScript               | Frontend interaction   | UX lebih interaktif dan responsif                  |
+| Blade Template Engine    | UI rendering           | Pengembangan UI lebih cepat                        |
+| Eloquent ORM             | Database layer         | Pengelolaan data lebih efisien                     |
+| Laravel Authentication   | Security system        | Proteksi akses berdasarkan role                    |
 
 ---
 
