@@ -37,7 +37,7 @@ Route::middleware(['auth'])->group(function () {
     // admin only
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
         ->middleware('role:admin')
-        ->name('pages.dashboard');
+        ->name('admin.dashboard');
 
     // resepsionis only
     Route::get('/resepsionis/dashboard', [DashboardController::class, 'resepsionis'])
