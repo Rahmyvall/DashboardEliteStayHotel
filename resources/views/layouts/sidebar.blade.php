@@ -26,7 +26,7 @@
 
              <!-- Dashboard -->
              <li class="menu-item">
-                 <a href="dashboard.html" class="menu-link waves-effect waves-light">
+                 <a href="{{ route('dashboard') }}" class="menu-link waves-effect waves-light">
                      <span class="menu-icon">
                          <i class="bx bx-home-smile"></i>
                      </span>
@@ -36,7 +36,6 @@
                      </span>
                  </a>
              </li>
-
              <!-- Data Master -->
              <li class="menu-title">Data Master</li>
 
@@ -56,9 +55,8 @@
 
                  <div class="collapse" id="menuMaster">
                      <ul class="sub-menu">
-
                          <li class="menu-item">
-                             <a href="users.html" class="menu-link">
+                             <a href="{{ route('users.index') }}" class="menu-link">
                                  <span class="menu-text" data-key="users">
                                      Users
                                  </span>

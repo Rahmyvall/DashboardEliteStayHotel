@@ -63,7 +63,6 @@
                                 </form>
                             </div>
                         </li>
-
                         <li class="dropdown d-none d-md-inline-block">
                             <a class="nav-link dropdown-toggle waves-effect waves-light arrow-none"
                                 data-bs-toggle="dropdown" href="#" role="button">
@@ -86,7 +85,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/indonesia.png') }}"
                                         alt="Indonesia" class="me-2 rounded" width="20" height="14">
-
                                     <span class="align-middle">Indonesia</span>
                                 </a>
 
@@ -97,7 +95,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/us.jpg') }}"
                                         class="me-1" height="12">
-
                                     <span class="align-middle">English</span>
                                 </a>
 
@@ -108,7 +105,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/germany.jpg') }}"
                                         class="me-1" height="12">
-
                                     <span class="align-middle">German</span>
                                 </a>
 
@@ -119,7 +115,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/spain.jpg') }}"
                                         class="me-1" height="12">
-
                                     <span class="align-middle">Spanish</span>
                                 </a>
 
@@ -130,7 +125,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/italy.jpg') }}"
                                         class="me-1" height="12">
-
                                     <span class="align-middle">Italian</span>
                                 </a>
 
@@ -141,7 +135,6 @@
 
                                     <img src="{{ asset('dashtrap/admin/dist/assets/images/flags/russia.jpg') }}"
                                         class="me-1" height="12">
-
                                     <span class="align-middle">Russian</span>
                                 </a>
 

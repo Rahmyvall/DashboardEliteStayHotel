@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -20,6 +19,12 @@ class User extends Authenticatable
      * Primary key custom
      */
     protected $primaryKey = 'id_user';
+
+    /**
+     * Disable timestamps jika tidak ada created_at & updated_at
+     * Kalau ada kolomnya, hapus baris ini
+     */
+    // public $timestamps = false;
 
     /**
      * Mass assignable
@@ -43,12 +48,9 @@ class User extends Authenticatable
     ];
 
     /**
-     * Cast attributes
+     * Attribute casting
      */
-    protected function casts(): array
-    {
-        return [
-            'password' => 'hashed',
-        ];
-    }
+    protected $casts = [
+        'password' => 'hashed',
+    ];
 }

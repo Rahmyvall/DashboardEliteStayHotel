@@ -3,35 +3,67 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\User;
 
 class DashboardController extends Controller
 {
+    /**
+     * ADMIN DASHBOARD
+     */
     public function index()
     {
-        return $this->checkRole('admin', 'pages.dashboard', 'Dashboard Admin');
+        $this->authorizeRole('admin');
+
+        return view('pages.dashboard', [
+            'title' => 'Dashboard Admin',
+            'user'  => Auth::user(),
+
+            // DATA ADMIN
+            'totalUsers'      => User::count(),
+            'adminCount'      => User::where('role', 'admin')->count(),
+            'resepsionis'     => User::where('role', 'resepsionis')->count(),
+            'pelanggan'       => User::where('role', 'pelanggan')->count(),
+            'userAktif'       => User::where('status', 'aktif')->count(),
+            'userBaruHariIni' => User::whereDate('created_at', today())->count(),
+            'userBulanIni'    => User::whereMonth('created_at', now()->month)->count(),
+        ]);
     }
 
+    /**
+     * RESEPSIONIS DASHBOARD
+     */
     public function resepsionis()
     {
-        return $this->checkRole('resepsionis', 'pages.resepsionis.dashboard', 'Dashboard Resepsionis');
+        $this->authorizeRole('resepsionis');
+
+        return view('pages.resepsionis.dashboard', [
+            'title' => 'Dashboard Resepsionis',
+            'user'  => Auth::user(),
+        ]);
     }
 
+    /**
+     * PELANGGAN DASHBOARD
+     */
     public function pelanggan()
     {
-        return $this->checkRole('pelanggan', 'pages.pelanggan.dashboard', 'Dashboard Pelanggan');
+        $this->authorizeRole('pelanggan');
+
+        return view('pages.pelanggan.dashboard', [
+            'title' => 'Dashboard Pelanggan',
+            'user'  => Auth::user(),
+        ]);
     }
 
-    private function checkRole($role, $view, $title)
+    /**
+     * ROLE CHECK SIMPLE (BERSIH & AMAN)
+     */
+    private function authorizeRole($role)
     {
         $user = Auth::user();
 
         if (!$user || $user->role !== $role) {
             abort(403, 'Akses ditolak');
         }
-
-        return view($view, [
-            'title' => $title,
-            'user' => $user,
-        ]);
     }
 }

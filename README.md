@@ -1,108 +1,164 @@
 <p align="center">
-  <a href="https://laravel.com" target="_blank">
-    <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo">
-  </a>
+  <img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="320" alt="Laravel Logo">
 </p>
 
-<h1 align="center">Hotel Management Dashboard</h1>
+<h1 align="center">🏨 Hotel Management Dashboard</h1>
 
 <p align="center">
-Dashboard manajemen hotel modern berbasis Laravel yang dirancang untuk memantau dan mengelola operasional hotel secara real-time secara efisien, terintegrasi, dan mudah digunakan.
+  <b>Modern Hotel Management System</b><br>
+  Built with Laravel to streamline hotel operations efficiently, securely, and in real-time.
 </p>
 
 <p align="center">
-<a href="https://github.com/laravel/framework/actions">
-<img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status">
-</a>
-<a href="https://packagist.org/packages/laravel/framework">
-<img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads">
-</a>
-<a href="https://packagist.org/packages/laravel/framework">
-<img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version">
-</a>
-<a href="https://packagist.org/packages/laravel/framework">
-<img src="https://img.shields.io/packagist/l/laravel/framework" alt="License">
-</a>
+  <img src="https://img.shields.io/badge/Laravel-Framework-red?style=for-the-badge&logo=laravel">
+  <img src="https://img.shields.io/badge/PHP-Backend-blue?style=for-the-badge&logo=php">
+  <img src="https://img.shields.io/badge/MySQL-Database-orange?style=for-the-badge&logo=mysql">
+  <img src="https://img.shields.io/badge/TailwindCSS-UI-cyan?style=for-the-badge&logo=tailwindcss">
+</p>
+
+<p align="center">
+  <a href="#-fitur-utama">Fitur</a> •
+  <a href="#-preview-aplikasi">Preview</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-instalasi">Instalasi</a>
 </p>
 
 ---
 
-## 📌 Tentang Project
+# 📌 Tentang Project
 
-Hotel Management Dashboard merupakan aplikasi manajemen hotel modern yang dikembangkan menggunakan framework Laravel untuk membantu proses operasional hotel menjadi lebih efektif, cepat, dan terintegrasi dalam satu sistem.
+Hotel Management Dashboard adalah aplikasi manajemen hotel berbasis Laravel yang dirancang untuk membantu operasional hotel menjadi lebih modern, cepat, dan terintegrasi.
+
+Sistem ini memungkinkan admin hotel mengelola reservasi, data tamu, pembayaran, dan monitoring kamar dalam satu dashboard yang intuitif dan responsive.
 
 ---
 
-## 📸 Screenshot Aplikasi
+# ✨ Nilai Jual Project
 
-### 🧩 ER Diagram
+✅ Clean Architecture & Scalable Structure  
+✅ Responsive Modern Dashboard UI  
+✅ Real-Time Room Monitoring  
+✅ Authentication & Role Management  
+✅ Business-Oriented System Design  
+✅ Suitable for Enterprise & Hospitality Industry  
 
-<p align="center">
-  <img src="public/assets/erd.png" width="900" alt="System Diagram">
-</p>
+---
 
-### 🖥 Dashboard Utama
+# 🖼 Preview Aplikasi
 
-<p align="center">
-  <img src="https://via.placeholder.com/1000x500.png?text=Dashboard+Hotel+Management" width="90%" alt="Dashboard">
-</p>
-
-### 🛎 Manajemen Reservasi
-
-<p align="center">
-  <img src="https://via.placeholder.com/1000x500.png?text=Reservation+Management" width="90%" alt="Reservation">
-</p>
-
-### 🏨 Manajemen Kamar
+## 🔹 ER Diagram
 
 <p align="center">
-  <img src="https://via.placeholder.com/1000x500.png?text=Room+Management" width="90%" alt="Room Management">
+  <img src="public/assets/erd.png" width="100%" alt="ERD">
 </p>
 
 ---
 
-## 🧩 Fitur Sistem
+## 🔹 Login Page
 
-- Manajemen reservasi kamar
-- Pengelolaan data tamu
+<p align="center">
+  <img src="public/assets/1.png" width="100%" alt="Login Page">
+</p>
+
+---
+
+## 🔹 Reservation Management
+
+<p align="center">
+  <img src="https://via.placeholder.com/1200x600.png?text=Reservation+Management+Dashboard" width="100%" alt="Reservation Dashboard">
+</p>
+
+---
+
+## 🔹 Room Management
+
+<p align="center">
+  <img src="https://via.placeholder.com/1200x600.png?text=Room+Management+System" width="100%" alt="Room Management">
+</p>
+
+---
+
+# 🚀 Fitur Utama
+
+### 🛎 Reservation Management
+- Booking & reservasi kamar
+- Check-in / Check-out management
+- Status reservasi real-time
+
+### 🏨 Room Monitoring
 - Monitoring ketersediaan kamar
-- Transaksi pembayaran
-- Dashboard statistik operasional
-- Laporan performa hotel
-- Sistem administrasi terintegrasi
-- User management & authentication
+- Room status management
+- Room categorization
+
+### 👥 Guest Management
+- Data tamu terintegrasi
+- Riwayat reservasi pelanggan
+- Guest information system
+
+### 💳 Payment System
+- Manajemen transaksi pembayaran
+- Invoice & payment tracking
+- Transaction history
+
+### 📊 Dashboard Analytics
+- Statistik operasional hotel
+- Revenue monitoring
+- Reservation analytics
+
+### 🔐 Security & Authentication
+- Multi-role authentication
+- Admin access management
+- Secure login system
 
 ---
 
-## 🛠 Technology Stack (Client & HRD Overview)
+# 🧩 Tech Stack
 
-| Technology               | Role in System         | Business Value                                     |
-| ------------------------ | ---------------------- | -------------------------------------------------- |
-| Laravel                  | Core backend system    | Stabil, scalable, dan aman untuk sistem perusahaan |
-| PHP                      | Server-side processing | Performa cepat dan efisien                         |
-| MySQL                    | Database management    | Data hotel terstruktur dan aman                    |
-| Bootstrap / Tailwind CSS | UI design system       | Tampilan modern & mudah digunakan                  |
-| JavaScript               | Frontend interaction   | UX lebih interaktif dan responsif                  |
-| Blade Template Engine    | UI rendering           | Pengembangan UI lebih cepat                        |
-| Eloquent ORM             | Database layer         | Pengelolaan data lebih efisien                     |
-| Laravel Authentication   | Security system        | Proteksi akses berdasarkan role                    |
+| Technology | Function |
+|---|---|
+| Laravel | Backend Framework |
+| PHP | Server-side Programming |
+| MySQL | Database Management |
+| Tailwind CSS / Bootstrap | Responsive UI Design |
+| JavaScript | Interactive Frontend |
+| Blade Engine | Template Rendering |
+| Eloquent ORM | Database Abstraction |
+| Laravel Authentication | Security System |
 
 ---
 
-## 🚀 Cara Install
+# 🏗 System Architecture
 
 ```bash
+Client Side (Browser)
+        ↓
+Laravel Routing
+        ↓
+Controller Layer
+        ↓
+Service / Business Logic
+        ↓
+Eloquent ORM
+        ↓
+MySQL Database
+
+# Clone repository
 git clone https://github.com/Rahmyvall/DashboardEliteStayHotel.git
 
-cd hotel-management-dashboard
+# Masuk ke folder project
+cd DashboardEliteStayHotel
 
+# Install dependency
 composer install
 
+# Copy environment
 cp .env.example .env
 
+# Generate application key
 php artisan key:generate
 
+# Migration database
 php artisan migrate
 
+# Jalankan server
 php artisan serve
-```

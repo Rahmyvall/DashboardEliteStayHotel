@@ -14,5 +14,8 @@
     <!-- App css -->
     <link href="{{asset('dashtrap/admin/dist/assets/css/style.min.css')}}" rel="stylesheet" type="text/css">
     <link href="{{asset('dashtrap/admin/dist/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css">
+     <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
+
     <script src="{{asset('dashtrap/admin/dist/assets/js/config.js')}}"></script>
 </head>

@@ -16,58 +16,112 @@
     <div class="row g-4">
 
         @php
+        use App\Models\User;
+
         $cards = [
-        ['title' => 'Cost per Unit', 'value' => '$17.21', 'badge' => 'Daily', 'progress' => 57, 'trend' => '+12.5%',
-        'icon' => 'up', 'color' => 'success'],
-        ['title' => 'Market Revenue', 'value' => '$1875.54', 'badge' => 'Per Week', 'progress' => 57, 'trend' =>
-        '-18.71%', 'icon' => 'down', 'color' => 'danger'],
-        ['title' => 'Expenses', 'value' => '$784.62', 'badge' => 'Per Month', 'progress' => 57, 'trend' => '+57%',
-        'icon' => 'up', 'color' => 'warning'],
-        ['title' => 'Daily Visits', 'value' => '115,187', 'badge' => 'All Time', 'progress' => 57, 'trend' => '-17.8%',
-        'icon' => 'down', 'color' => 'info'],
+        [
+        'title' => 'Total Users',
+        'value' => User::count(),
+        'badge' => 'Semua User',
+        'progress' => 100,
+        'trend' => '+100%',
+        'icon' => 'users',
+        'color' => 'primary',
+        ],
+        [
+        'title' => 'Admin',
+        'value' => User::where('role', 'admin')->count(),
+        'badge' => 'Role Admin',
+        'progress' => 60,
+        'trend' => '+5%',
+        'icon' => 'shield-account',
+        'color' => 'danger',
+        ],
+        [
+        'title' => 'Resepsionis',
+        'value' => User::where('role', 'resepsionis')->count(),
+        'badge' => 'Front Office',
+        'progress' => 40,
+        'trend' => '+3%',
+        'icon' => 'account-tie',
+        'color' => 'warning',
+        ],
+        [
+        'title' => 'Pelanggan',
+        'value' => User::where('role', 'pelanggan')->count(),
+        'badge' => 'Customer',
+        'progress' => 80,
+        'trend' => '+12%',
+        'icon' => 'account-group',
+        'color' => 'info',
+        ],
+        [
+        'title' => 'User Aktif',
+        'value' => User::where('status', 'aktif')->count(),
+        'badge' => 'Aktif sekarang',
+        'progress' => 90,
+        'trend' => '+8%',
+        'icon' => 'check-circle',
+        'color' => 'success',
+        ],
         ];
         @endphp
 
         @foreach($cards as $c)
         <div class="col-md-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 hover-shadow transition">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
 
                 <div class="card-body p-4">
 
                     {{-- HEADER --}}
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center gap-2">
+
+                        <div class="d-flex align-items-center gap-3">
+
                             <div class="rounded-circle bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} d-flex align-items-center justify-content-center"
-                                style="width:38px;height:38px;">
-                                <i class="mdi mdi-chart-box-outline"></i>
+                                style="width:42px;height:42px;">
+
+                                <i class="ti ti-{{ $c['icon'] }}"></i>
+
                             </div>
 
                             <div>
-                                <div class="small text-muted">{{ $c['title'] }}</div>
-                                <div class="fw-semibold text-dark">{{ $c['badge'] }}</div>
+                                <div class="text-muted small">{{ $c['title'] }}</div>
+                                <div class="fw-semibold">{{ $c['badge'] }}</div>
                             </div>
+
                         </div>
+
                     </div>
 
                     {{-- VALUE --}}
-                    <div class="d-flex justify-content-between align-items-end mb-3">
-                        <h3 class="fw-bold mb-0">{{ $c['value'] }}</h3>
+                    <h3 class="fw-bold mb-2">
+                        {{ $c['value'] }}
+                    </h3>
 
-                        <div class="text-end">
-                            <div class="small fw-semibold text-{{ $c['color'] }}">
-                                {{ $c['trend'] }}
-                                <i class="mdi mdi-arrow-{{ $c['icon'] }}"></i>
-                            </div>
-                        </div>
+                    {{-- TREND --}}
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <span class="text-{{ $c['trend'][0] == '+' ? 'success' : 'danger' }} small fw-semibold">
+                            {{ $c['trend'] }}
+                        </span>
+
+                        <small class="text-muted">
+                            Progress {{ $c['progress'] }}%
+                        </small>
+
                     </div>
 
-                    {{-- PROGRESS --}}
-                    <div class="progress rounded-pill" style="height:6px;">
+                    {{-- PROGRESS BAR --}}
+                    <div class="progress mt-2" style="height:6px;">
                         <div class="progress-bar bg-{{ $c['color'] }}" style="width: {{ $c['progress'] }}%"></div>
                     </div>
 
                 </div>
+
             </div>
+
         </div>
         @endforeach
 
