@@ -37,3 +37,7 @@
     height: 34px;
     font-size: 13px;
 }
+.ti {
+    font-size: 1.6rem !important;
+    stroke-width: 2;
+}

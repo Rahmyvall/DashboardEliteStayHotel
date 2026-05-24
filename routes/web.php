@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ResepsionisPelangganController;   
 
 /*
 |--------------------------------------------------------------------------
@@ -66,9 +68,26 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
         ->name('admin.dashboard');
 
-    // USER MANAGEMENT
+    /*
+    |--------------------------------------------------------------------------
+    | USER MANAGEMENT
+    |--------------------------------------------------------------------------
+    */
+
     Route::resource('/pages/users', UserController::class)
         ->names('users');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PELANGGAN MANAGEMENT
+    |--------------------------------------------------------------------------
+    */
+
+    Route::resource('/pages/pelanggan1', PelangganController::class)
+        ->names('pelanggan1');
+
+    Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
+        ->name('admin.dashboard.pelanggan.chart');
 });
 
 
@@ -78,11 +97,23 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-Route::middleware(['auth', 'role:resepsionis'])->group(function () {
+Route::middleware(['auth', 'role:resepsionis'])
+    ->prefix('pages/resepsionis')
+    ->name('resepsionis.')
+    ->group(function () {
 
-    Route::get('/resepsionis/dashboard', [DashboardController::class, 'resepsionis'])
-        ->name('resepsionis.dashboard');
-});
+        Route::get('/pelanggan', [ResepsionisPelangganController::class, 'index'])
+            ->name('pelanggan.index');
+
+        Route::get('/pelanggan/create', [ResepsionisPelangganController::class, 'create'])
+            ->name('pelanggan.create');
+
+        Route::post('/pelanggan', [ResepsionisPelangganController::class, 'store'])
+            ->name('pelanggan.store');
+
+        Route::delete('/pelanggan/{pelanggan}', [ResepsionisPelangganController::class, 'destroy'])
+            ->name('pelanggan.destroy');
+    });
 
 
 /*

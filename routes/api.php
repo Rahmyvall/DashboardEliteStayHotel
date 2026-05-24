@@ -1,16 +1,63 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\UserController;   // ← Ini yang diperbaiki
 
-// API Routes untuk User
-Route::prefix('users')->name('users.')->group(function () {
+// Controllers
+use App\Http\Controllers\Api\UserController;
 
-    Route::get('/', [UserController::class, 'index'])->name('index');
-    Route::post('/', [UserController::class, 'store'])->name('store');
-    Route::get('{id}', [UserController::class, 'show'])->name('show');
-    Route::put('{id}', [UserController::class, 'update'])->name('update');     // PUT lebih tepat
-    Route::patch('{id}', [UserController::class, 'update'])->name('update');   // PATCH juga boleh
-    Route::delete('{id}', [UserController::class, 'destroy'])->name('destroy');
+// Admin
+use App\Http\Controllers\Api\Admin\PelangganApiController as PelangganApiController;
+
+// Resepsionis
+use App\Http\Controllers\Api\Resepsionis\PelangganApiController as ResepsionisPelangganApiController;
+
+// Pelanggan
+use App\Http\Controllers\Api\Pelanggan\PelangganApiController;
+
+Route::prefix('v1')->group(function () {
+
+    /*
+    |--------------------------------------------------------------------------
+    | ADMIN API
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['auth:sanctum', 'role:admin'])
+        ->prefix('admin')
+        ->group(function () {
+
+            Route::apiResource(
+                'pelanggan',
+                PelangganApiController::class
+            );
+            Route::apiResource('users', UserController::class);
+
+        });
+
+    /*
+    |--------------------------------------------------------------------------
+    | RESEPSIONIS API
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['auth:sanctum', 'role:resepsionis'])
+        ->prefix('resepsionis')
+        ->group(function () {
+
+            Route::apiResource(
+                'pelanggan',
+                ResepsionisPelangganApiController::class
+            );
+
+        });
+
+    /*
+    |--------------------------------------------------------------------------
+    | PELANGGAN API
+    |--------------------------------------------------------------------------
+    */
+    Route::middleware(['auth:sanctum', 'role:pelanggan'])
+        ->prefix('pelanggan')
+        ->group(function () {
+
+        });
 
 });

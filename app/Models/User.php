@@ -51,6 +51,12 @@ class User extends Authenticatable
      * Attribute casting
      */
     protected $casts = [
+        'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function pelanggan()
+    {
+        return $this->hasOne(Pelanggan::class, 'id_user', 'id_user');
+    }
 }

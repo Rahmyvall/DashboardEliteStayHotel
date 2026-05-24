@@ -68,61 +68,53 @@
         @endphp
 
         @foreach($cards as $c)
-        <div class="col-md-6 col-xl-3">
+       <div class="col-md-6 col-xl-3">
+    <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden hover-shadow transition-all">
+        <div class="card-body p-4 pb-3">
 
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-
-                <div class="card-body p-4">
-
-                    {{-- HEADER --}}
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-
-                        <div class="d-flex align-items-center gap-3">
-
-                            <div class="rounded-circle bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} d-flex align-items-center justify-content-center"
-                                style="width:42px;height:42px;">
-
-                                <i class="ti ti-{{ $c['icon'] }}"></i>
-
-                            </div>
-
-                            <div>
-                                <div class="text-muted small">{{ $c['title'] }}</div>
-                                <div class="fw-semibold">{{ $c['badge'] }}</div>
-                            </div>
-
-                        </div>
-
+            {{-- HEADER --}}
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    
+                    <!-- Icon Container -->
+                    <div class="rounded-3 bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} 
+                                d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width: 52px; height: 52px; font-size: 1.6rem;">
+                        
+                        <i class="ti ti-{{ $c['icon'] ?? 'question-mark' }}"></i>
                     </div>
 
-                    {{-- VALUE --}}
-                    <h3 class="fw-bold mb-2">
-                        {{ $c['value'] }}
-                    </h3>
-
-                    {{-- TREND --}}
-                    <div class="d-flex justify-content-between align-items-center">
-
-                        <span class="text-{{ $c['trend'][0] == '+' ? 'success' : 'danger' }} small fw-semibold">
-                            {{ $c['trend'] }}
-                        </span>
-
-                        <small class="text-muted">
-                            Progress {{ $c['progress'] }}%
-                        </small>
-
+                    <!-- Title -->
+                    <div>
+                        <div class="text-muted small fw-medium">{{ $c['title'] }}</div>
+                        <div class="fw-semibold text-dark">{{ $c['badge'] }}</div>
                     </div>
-
-                    {{-- PROGRESS BAR --}}
-                    <div class="progress mt-2" style="height:6px;">
-                        <div class="progress-bar bg-{{ $c['color'] }}" style="width: {{ $c['progress'] }}%"></div>
-                    </div>
-
                 </div>
+            </div>
 
+            {{-- VALUE --}}
+            <h3 class="fw-bold mb-1 text-dark" style="font-size: 2.1rem; line-height: 1;">
+                {{ $c['value'] }}
+            </h3>
+
+            {{-- TREND + PROGRESS --}}
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                <span class="text-{{ $c['trend'][0] == '+' ? 'success' : 'danger' }} fw-semibold fs-6">
+                    {{ $c['trend'] }}
+                </span>
+                <small class="text-muted fw-medium">Progress {{ $c['progress'] }}%</small>
+            </div>
+
+            {{-- PROGRESS BAR --}}
+            <div class="progress mt-2" style="height: 7px; border-radius: 10px; background: #f1f3f5;">
+                <div class="progress-bar bg-{{ $c['color'] }} rounded-3" 
+                     style="width: {{ $c['progress'] }}%; transition: width 1.2s ease;">
+                </div>
             </div>
 
         </div>
+    </div>
+</div>
         @endforeach
 
     </div>
@@ -131,22 +123,50 @@
     <div class="row mt-4 g-4">
 
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h6 class="fw-semibold mb-3">Basic Column Chart</h6>
-                    <div id="apex-column-1" class="apex-charts"></div>
-                </div>
-            </div>
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body p-4">
+            <h6 class="fw-semibold mb-3">Basic Column Chart</h6>
+            <div id="apex-column-1" class="apex-charts"></div>
         </div>
+    </div>
+</div>
 
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h6 class="fw-semibold mb-3">Simple Pie Chart</h6>
-                    <div id="apex-pie-1" class="apex-charts"></div>
+     <div class="col-lg-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body p-4">
+            
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-semibold mb-0">Distribusi Pelanggan</h6>
+                <span class="badge bg-primary fs-6">
+                    Total: <span id="total-pelanggan" class="fw-bold">0</span>
+                </span>
+            </div>
+
+            <!-- Chart -->
+            <div id="apex-pie-pelanggan" style="min-height: 280px;"></div>
+
+            <!-- Legend -->
+            <div class="row text-center mt-4">
+                <div class="col-6">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <span class="text-primary fs-4">●</span>
+                        <span class="text-muted">Laki-laki</span>
+                    </div>
+                    <h5 id="count-laki" class="fw-bold text-primary mb-0">0</h5>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <span class="text-danger fs-4">●</span>
+                        <span class="text-muted">Perempuan</span>
+                    </div>
+                    <h5 id="count-perempuan" class="fw-bold text-danger mb-0">0</h5>
                 </div>
             </div>
+
         </div>
+    </div>
+</div>
 
         <div class="col-lg-3">
             <div class="card border-0 shadow-sm rounded-4 h-100">

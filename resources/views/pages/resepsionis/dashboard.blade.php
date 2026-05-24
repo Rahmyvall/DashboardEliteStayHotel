@@ -16,59 +16,105 @@
     <div class="row g-4">
 
         @php
+        use App\Models\User;
+
         $cards = [
-        ['title' => 'Cost per Unit', 'value' => '$17.21', 'badge' => 'Daily', 'progress' => 57, 'trend' => '+12.5%',
-        'icon' => 'up', 'color' => 'success'],
-        ['title' => 'Market Revenue', 'value' => '$1875.54', 'badge' => 'Per Week', 'progress' => 57, 'trend' =>
-        '-18.71%', 'icon' => 'down', 'color' => 'danger'],
-        ['title' => 'Expenses', 'value' => '$784.62', 'badge' => 'Per Month', 'progress' => 57, 'trend' => '+57%',
-        'icon' => 'up', 'color' => 'warning'],
-        ['title' => 'Daily Visits', 'value' => '115,187', 'badge' => 'All Time', 'progress' => 57, 'trend' => '-17.8%',
-        'icon' => 'down', 'color' => 'info'],
+        [
+        'title' => 'Total Users',
+        'value' => User::count(),
+        'badge' => 'Semua User',
+        'progress' => 100,
+        'trend' => '+100%',
+        'icon' => 'users',
+        'color' => 'primary',
+        ],
+        [
+        'title' => 'Admin',
+        'value' => User::where('role', 'admin')->count(),
+        'badge' => 'Role Admin',
+        'progress' => 60,
+        'trend' => '+5%',
+        'icon' => 'shield-account',
+        'color' => 'danger',
+        ],
+        [
+        'title' => 'Resepsionis',
+        'value' => User::where('role', 'resepsionis')->count(),
+        'badge' => 'Front Office',
+        'progress' => 40,
+        'trend' => '+3%',
+        'icon' => 'account-tie',
+        'color' => 'warning',
+        ],
+        [
+        'title' => 'Pelanggan',
+        'value' => User::where('role', 'pelanggan')->count(),
+        'badge' => 'Customer',
+        'progress' => 80,
+        'trend' => '+12%',
+        'icon' => 'account-group',
+        'color' => 'info',
+        ],
+        [
+        'title' => 'User Aktif',
+        'value' => User::where('status', 'aktif')->count(),
+        'badge' => 'Aktif sekarang',
+        'progress' => 90,
+        'trend' => '+8%',
+        'icon' => 'check-circle',
+        'color' => 'success',
+        ],
         ];
         @endphp
 
         @foreach($cards as $c)
-        <div class="col-md-6 col-xl-3">
-            <div class="card border-0 shadow-sm rounded-4 h-100 hover-shadow transition">
+       <div class="col-md-6 col-xl-3">
+    <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden hover-shadow transition-all">
+        <div class="card-body p-4 pb-3">
 
-                <div class="card-body p-4">
-
-                    {{-- HEADER --}}
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="d-flex align-items-center gap-2">
-                            <div class="rounded-circle bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} d-flex align-items-center justify-content-center"
-                                style="width:38px;height:38px;">
-                                <i class="mdi mdi-chart-box-outline"></i>
-                            </div>
-
-                            <div>
-                                <div class="small text-muted">{{ $c['title'] }}</div>
-                                <div class="fw-semibold text-dark">{{ $c['badge'] }}</div>
-                            </div>
-                        </div>
+            {{-- HEADER --}}
+            <div class="d-flex justify-content-between align-items-start mb-4">
+                <div class="d-flex align-items-center gap-3">
+                    
+                    <!-- Icon Container -->
+                    <div class="rounded-3 bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} 
+                                d-flex align-items-center justify-content-center flex-shrink-0"
+                         style="width: 52px; height: 52px; font-size: 1.6rem;">
+                        
+                        <i class="ti ti-{{ $c['icon'] ?? 'question-mark' }}"></i>
                     </div>
 
-                    {{-- VALUE --}}
-                    <div class="d-flex justify-content-between align-items-end mb-3">
-                        <h3 class="fw-bold mb-0">{{ $c['value'] }}</h3>
-
-                        <div class="text-end">
-                            <div class="small fw-semibold text-{{ $c['color'] }}">
-                                {{ $c['trend'] }}
-                                <i class="mdi mdi-arrow-{{ $c['icon'] }}"></i>
-                            </div>
-                        </div>
+                    <!-- Title -->
+                    <div>
+                        <div class="text-muted small fw-medium">{{ $c['title'] }}</div>
+                        <div class="fw-semibold text-dark">{{ $c['badge'] }}</div>
                     </div>
-
-                    {{-- PROGRESS --}}
-                    <div class="progress rounded-pill" style="height:6px;">
-                        <div class="progress-bar bg-{{ $c['color'] }}" style="width: {{ $c['progress'] }}%"></div>
-                    </div>
-
                 </div>
             </div>
+
+            {{-- VALUE --}}
+            <h3 class="fw-bold mb-1 text-dark" style="font-size: 2.1rem; line-height: 1;">
+                {{ $c['value'] }}
+            </h3>
+
+            {{-- TREND + PROGRESS --}}
+            <div class="d-flex justify-content-between align-items-end mt-3">
+                <span class="text-{{ $c['trend'][0] == '+' ? 'success' : 'danger' }} fw-semibold fs-6">
+                    {{ $c['trend'] }}
+                </span>
+                <small class="text-muted fw-medium">Progress {{ $c['progress'] }}%</small>
+            </div>
+
+            {{-- PROGRESS BAR --}}
+            <div class="progress mt-2" style="height: 7px; border-radius: 10px; background: #f1f3f5;">
+                <div class="progress-bar bg-{{ $c['color'] }} rounded-3" 
+                     style="width: {{ $c['progress'] }}%; transition: width 1.2s ease;">
+                </div>
+            </div>
+
         </div>
+    </div>
+</div>
         @endforeach
 
     </div>
@@ -77,22 +123,50 @@
     <div class="row mt-4 g-4">
 
         <div class="col-lg-5">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h6 class="fw-semibold mb-3">Basic Column Chart</h6>
-                    <div id="apex-column-1" class="apex-charts"></div>
-                </div>
-            </div>
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body p-4">
+            <h6 class="fw-semibold mb-3">Basic Column Chart</h6>
+            <div id="apex-column-1" class="apex-charts"></div>
         </div>
+    </div>
+</div>
 
-        <div class="col-lg-4">
-            <div class="card border-0 shadow-sm rounded-4 h-100">
-                <div class="card-body p-4">
-                    <h6 class="fw-semibold mb-3">Simple Pie Chart</h6>
-                    <div id="apex-pie-1" class="apex-charts"></div>
+     <div class="col-lg-4">
+    <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body p-4">
+            
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h6 class="fw-semibold mb-0">Distribusi Pelanggan</h6>
+                <span class="badge bg-primary fs-6">
+                    Total: <span id="total-pelanggan" class="fw-bold">0</span>
+                </span>
+            </div>
+
+            <!-- Chart -->
+            <div id="apex-pie-pelanggan" style="min-height: 280px;"></div>
+
+            <!-- Legend -->
+            <div class="row text-center mt-4">
+                <div class="col-6">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <span class="text-primary fs-4">●</span>
+                        <span class="text-muted">Laki-laki</span>
+                    </div>
+                    <h5 id="count-laki" class="fw-bold text-primary mb-0">0</h5>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex align-items-center justify-content-center gap-2">
+                        <span class="text-danger fs-4">●</span>
+                        <span class="text-muted">Perempuan</span>
+                    </div>
+                    <h5 id="count-perempuan" class="fw-bold text-danger mb-0">0</h5>
                 </div>
             </div>
+
         </div>
+    </div>
+</div>
 
         <div class="col-lg-3">
             <div class="card border-0 shadow-sm rounded-4 h-100">

@@ -429,3 +429,58 @@ document.getElementById('btnLogout')
         }, 500);
     });
 </script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    const chartElement = document.querySelector("#apex-pie-pelanggan");
+    
+    if (!chartElement) {
+        console.error("Element #apex-pie-pelanggan tidak ditemukan!");
+        return;
+    }
+
+    fetch('{{ route("admin.dashboard.pelanggan.chart") }}')
+        .then(response => {
+            if (!response.ok) throw new Error('Gagal mengambil data');
+            return response.json();
+        })
+        .then(data => {
+            document.getElementById('total-pelanggan').textContent = data.total;
+            document.getElementById('count-laki').textContent = data.laki_laki;
+            document.getElementById('count-perempuan').textContent = data.perempuan;
+
+            const options = {
+                series: [data.laki_laki, data.perempuan],
+                chart: {
+                    type: 'pie',
+                    height: 280,
+                    toolbar: { show: false }
+                },
+                labels: ['Laki-laki', 'Perempuan'],
+                colors: ['#3b82f6', '#ec4899'],
+                legend: {
+                    position: 'bottom',
+                    fontSize: '14px'
+                },
+                dataLabels: {
+                    enabled: true,
+                    formatter: function(val) {
+                        return val.toFixed(1) + "%";
+                    }
+                },
+                tooltip: {
+                    y: {
+                        formatter: (val) => val + " orang"
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(chartElement, options);
+            chart.render();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            chartElement.innerHTML = `<p class="text-center text-danger mt-5">Gagal memuat grafik</p>`;
+        });
+});
+</script>
