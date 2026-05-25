@@ -40,7 +40,7 @@ Sistem ini memungkinkan admin hotel mengelola reservasi, data tamu, pembayaran, 
 ✅ Real-Time Room Monitoring  
 ✅ Authentication & Role Management  
 ✅ Business-Oriented System Design  
-✅ Suitable for Enterprise & Hospitality Industry  
+✅ Suitable for Enterprise & Hospitality Industry
 
 ---
 
@@ -65,7 +65,10 @@ Sistem ini memungkinkan admin hotel mengelola reservasi, data tamu, pembayaran, 
 ## 🔹 Reservation Management
 
 <p align="center">
-  <img src="https://via.placeholder.com/1200x600.png?text=Reservation+Management+Dashboard" width="100%" alt="Reservation Dashboard">
+  <img src="public/assets/2.png" width="100%" alt="Login Page">
+</p>
+<p align="center">
+  <img src="public/assets/3.png" width="100%" alt="Login Page">
 </p>
 
 ---
@@ -81,31 +84,37 @@ Sistem ini memungkinkan admin hotel mengelola reservasi, data tamu, pembayaran, 
 # 🚀 Fitur Utama
 
 ### 🛎 Reservation Management
+
 - Booking & reservasi kamar
 - Check-in / Check-out management
 - Status reservasi real-time
 
 ### 🏨 Room Monitoring
+
 - Monitoring ketersediaan kamar
 - Room status management
 - Room categorization
 
 ### 👥 Guest Management
+
 - Data tamu terintegrasi
 - Riwayat reservasi pelanggan
 - Guest information system
 
 ### 💳 Payment System
+
 - Manajemen transaksi pembayaran
 - Invoice & payment tracking
 - Transaction history
 
 ### 📊 Dashboard Analytics
+
 - Statistik operasional hotel
 - Revenue monitoring
 - Reservation analytics
 
 ### 🔐 Security & Authentication
+
 - Multi-role authentication
 - Admin access management
 - Secure login system
@@ -114,16 +123,16 @@ Sistem ini memungkinkan admin hotel mengelola reservasi, data tamu, pembayaran, 
 
 # 🧩 Tech Stack
 
-| Technology | Function |
-|---|---|
-| Laravel | Backend Framework |
-| PHP | Server-side Programming |
-| MySQL | Database Management |
-| Tailwind CSS / Bootstrap | Responsive UI Design |
-| JavaScript | Interactive Frontend |
-| Blade Engine | Template Rendering |
-| Eloquent ORM | Database Abstraction |
-| Laravel Authentication | Security System |
+| Technology               | Function                |
+| ------------------------ | ----------------------- |
+| Laravel                  | Backend Framework       |
+| PHP                      | Server-side Programming |
+| MySQL                    | Database Management     |
+| Tailwind CSS / Bootstrap | Responsive UI Design    |
+| JavaScript               | Interactive Frontend    |
+| Blade Engine             | Template Rendering      |
+| Eloquent ORM             | Database Abstraction    |
+| Laravel Authentication   | Security System         |
 
 ---
 
@@ -162,3 +171,4 @@ php artisan migrate
 
 # Jalankan server
 php artisan serve
+```
