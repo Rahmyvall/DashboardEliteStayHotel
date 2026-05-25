@@ -9,16 +9,13 @@
     <meta content="Myra Studio" name="author" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('dashtrap/admin/dist/assets/images/logo3.png')}}">
+    <link rel="shortcut icon" href="{{ asset('dashtrap/admin/dist/assets/images/logo3.png') }}">
 
     <!-- App css -->
-    <link href="{{asset('dashtrap/admin/dist/assets/css/style.min.css')}}" rel="stylesheet" type="text/css">
-    <link href="{{asset('dashtrap/admin/dist/assets/css/icons.min.css')}}" rel="stylesheet" type="text/css">
-    <link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="{{ asset('dashtrap/admin/dist/assets/css/style.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('dashtrap/admin/dist/assets/css/icons.min.css') }}" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-     <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css">
-
-    <script src="{{asset('dashtrap/admin/dist/assets/js/config.js')}}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    <script src="{{ asset('dashtrap/admin/dist/assets/js/config.js') }}"></script>
 </head>

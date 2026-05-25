@@ -1,18 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-
-// Controllers
+use App\Http\Controllers\Api\PelangganApiController;
+use App\Http\Controllers\Api\Resepsionis\ResepsionisKamarApiController;
+use App\Http\Controllers\Api\Resepsionis\ResepsionisPelangganApiController;
+use App\Http\Controllers\Api\TipeKamarController;
 use App\Http\Controllers\Api\UserController;
-
-// Admin
-use App\Http\Controllers\Api\Admin\PelangganApiController as PelangganApiController;
-
-// Resepsionis
-use App\Http\Controllers\Api\Resepsionis\PelangganApiController as ResepsionisPelangganApiController;
-
-// Pelanggan
-use App\Http\Controllers\Api\Pelanggan\PelangganApiController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
 
@@ -25,11 +18,9 @@ Route::prefix('v1')->group(function () {
         ->prefix('admin')
         ->group(function () {
 
-            Route::apiResource(
-                'pelanggan',
-                PelangganApiController::class
-            );
+            Route::apiResource('pelanggan', PelangganApiController::class);
             Route::apiResource('users', UserController::class);
+            Route::apiResource('tipe-kamar', TipeKamarController::class);
 
         });
 
@@ -42,22 +33,23 @@ Route::prefix('v1')->group(function () {
         ->prefix('resepsionis')
         ->group(function () {
 
-            Route::apiResource(
-                'pelanggan',
-                ResepsionisPelangganApiController::class
-            );
+            Route::apiResource('pelanggan', ResepsionisPelangganApiController::class);
+
+            // Kamar
+            Route::apiResource('kamar', ResepsionisKamarApiController::class);
 
         });
 
     /*
     |--------------------------------------------------------------------------
-    | PELANGGAN API
+    | PELANGGAN (CUSTOMER) API
     |--------------------------------------------------------------------------
     */
     Route::middleware(['auth:sanctum', 'role:pelanggan'])
         ->prefix('pelanggan')
         ->group(function () {
 
-        });
+            // Tambahkan route pelanggan di sini nanti
 
+        });
 });

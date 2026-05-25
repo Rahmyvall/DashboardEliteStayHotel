@@ -2,42 +2,124 @@
 @tailwind components;
 @tailwind utilities;
 
-/* custom CSS kamu di bawah sini */
+/* =========================
+   🎨 DESIGN SYSTEM DASHBOARD HOTEL
+   ========================= */
+
+/* Smooth transition global */
+.transition {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Hover card modern (lebih soft & premium) */
 .hover-shadow {
-    transition: all 0.2s ease;
+    transition: all 0.25s ease;
+    will-change: transform, box-shadow;
 }
 
 .hover-shadow:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    transform: translateY(-6px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
 }
 
-.transition {
-    transition: all 0.2s ease;
+/* =========================
+   📊 TABLE MODERN (ADMIN HOTEL)
+   ========================= */
+
+.modern-table {
+    border-collapse: separate;
+    border-spacing: 0;
 }
+
 .modern-table thead th {
-    font-size: 12px;
+    font-size: 11px;
     text-transform: uppercase;
-    letter-spacing: .5px;
-    color: #6c757d;
-    border-bottom: 1px solid #eee !important;
-    padding-bottom: 12px;
+    letter-spacing: 0.08em;
+    color: #94a3b8; /* slate-400 */
+    border-bottom: 1px solid #eef2f7 !important;
+    padding: 14px 12px;
+    font-weight: 600;
 }
 
 .modern-table tbody tr {
-    border-bottom: 1px solid #f3f3f3;
+    border-bottom: 1px solid #f1f5f9;
+    transition: all 0.15s ease;
 }
 
 .modern-table tbody tr:hover {
-    background: #f9fafb;
+    background: #f8fafc;
 }
+
+/* =========================
+   👤 AVATAR SYSTEM
+   ========================= */
 
 .avatar-sm {
     width: 34px;
     height: 34px;
     font-size: 13px;
+    border-radius: 10px;
 }
-.ti {
+
+.avatar-md {
+    width: 42px;
+    height: 42px;
+    font-size: 15px;
+    border-radius: 12px;
+}
+
+/* =========================
+   🧩 ICON SYSTEM (Bootstrap Icons / Tabler / dll)
+   ========================= */
+
+.icon {
     font-size: 1.6rem !important;
     stroke-width: 2;
+}
+
+/* =========================
+   🪟 CARD SYSTEM (HOTEL DASHBOARD STYLE)
+   ========================= */
+
+.card {
+    border-radius: 16px;
+}
+
+/* soft card feel */
+.soft-card {
+    background: #ffffff;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 4px 18px rgba(15, 23, 42, 0.04);
+}
+
+/* hover lift lebih smooth */
+.lift {
+    transition: all 0.25s ease;
+}
+
+.lift:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================
+   📈 PROGRESS BAR MODERN
+   ========================= */
+
+.progress {
+    background-color: #f1f5f9;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    border-radius: 999px;
+}
+
+/* =========================
+   🏨 DASHBOARD BACKGROUND OPTIONAL
+   ========================= */
+
+.dashboard-bg {
+    background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
 }

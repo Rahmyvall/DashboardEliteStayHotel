@@ -5,45 +5,41 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\ResepsionisPelangganController;   
+use App\Http\Controllers\TipeKamarController;
+use App\Http\Controllers\KamarController;
+use App\Http\Controllers\ResepsionisKamarController;
+use App\Http\Controllers\ResepsionisPelangganController;
 
 /*
 |--------------------------------------------------------------------------
 | AUTH
 |--------------------------------------------------------------------------
 */
-
 Route::middleware('guest')->group(function () {
 
-    Route::get('/', [AuthController::class, 'login'])
-        ->name('login');
+    Route::get('/', [AuthController::class, 'login'])->name('login');
 
-    Route::post('/login', [AuthController::class, 'authenticate'])
-        ->name('login.process');
+    Route::post('/login', [AuthController::class, 'authenticate'])->name('login.process');
 });
-
 
 /*
 |--------------------------------------------------------------------------
 | LOGOUT
 |--------------------------------------------------------------------------
 */
-
 Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
-
 
 /*
 |--------------------------------------------------------------------------
 | DASHBOARD REDIRECT
 |--------------------------------------------------------------------------
 */
-
 Route::get('/dashboard', function () {
 
     if (auth()->user()->role == 'admin') {
-        return redirect()->route('admin.dashboard');
+        return redirect()->route('pages.dashboard');
     }
 
     if (auth()->user()->role == 'resepsionis') {
@@ -54,54 +50,56 @@ Route::get('/dashboard', function () {
         return redirect()->route('pelanggan.dashboard');
     }
 
-})->middleware('auth')->name('dashboard');
+    abort(403);
 
+})->middleware('auth')->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
 | ADMIN
 |--------------------------------------------------------------------------
 */
-
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
-        ->name('admin.dashboard');
+        ->name('pages.dashboard');
 
-    /*
-    |--------------------------------------------------------------------------
-    | USER MANAGEMENT
-    |--------------------------------------------------------------------------
-    */
+    Route::resource('/pages/users', UserController::class)->names('users');
 
-    Route::resource('/pages/users', UserController::class)
-        ->names('users');
-
-    /*
-    |--------------------------------------------------------------------------
-    | PELANGGAN MANAGEMENT
-    |--------------------------------------------------------------------------
-    */
-
-    Route::resource('/pages/pelanggan1', PelangganController::class)
-        ->names('pelanggan1');
+    Route::resource('/pages/pelanggan1', PelangganController::class)->names('pelanggan1');
 
     Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
         ->name('admin.dashboard.pelanggan.chart');
-});
 
+    Route::resource('/pages/tipe-kamar', TipeKamarController::class)->names('tipe-kamar');
+
+    Route::resource('/pages/kamar', KamarController::class)->names('kamar');
+Route::put('/kamar/{kamar}/konfirmasi', [KamarController::class, 'konfirmasi'])->name('kamar.konfirmasi');
+    Route::post('/pages/kamar/generate-floor', [KamarController::class, 'generateFloorRooms'])
+        ->name('kamar.generateFloor');
+});
 
 /*
 |--------------------------------------------------------------------------
 | RESEPSIONIS
 |--------------------------------------------------------------------------
 */
-
+/*
+|--------------------------------------------------------------------------
+| RESEPSIONIS
+|--------------------------------------------------------------------------
+*/
 Route::middleware(['auth', 'role:resepsionis'])
     ->prefix('pages/resepsionis')
     ->name('resepsionis.')
     ->group(function () {
 
+        // ================= DASHBOARD =================
+        Route::get('/dashboard', function () {
+            return redirect()->route('resepsionis.pelanggan.index');
+        })->name('dashboard');
+
+        // ================= PELANGGAN =================
         Route::get('/pelanggan', [ResepsionisPelangganController::class, 'index'])
             ->name('pelanggan.index');
 
@@ -113,15 +111,35 @@ Route::middleware(['auth', 'role:resepsionis'])
 
         Route::delete('/pelanggan/{pelanggan}', [ResepsionisPelangganController::class, 'destroy'])
             ->name('pelanggan.destroy');
+
+        // ================= CHART =================
+        Route::get('/dashboard/pelanggan/chart', [DashboardController::class, 'pelangganChart'])
+            ->name('pelanggan.chart');
+
+        // ================= KAMAR =================
+        Route::get('/kamar', [ResepsionisKamarController::class, 'index'])
+            ->name('kamar.index');
+
+        Route::get('/kamar/create', [ResepsionisKamarController::class, 'create'])
+            ->name('kamar.create');
+
+        Route::post('/kamar/store', [ResepsionisKamarController::class, 'store'])
+            ->name('kamar.store');
+
+        Route::get('/kamar/{id}', [ResepsionisKamarController::class, 'show'])
+            ->name('kamar.show');
+
+        Route::get('/kamar/{id}/info', [ResepsionisKamarController::class, 'info'])
+            ->name('kamar.info');
+
+        Route::post('/kamar/{id}/pick', [ResepsionisKamarController::class, 'pick'])
+            ->name('kamar.pick');
     });
-
-
 /*
 |--------------------------------------------------------------------------
 | PELANGGAN
 |--------------------------------------------------------------------------
 */
-
 Route::middleware(['auth', 'role:pelanggan'])->group(function () {
 
     Route::get('/pelanggan/dashboard', [DashboardController::class, 'pelanggan'])
