@@ -5,10 +5,19 @@
 
         {{-- TITLE --}}
         <div class="d-flex align-items-center justify-content-between mb-4">
+
             <div>
-                <h3 class="fw-semibold mb-1">{{ $title ?? 'Dashboard' }}</h3>
-                <small class="text-muted">Overview dashboard terbaru</small>
+
+                <h3 class="fw-semibold mb-1">
+                    {{ $title ?? 'Dashboard' }}
+                </h3>
+
+                <small class="text-muted">
+                    Overview dashboard terbaru
+                </small>
+
             </div>
+
         </div>
 
         {{-- CARDS --}}
@@ -18,8 +27,14 @@
                 use App\Models\User;
                 use App\Models\TipeKamar;
                 use App\Models\Kamar;
+                use App\Models\TipeKamarFasilitas;
 
                 $cards = [
+                    /*
+                |--------------------------------------------------------------------------
+                | USERS
+                |--------------------------------------------------------------------------
+                */
                     [
                         'title' => 'Total Users',
                         'value' => User::count(),
@@ -30,6 +45,7 @@
                         'color' => 'primary',
                         'link' => route('users.index'),
                     ],
+
                     [
                         'title' => 'Admin',
                         'value' => User::where('role', 'admin')->count(),
@@ -40,6 +56,7 @@
                         'color' => 'danger',
                         'link' => route('users.index', ['role' => 'admin']),
                     ],
+
                     [
                         'title' => 'Resepsionis',
                         'value' => User::where('role', 'resepsionis')->count(),
@@ -50,6 +67,7 @@
                         'color' => 'warning',
                         'link' => route('users.index', ['role' => 'resepsionis']),
                     ],
+
                     [
                         'title' => 'Pelanggan',
                         'value' => User::where('role', 'pelanggan')->count(),
@@ -60,10 +78,11 @@
                         'color' => 'info',
                         'link' => route('users.index', ['role' => 'pelanggan']),
                     ],
+
                     [
                         'title' => 'User Aktif',
                         'value' => User::where('status', 'aktif')->count(),
-                        'badge' => 'Aktif sekarang',
+                        'badge' => 'Aktif Sekarang',
                         'progress' => 90,
                         'trend' => '+8%',
                         'icon' => 'check-circle-fill',
@@ -71,6 +90,11 @@
                         'link' => route('users.index', ['status' => 'aktif']),
                     ],
 
+                    /*
+                |--------------------------------------------------------------------------
+                | TIPE KAMAR
+                |--------------------------------------------------------------------------
+                */
                     [
                         'title' => 'Tipe Kamar',
                         'value' => TipeKamar::count(),
@@ -82,6 +106,38 @@
                         'link' => route('tipe-kamar.index'),
                     ],
 
+                    /*
+                |--------------------------------------------------------------------------
+                | TIPE KAMAR FASILITAS
+                |--------------------------------------------------------------------------
+                */
+                    [
+                        'title' => 'Tipe Kamar Fasilitas',
+                        'value' => TipeKamarFasilitas::count(),
+                        'badge' => 'Relasi Fasilitas Hotel',
+                        'progress' => 85,
+                        'trend' => '+11%',
+                        'icon' => 'diagram-3-fill',
+                        'color' => 'secondary',
+                        'link' => route('tipe-kamar-fasilitas.index'),
+                    ],
+
+                    [
+                        'title' => 'Relasi Hari Ini',
+                        'value' => TipeKamarFasilitas::whereDate('created_at', today())->count(),
+                        'badge' => 'Data Baru',
+                        'progress' => 70,
+                        'trend' => '+7%',
+                        'icon' => 'plus-circle-fill',
+                        'color' => 'info',
+                        'link' => route('tipe-kamar-fasilitas.index'),
+                    ],
+
+                    /*
+                |--------------------------------------------------------------------------
+                | KAMAR
+                |--------------------------------------------------------------------------
+                */
                     [
                         'title' => 'Total Kamar',
                         'value' => Kamar::count(),
@@ -92,6 +148,7 @@
                         'color' => 'primary',
                         'link' => route('kamar.index'),
                     ],
+
                     [
                         'title' => 'Kamar Tersedia',
                         'value' => Kamar::where('status_kamar', 'tersedia')->count(),
@@ -102,6 +159,7 @@
                         'color' => 'success',
                         'link' => route('kamar.index', ['status' => 'tersedia']),
                     ],
+
                     [
                         'title' => 'Kamar Terisi',
                         'value' => Kamar::where('status_kamar', 'terisi')->count(),
@@ -112,6 +170,7 @@
                         'color' => 'danger',
                         'link' => route('kamar.index', ['status' => 'terisi']),
                     ],
+
                     [
                         'title' => 'Kamar Dipesan',
                         'value' => Kamar::where('status_kamar', 'dipesan')->count(),
@@ -127,43 +186,78 @@
 
             @foreach ($cards as $c)
                 <div class="col-md-6 col-xl-3">
+
                     <a href="{{ $c['link'] ?? '#' }}" class="text-decoration-none">
+
                         <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden card-clickable">
+
                             <div class="card-body p-4 pb-3">
+
                                 <div class="d-flex justify-content-between align-items-start mb-4">
+
                                     <div class="d-flex align-items-center gap-3">
+
                                         <div class="rounded-3 bg-{{ $c['color'] }} bg-opacity-10 text-{{ $c['color'] }} d-flex align-items-center justify-content-center flex-shrink-0"
                                             style="width: 52px; height: 52px; font-size: 1.6rem;">
+
                                             <i class="bi bi-{{ $c['icon'] }}"></i>
+
                                         </div>
+
                                         <div>
-                                            <div class="text-muted small fw-medium">{{ $c['title'] }}</div>
-                                            <div class="fw-semibold text-dark">{{ $c['badge'] }}</div>
+
+                                            <div class="text-muted small fw-medium">
+                                                {{ $c['title'] }}
+                                            </div>
+
+                                            <div class="fw-semibold text-dark">
+                                                {{ $c['badge'] }}
+                                            </div>
+
                                         </div>
+
                                     </div>
+
                                 </div>
 
                                 <h3 class="fw-bold mb-1 text-dark" style="font-size: 2.1rem;">
+
                                     {{ $c['value'] }}
+
                                 </h3>
 
                                 <div class="d-flex justify-content-between align-items-end mt-3">
+
                                     <span
                                         class="text-{{ str_starts_with($c['trend'], '+') ? 'success' : 'danger' }} fw-semibold">
+
                                         {{ $c['trend'] }}
+
                                     </span>
-                                    <small class="text-muted">Progress {{ $c['progress'] }}%</small>
+
+                                    <small class="text-muted">
+                                        Progress {{ $c['progress'] }}%
+                                    </small>
+
                                 </div>
 
                                 <div class="progress mt-2" style="height: 7px;">
+
                                     <div class="progress-bar bg-{{ $c['color'] }}" style="width: {{ $c['progress'] }}%">
+
                                     </div>
+
                                 </div>
+
                             </div>
+
                         </div>
+
                     </a>
+
                 </div>
             @endforeach
+
         </div>
         {{-- CHART SECTION --}}
         <div class="row mt-4 g-4">

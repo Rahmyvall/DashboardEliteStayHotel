@@ -21,17 +21,17 @@
                         <div class="logo-box">
                             <!-- Brand Logo Light -->
                             <a href="index.html" class="logo-light">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/logo-light.png')}}" alt="logo"
+                                <img src="{{ asset('dashtrap/admin/dist/assets/images/logo-light.png') }}" alt="logo"
                                     class="logo-lg" height="22">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/logo-sm.png')}}" alt="small logo"
+                                <img src="{{ asset('dashtrap/admin/dist/assets/images/logo-sm.png') }}" alt="small logo"
                                     class="logo-sm" height="22">
                             </a>
 
                             <!-- Brand Logo Dark -->
                             <a href="index.html" class="logo-dark">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/logo-dark.png')}}" alt="dark logo"
-                                    class="logo-lg" height="22">
-                                <img src="{{asset('dashtrap/admin/dist/assets/images/logo-sm.png')}}" alt="small logo"
+                                <img src="{{ asset('dashtrap/admin/dist/assets/images/logo-dark.png') }}"
+                                    alt="dark logo" class="logo-lg" height="22">
+                                <img src="{{ asset('dashtrap/admin/dist/assets/images/logo-sm.png') }}" alt="small logo"
                                     class="logo-sm" height="22">
                             </a>
                         </div>
@@ -155,7 +155,8 @@
                                             <h6 class="m-0 font-size-16 fw-semibold"> Notification</h6>
                                         </div>
                                         <div class="col-auto">
-                                            <a href="javascript: void(0);" class="text-dark text-decoration-underline">
+                                            <a href="javascript: void(0);"
+                                                class="text-dark text-decoration-underline">
                                                 <small>Clear All</small>
                                             </a>
                                         </div>
@@ -179,8 +180,9 @@
                                                     </div>
                                                 </div>
                                                 <div class="flex-grow-1 text-truncate ms-2">
-                                                    <h5 class="noti-item-title fw-semibold font-size-14">Datacorp <small
-                                                            class="fw-normal text-muted ms-1">1 min ago</small></h5>
+                                                    <h5 class="noti-item-title fw-semibold font-size-14">Datacorp
+                                                        <small class="fw-normal text-muted ms-1">1 min ago</small>
+                                                    </h5>
                                                     <small class="noti-item-subtitle text-muted">Caleb Flakelar
                                                         commented on Admin</small>
                                                 </div>
@@ -221,7 +223,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('dashtrap/admin/dist/assets/images/users/avatar-2.jpg')}}"
+                                                        <img src="{{ asset('dashtrap/admin/dist/assets/images/users/avatar-2.jpg') }}"
                                                             class="img-fluid rounded-circle" alt="" />
                                                     </div>
                                                 </div>
@@ -268,7 +270,7 @@
                                             <div class="d-flex align-items-center">
                                                 <div class="flex-shrink-0">
                                                     <div class="notify-icon">
-                                                        <img src="{{asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg')}}"
+                                                        <img src="{{ asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg') }}"
                                                             class="img-fluid rounded-circle" alt="" />
                                                     </div>
                                                 </div>
@@ -306,16 +308,12 @@
                                 aria-expanded="false">
 
                                 {{-- Foto Profile --}}
-                                @if(Auth::user()->foto_profile)
-
-                                <img src="{{ asset('storage/' . Auth::user()->foto_profile) }}" alt="user-image"
-                                    class="rounded-circle">
-
+                                @if (Auth::user()->foto_profile)
+                                    <img src="{{ asset('storage/' . Auth::user()->foto_profile) }}" alt="user-image"
+                                        class="rounded-circle">
                                 @else
-
-                                <img src="{{ asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg') }}"
-                                    alt="user-image" class="rounded-circle">
-
+                                    <img src="{{ asset('dashtrap/admin/dist/assets/images/users/avatar-4.jpg') }}"
+                                        alt="user-image" class="rounded-circle">
                                 @endif
 
                                 <span class="ms-1 d-none d-md-inline-block">
@@ -419,7 +417,6 @@
 
             @include('layouts.footer')
             @include('layouts.script')
-
         </div>
         <!-- End Page content -->
 

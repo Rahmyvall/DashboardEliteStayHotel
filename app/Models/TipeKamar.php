@@ -37,4 +37,12 @@ class TipeKamar extends Model
     {
         return $this->hasMany(Kamar::class, 'id_tipe', 'id_tipe');
     }
+     public function tipeKamarFasilitas()
+    {
+        return $this->hasMany(
+            TipeKamarFasilitas::class,
+            'id_tipe',
+            'id_tipe'
+        );
+    }
 }

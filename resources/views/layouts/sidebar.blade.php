@@ -73,14 +73,15 @@
                             </li>
 
                             <li>
-                                <a href="#" class="menu-link">
+                                <a href="{{ route('fasilitas.index') }}" class="menu-link">
                                     <i class="bx bx-wifi me-1"></i> Fasilitas
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="menu-link">
-                                    <i class="bx bx-category-alt me-1"></i> Tipe Kamar Fasilitas
+                                <a href="{{ route('tipe-kamar-fasilitas.index') }}" class="menu-link">
+                                    <i class="bx bx-category-alt me-1"></i>
+                                    <span>Tipe Kamar Fasilitas</span>
                                 </a>
                             </li>
 
