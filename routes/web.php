@@ -163,4 +163,5 @@ Route::middleware(['auth', 'role:pelanggan'])
 
         Route::get('/dashboard', [DashboardController::class, 'pelanggan'])
             ->name('dashboard');
+
     });

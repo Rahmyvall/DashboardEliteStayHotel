@@ -265,8 +265,19 @@
             <div class="col-lg-5">
                 <div class="card border-0 shadow-sm rounded-4 h-100">
                     <div class="card-body p-4">
-                        <h6 class="fw-semibold mb-3">Basic Column Chart</h6>
-                        <div id="apex-column-1" class="apex-charts"></div>
+
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold mb-0">
+                                Tren Reservasi
+                            </h6>
+                            <select id="periode-reservasi" class="form-select form-select-sm w-auto">
+                                <option value="monthly">Bulanan</option>
+                                <option value="daily">Harian (7 Hari Terakhir)</option>
+                            </select>
+                        </div>
+
+                        <div id="apex-line-reservasi" class="apex-charts"></div>
+
                     </div>
                 </div>
             </div>

@@ -239,9 +239,12 @@
                 <li class="menu-title">Layanan Saya</li>
 
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <span class="menu-icon"><i class="bx bx-calendar-check"></i></span>
+                    <a href="#" class="menu-link active">
+                        <span class="menu-icon text-primary">
+                            <i class="bx bx-calendar-check"></i>
+                        </span>
                         <span class="menu-text">Reservasi Saya</span>
+                        <span class="badge bg-primary ms-auto">New</span>
                     </a>
                 </li>
 
