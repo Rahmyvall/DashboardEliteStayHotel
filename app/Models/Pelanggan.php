@@ -4,34 +4,21 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use App\Models\Reservasi;
 
 class Pelanggan extends Model
 {
     use HasFactory;
 
-    /**
-     * Nama tabel
-     */
     protected $table = 'pelanggan';
 
-    /**
-     * Primary key
-     */
     protected $primaryKey = 'id_pelanggan';
 
-    /**
-     * Auto increment
-     */
     public $incrementing = true;
 
-    /**
-     * Tipe primary key
-     */
     protected $keyType = 'int';
 
-    /**
-     * Mass assignment
-     */
     protected $fillable = [
         'id_user',
         'nik',
@@ -42,18 +29,27 @@ class Pelanggan extends Model
         'tanggal_lahir',
     ];
 
-    /**
-     * Casting data
-     */
     protected $casts = [
-    'tanggal_lahir' => 'date',
-];
+        'tanggal_lahir' => 'date',
+    ];
+
+    public function getNamaLengkapAttribute()
+{
+    return $this->user->nama_lengkap ?? '-';
+}
+    /**
+     * Relasi ke user
+     */
+   public function user()
+{
+    return $this->belongsTo(User::class, 'id_user', 'id_user');
+}
 
     /**
-     * Relasi ke tabel users
+     * Relasi ke reservasi (HOTEL SYSTEM)
      */
-    public function user()
+    public function reservasi()
     {
-        return $this->belongsTo(User::class, 'id_user', 'id_user');
+        return $this->hasMany(Reservasi::class, 'id_pelanggan', 'id_pelanggan');
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Controllers\TipeKamarController;
 use App\Http\Controllers\KamarController;
 use App\Http\Controllers\ResepsionisKamarController;
 use App\Http\Controllers\ResepsionisPelangganController;
+use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\TipeKamarFasilitasController;
 
 /*
@@ -44,7 +45,7 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
 
     if ($user->role == 'admin') {
-        return redirect()->route('pages.dashboard');
+        return view('pages.dashboard');
     }
 
     if ($user->role == 'resepsionis') {
@@ -97,6 +98,9 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         '/pages/tipe-kamar-fasilitas',
         TipeKamarFasilitasController::class
     )->names('tipe-kamar-fasilitas');
+    Route::resource('reservasi', ReservasiController::class);
+    Route::get('/dashboard/reservasi-line', [DashboardController::class, 'getReservasiLineChart'])
+     ->name('dashboard.reservasi-line');
 });
 
 /*

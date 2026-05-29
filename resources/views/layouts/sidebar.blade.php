@@ -102,17 +102,18 @@
                         <ul class="sub-menu">
 
                             <li>
-                                <a href="#" class="menu-link">
-                                    <i class="bx bx-list-ul me-1"></i> Daftar Reservasi
+                                <a href="{{ route('reservasi.index') }}" class="menu-link">
+                                    <i class="bx bx-list-ul me-1"></i>
+                                    <span>Daftar Reservasi</span>
                                 </a>
                             </li>
 
                             <li>
-                                <a href="#" class="menu-link">
-                                    <i class="bx bx-detail me-1"></i> Detail Reservasi
+                                <a href="{{ route('reservasi.create') }}" class="menu-link">
+                                    <i class="bx bx-detail me-1"></i>
+                                    <span>Tambah Reservasi</span>
                                 </a>
                             </li>
-
                             <li>
                                 <a href="#" class="menu-link">
                                     <i class="bx bx-credit-card me-1"></i> Pembayaran
