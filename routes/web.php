@@ -25,7 +25,6 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [AuthController::class, 'authenticate'])
         ->name('login.process');
 });
-
 /*
 |--------------------------------------------------------------------------
 | LOGOUT
@@ -101,6 +100,12 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('reservasi', ReservasiController::class);
     Route::get('/dashboard/reservasi-line', [DashboardController::class, 'getReservasiLineChart'])
      ->name('dashboard.reservasi-line');
+
+    Route::patch('/reservasi/{id}/approve', [ReservasiController::class, 'approve'])
+    ->name('reservasi.approve');
+
+    Route::patch('/reservasi/{id}/reject', [ReservasiController::class, 'reject'])
+    ->name('reservasi.reject');
 });
 
 /*

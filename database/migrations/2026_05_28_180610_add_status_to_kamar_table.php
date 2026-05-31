@@ -6,14 +6,23 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    public function up(): void
-    {
-        Schema::table('kamar', function (Blueprint $table) {
-            $table->enum('status_kamar', ['available', 'occupied', 'maintenance', 'cleaning'])
-                  ->default('available')
-                  ->after('nomor_kamar');
-        });
-    }
+   public function up(): void
+{
+    Schema::table('kamar', function (Blueprint $table) {
+
+        if (!Schema::hasColumn('kamar', 'status_kamar')) {
+
+            $table->enum('status_kamar', [
+                'available',
+                'occupied',
+                'maintenance',
+                'cleaning'
+            ])->default('available');
+
+        }
+
+    });
+}
 
     public function down(): void
     {

@@ -4,14 +4,6 @@
     @php
         use Carbon\Carbon;
 
-        $total = $reservasi->total();
-
-        $confirmed = $reservasi->getCollection()->where('status_reservasi', 'confirmed')->count();
-
-        $pending = $reservasi->getCollection()->where('status_reservasi', 'pending')->count();
-
-        $unpaid = $reservasi->getCollection()->where('status_pembayaran', 'unpaid')->count();
-
         function statusBadge($status)
         {
             return match ($status) {
@@ -35,6 +27,16 @@
                 default => 'secondary',
             };
         }
+
+        function approvalBadge($status)
+        {
+            return match ($status) {
+                'approved' => 'success',
+                'pending' => 'warning',
+                'rejected' => 'danger',
+                default => 'secondary',
+            };
+        }
     @endphp
 
     <div class="container-fluid py-4">
@@ -43,57 +45,16 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h2 class="fw-bold mb-1">🏨 Reservasi Hotel</h2>
-                <small class="text-muted">Manajemen booking tamu real-time</small>
+                <small class="text-muted">Manajemen booking & persetujuan admin</small>
             </div>
 
-            <a href="{{ route('reservasi.create') }}" class="btn btn-primary shadow-sm px-4 rounded-3">
+            <a href="{{ route('reservasi.create') }}" class="btn btn-primary">
                 + Tambah Reservasi
             </a>
         </div>
 
-        {{-- STATS --}}
-        <div class="row g-3 mb-4">
-
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <small class="text-muted">Total Reservasi</small>
-                        <h3 class="fw-bold">{{ $total }}</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <small class="text-muted">Confirmed</small>
-                        <h3 class="fw-bold text-success">{{ $confirmed }}</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <small class="text-muted">Pending</small>
-                        <h3 class="fw-bold text-warning">{{ $pending }}</h3>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-3">
-                <div class="card border-0 shadow-sm rounded-4">
-                    <div class="card-body">
-                        <small class="text-muted">Belum Bayar</small>
-                        <h3 class="fw-bold text-danger">{{ $unpaid }}</h3>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
         {{-- TABLE --}}
-        <div class="card border-0 shadow-sm rounded-4">
+        <div class="card shadow-sm border-0 rounded-4">
 
             <div class="card-header bg-white border-0">
                 <h5 class="mb-0 fw-bold">Daftar Reservasi</h5>
@@ -103,15 +64,13 @@
                 <table class="table table-hover align-middle mb-0">
 
                     <thead class="bg-light">
-                        <tr class="text-muted">
-                            <th>#</th>
+                        <tr>
                             <th>Kode</th>
                             <th>Pelanggan</th>
                             <th>Kamar</th>
-                            <th>Check In</th>
-                            <th>Check Out</th>
                             <th>Status</th>
                             <th>Pembayaran</th>
+                            <th>Approval Admin</th>
                             <th>Total</th>
                             <th class="text-center">Aksi</th>
                         </tr>
@@ -119,10 +78,9 @@
 
                     <tbody>
                         @forelse ($reservasi as $item)
-                            <tr class="align-middle">
+                            <tr>
 
-                                <td>{{ $loop->iteration }}</td>
-
+                                {{-- KODE --}}
                                 <td class="fw-bold text-primary">
                                     {{ $item->kode_reservasi }}
                                 </td>
@@ -139,16 +97,6 @@
                                     </span>
                                 </td>
 
-                                {{-- CHECK IN --}}
-                                <td>
-                                    {{ $item->check_in ? Carbon::parse($item->check_in)->format('d M Y') : '-' }}
-                                </td>
-
-                                {{-- CHECK OUT --}}
-                                <td>
-                                    {{ $item->check_out ? Carbon::parse($item->check_out)->format('d M Y') : '-' }}
-                                </td>
-
                                 {{-- STATUS RESERVASI --}}
                                 <td>
                                     <span class="badge bg-{{ statusBadge($item->status_reservasi) }}">
@@ -163,6 +111,13 @@
                                     </span>
                                 </td>
 
+                                {{-- APPROVAL ADMIN (🔥 NEW) --}}
+                                <td>
+                                    <span class="badge bg-{{ approvalBadge($item->approval_admin ?? 'pending') }}">
+                                        {{ ucfirst($item->approval_admin ?? 'pending') }}
+                                    </span>
+                                </td>
+
                                 {{-- TOTAL --}}
                                 <td class="fw-bold text-success">
                                     Rp {{ number_format($item->total_harga ?? 0, 0, ',', '.') }}
@@ -172,12 +127,35 @@
                                 <td class="text-center">
 
                                     <a href="{{ route('reservasi.show', $item->id_reservasi) }}"
-                                        class="btn btn-sm btn-outline-primary rounded-3">
+                                        class="btn btn-sm btn-outline-primary">
                                         👁
                                     </a>
 
+                                    {{-- APPROVE --}}
+                                    @if (($item->approval_admin ?? 'pending') == 'pending')
+                                        <form action="{{ route('reservasi.approve', $item->id_reservasi) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <button class="btn btn-sm btn-success">
+                                                ✔ Approve
+                                            </button>
+                                        </form>
+
+                                        <form action="{{ route('reservasi.reject', $item->id_reservasi) }}" method="POST"
+                                            class="d-inline">
+                                            @csrf
+                                            @method('PATCH')
+
+                                            <button class="btn btn-sm btn-danger">
+                                                ✖ Reject
+                                            </button>
+                                        </form>
+                                    @endif
+
                                     <a href="{{ route('reservasi.edit', $item->id_reservasi) }}"
-                                        class="btn btn-sm btn-outline-warning rounded-3">
+                                        class="btn btn-sm btn-outline-warning">
                                         ✏
                                     </a>
 
@@ -186,7 +164,7 @@
                                         @csrf
                                         @method('DELETE')
 
-                                        <button class="btn btn-sm btn-outline-danger rounded-3"
+                                        <button class="btn btn-sm btn-outline-danger"
                                             onclick="return confirm('Hapus data ini?')">
                                             🗑
                                         </button>
@@ -197,7 +175,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center py-5 text-muted">
+                                <td colspan="8" class="text-center py-5 text-muted">
                                     Tidak ada data reservasi
                                 </td>
                             </tr>
@@ -205,10 +183,6 @@
                     </tbody>
 
                 </table>
-            </div>
-
-            <div class="card-footer bg-white border-0">
-                {{ $reservasi->links() }}
             </div>
 
         </div>

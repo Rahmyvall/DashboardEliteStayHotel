@@ -1,178 +1,251 @@
 @extends('layouts.app')
 
 @section('content')
+    <style>
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                background: #fff !important;
+                font-family: "Courier New", monospace;
+            }
+
+            .invoice-box {
+                box-shadow: none !important;
+                border: none !important;
+                width: 100%;
+            }
+        }
+
+        .invoice-box {
+            max-width: 780px;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #eee;
+            padding: 30px;
+            border-radius: 10px;
+        }
+
+        .hotel-name {
+            text-align: center;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .hotel-sub {
+            text-align: center;
+            font-size: 12px;
+            color: #777;
+        }
+
+        .divider {
+            border-top: 1px dashed #ccc;
+            margin: 10px 0;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 18px;
+            margin-bottom: 6px;
+            color: #333;
+            border-bottom: 1px dashed #ddd;
+            padding-bottom: 4px;
+        }
+
+        .info-line {
+            font-size: 13px;
+            margin-bottom: 4px;
+            color: #444;
+        }
+
+        .total-box {
+            font-weight: 800;
+            font-size: 15px;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+            background: #f1f1f1;
+            display: inline-block;
+        }
+
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+    </style>
+
     @php
         use Carbon\Carbon;
 
         $checkIn = $reservasi->check_in ? Carbon::parse($reservasi->check_in) : null;
         $checkOut = $reservasi->check_out ? Carbon::parse($reservasi->check_out) : null;
+
+        $lama = $checkIn && $checkOut ? $checkIn->diffInDays($checkOut) : 0;
+
+        $harga = $reservasi->harga_per_malam ?? 0;
+        $subtotal = $harga * $lama;
+
+        $diskon = $reservasi->diskon_nominal ?? 0;
+        $total = $reservasi->total_harga ?? $subtotal - $diskon;
     @endphp
 
-    <div class="container-fluid py-4">
+    <div class="container py-4">
 
         {{-- HEADER --}}
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-5">
+        <div class="no-print header-top mb-3">
             <div>
-                <h1 class="fw-bold text-dark mb-1">Detail Reservasi</h1>
-                <p class="text-muted mb-0">Informasi lengkap booking tamu hotel</p>
+                <h4 class="mb-0">Detail Reservasi</h4>
+                <small class="text-muted">Invoice & Struk Hotel</small>
             </div>
 
-            <div class="d-flex gap-2">
-                <a href="{{ route('reservasi.edit', $reservasi->id_reservasi) }}" class="btn btn-warning shadow-sm">
-                    Edit
-                </a>
-
-                <button class="btn btn-dark shadow-sm" onclick="window.print()">
-                    Print Invoice
-                </button>
+            <div>
+                <a href="{{ route('reservasi.edit', $reservasi->id_reservasi) }}" class="btn btn-warning btn-sm">Edit</a>
+                <button onclick="window.print()" class="btn btn-dark btn-sm">Print</button>
             </div>
         </div>
 
-        {{-- CARD --}}
-        <div class="card border-0 shadow-sm" id="printArea">
-            <div class="card-body p-5">
+        {{-- INVOICE --}}
+        <div class="invoice-box shadow-sm">
 
-                {{-- HEADER INVOICE --}}
-                <div class="d-flex justify-content-between mb-4">
-                    <div>
-                        <h2 class="fw-bold text-primary mb-1">HOTEL PREMIUM</h2>
-                        <small class="text-muted">Sistem Reservasi Hotel</small>
-                    </div>
+            {{-- HOTEL HEADER --}}
+            <div class="hotel-name">HOTEL PREMIUM</div>
+            <div class="hotel-sub">Jl. Example No.1 • Telp: 0812-xxxx-xxxx</div>
 
-                    <div class="text-end">
-                        <h4 class="fw-bold text-primary">{{ $reservasi->kode_reservasi }}</h4>
+            <div class="divider"></div>
 
-                        <span
-                            class="badge
-                        @if ($reservasi->status_reservasi == 'confirmed') bg-success
-                        @elseif($reservasi->status_reservasi == 'pending') bg-warning text-dark
-                        @elseif($reservasi->status_reservasi == 'checkin') bg-info
-                        @elseif($reservasi->status_reservasi == 'checkout') bg-secondary
-                        @elseif($reservasi->status_reservasi == 'cancelled') bg-danger
-                        @else bg-dark @endif">
-
-                            {{ ucfirst($reservasi->status_reservasi) }}
-                        </span>
-                    </div>
-                </div>
-
-                <hr>
-
-                <div class="row">
-
-                    {{-- PELANGGAN --}}
-                    <div class="col-md-6 mb-4">
-                        <h6 class="fw-bold mb-3">Pelanggan</h6>
-
-                        <p class="mb-1">
-                            {{ optional(optional($reservasi->pelanggan)->user)->nama_lengkap ?? '-' }}
-                        </p>
-
-                        <small class="text-muted">
-                            {{ optional(optional($reservasi->pelanggan)->user)->email ?? '-' }}
-                        </small>
-                    </div>
-
-                    {{-- RESERVASI --}}
-                    <div class="col-md-6 mb-4">
-                        <h6 class="fw-bold mb-3">Detail Menginap</h6>
-
-                        <p>Kamar: <b>{{ optional($reservasi->kamar)->nomor_kamar ?? '-' }}</b></p>
-
-                        <p>
-                            Check In:
-                            <b>{{ $checkIn ? $checkIn->format('d M Y') : '-' }}</b>
-                        </p>
-
-                        <p>
-                            Check Out:
-                            <b>{{ $checkOut ? $checkOut->format('d M Y') : '-' }}</b>
-                        </p>
-
-                        <p>Lama: <b>{{ $reservasi->lama_menginap ?? 0 }} malam</b></p>
-                    </div>
-                </div>
-
-                <hr>
-
-                {{-- HARGA --}}
-                <h6 class="fw-bold mb-3">Rincian Pembayaran</h6>
-
-                <table class="table table-bordered">
-                    <tr>
-                        <td>Harga / Malam</td>
-                        <td class="text-end">
-                            Rp {{ number_format($reservasi->harga_per_malam ?? 0, 0, ',', '.') }}
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>Subtotal</td>
-                        <td class="text-end">
-                            Rp
-                            {{ number_format(($reservasi->harga_per_malam ?? 0) * ($reservasi->lama_menginap ?? 0), 0, ',', '.') }}
-                        </td>
-                    </tr>
-
-                    @if (($reservasi->diskon_persen ?? 0) > 0)
-                        <tr>
-                            <td>Diskon ({{ $reservasi->diskon_persen }}%)</td>
-                            <td class="text-end text-danger">
-                                - Rp {{ number_format($reservasi->diskon_nominal ?? 0, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @endif
-
-                    @if (($reservasi->pajak_persen ?? 0) > 0)
-                        <tr>
-                            <td>Pajak ({{ $reservasi->pajak_persen }}%)</td>
-                            <td class="text-end">
-                                Rp {{ number_format($reservasi->pajak_nominal ?? 0, 0, ',', '.') }}
-                            </td>
-                        </tr>
-                    @endif
-
-                    <tr class="table-dark fw-bold">
-                        <td>Total</td>
-                        <td class="text-end">
-                            Rp {{ number_format($reservasi->total_harga ?? 0, 0, ',', '.') }}
-                        </td>
-                    </tr>
-                </table>
-
-                <hr>
-
-                {{-- STATUS --}}
-                <div class="d-flex gap-2 align-items-center">
-
-                    <span class="badge bg-primary">
-                        {{ ucfirst($reservasi->status_pembayaran) }}
-                    </span>
-
-                    @if ($reservasi->metode_pembayaran)
-                        <span class="badge bg-light text-dark">
-                            {{ strtoupper($reservasi->metode_pembayaran) }}
-                        </span>
-                    @endif
-
-                </div>
-
-                {{-- BARCODE --}}
-                <div class="text-center mt-5">
-                    <svg id="barcode"></svg>
-                </div>
-
+            {{-- RESERVATION --}}
+            <div class="info-line">
+                <b>Kode:</b> {{ $reservasi->kode_reservasi }}
             </div>
+
+            <div class="info-line">
+                <b>Status:</b>
+                <span class="badge-status">
+                    {{ strtoupper($reservasi->status_reservasi) }}
+                </span>
+            </div>
+
+            <div class="divider"></div>
+
+            {{-- GUEST --}}
+            <div class="section-title">DATA TAMU</div>
+
+            <div class="info-line">
+                {{ $reservasi->pelanggan->user->nama_lengkap ?? '-' }}
+            </div>
+
+            <div class="info-line">
+                {{ $reservasi->pelanggan->user->email ?? '-' }}
+            </div>
+
+            {{-- ROOM --}}
+            <div class="section-title">DETAIL KAMAR</div>
+
+            <div class="info-line">
+                Kamar: {{ $reservasi->kamar->nomor_kamar ?? '-' }}
+            </div>
+
+            <div class="info-line">
+                Check In: {{ $checkIn?->format('d M Y') ?? '-' }}
+            </div>
+
+            <div class="info-line">
+                Check Out: {{ $checkOut?->format('d M Y') ?? '-' }}
+            </div>
+
+            <div class="info-line">
+                Lama Menginap: {{ $lama }} malam
+            </div>
+
+            <div class="info-line">
+                Tamu: {{ $reservasi->jumlah_dewasa ?? 0 }} dewasa,
+                {{ $reservasi->jumlah_anak ?? 0 }} anak
+            </div>
+
+            {{-- PAYMENT --}}
+            <div class="section-title">RINCIAN PEMBAYARAN</div>
+
+            <table width="100%">
+                <tr>
+                    <td>Harga / Malam</td>
+                    <td class="text-right">Rp {{ number_format($harga, 0, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td>Subtotal</td>
+                    <td class="text-right">Rp {{ number_format($subtotal, 0, ',', '.') }}</td>
+                </tr>
+
+                <tr>
+                    <td>Diskon</td>
+                    <td class="text-right text-danger">
+                        - Rp {{ number_format($diskon, 0, ',', '.') }}
+                    </td>
+                </tr>
+            </table>
+
+            <div class="divider"></div>
+
+            <table width="100%">
+                <tr class="total-box">
+                    <td>TOTAL</td>
+                    <td class="text-right">
+                        Rp {{ number_format($total, 0, ',', '.') }}
+                    </td>
+                </tr>
+            </table>
+
+            <div class="divider"></div>
+
+            {{-- PAYMENT INFO --}}
+            <div class="info-line">
+                Status Bayar: {{ strtoupper($reservasi->status_pembayaran) }}
+            </div>
+
+            <div class="info-line">
+                Metode: {{ strtoupper($reservasi->metode_pembayaran ?? '-') }}
+            </div>
+
+            {{-- NOTE --}}
+            @if ($reservasi->catatan)
+                <div class="section-title">CATATAN</div>
+                <div class="info-line">
+                    {{ $reservasi->catatan }}
+                </div>
+            @endif
+
+            <div class="divider"></div>
+
+            {{-- BARCODE --}}
+            <div class="text-center">
+                <svg id="barcode"></svg>
+            </div>
+
+            <div class="hotel-sub mt-2">
+                Terima kasih telah menginap di Hotel Premium
+            </div>
+
         </div>
     </div>
 
-    {{-- JS BARCODE --}}
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.6/dist/JsBarcode.all.min.js"></script>
     <script>
         JsBarcode("#barcode", "{{ $reservasi->kode_reservasi }}", {
             format: "CODE128",
             width: 2,
-            height: 70,
+            height: 50,
             displayValue: true
         });
     </script>

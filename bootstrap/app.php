@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\SetLocale;
+use App\Http\Middleware\RoleMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,17 +12,29 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+
     ->withMiddleware(function (Middleware $middleware) {
 
-        // middleware kamu yang sudah ada
+        /*
+        |------------------------------------------------------
+        | GLOBAL MIDDLEWARE (jalan di semua request)
+        |------------------------------------------------------
+        */
         $middleware->append(SetLocale::class);
 
-        // ✅ TAMBAHAN PENTING: alias role middleware
+        /*
+        |------------------------------------------------------
+        | ALIAS MIDDLEWARE (untuk route)
+        | contoh: ->middleware('role:admin')
+        |------------------------------------------------------
+        */
         $middleware->alias([
-            'role' => \App\Http\Middleware\RoleMiddleware::class,
+            'role' => RoleMiddleware::class,
         ]);
 
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();

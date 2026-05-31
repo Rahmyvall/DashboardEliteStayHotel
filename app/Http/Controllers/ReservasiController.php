@@ -11,241 +11,178 @@ use Carbon\Carbon;
 
 class ReservasiController extends Controller
 {
-    // =========================
-    // INDEX
-    // =========================
     public function index()
     {
-        $reservasi = Reservasi::with(['pelanggan', 'kamar.tipe_kamar'])
-            ->orderByDesc('id_reservasi')
+        $reservasi = Reservasi::with(['pelanggan.user', 'kamar.tipe_kamar'])
+            ->latest('id_reservasi')
             ->paginate(10);
 
         return view('pages.reservasi.index', compact('reservasi'));
     }
 
-    // =========================
-    // CREATE
-    // =========================
     public function create()
     {
-        $pelanggan = Pelanggan::orderBy('id_pelanggan')->get();
+        $pelanggan = Pelanggan::with('user')->get();
 
         $kamar = Kamar::with('tipe_kamar')
+            ->where('status_kamar', 'tersedia')
             ->orderBy('nomor_kamar')
             ->get();
 
         return view('pages.reservasi.create', compact('pelanggan', 'kamar'));
     }
 
-    public function edit($id)
-{
-    $reservasi = Reservasi::with(['pelanggan', 'kamar.tipe_kamar'])
-        ->findOrFail($id);
-
-    $pelanggan = Pelanggan::orderBy('id_pelanggan')->get();
-
-    $kamar = Kamar::with('tipe_kamar')
-        ->orderBy('nomor_kamar')
-        ->get();
-
-    return view('pages.reservasi.edit', compact(
-        'reservasi',
-        'pelanggan',
-        'kamar'
-    ));
-}
-    // =========================
-    // STORE
-    // =========================
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'id_pelanggan'      => 'required|exists:pelanggan,id_pelanggan',
-            'id_kamar'          => 'required|exists:kamar,id_kamar',
-            'check_in'          => 'required|date',
-            'lama_menginap'     => 'required|integer|min:1',
+        $data = $this->validateData($request);
 
-            'status_reservasi'  => 'required|string',
-            'status_pembayaran' => 'required|string',
-            'metode_pembayaran' => 'nullable|string|max:50',
+        return DB::transaction(function () use ($data) {
 
-            'diskon_persen'     => 'nullable|numeric|min:0|max:100',
-            'pajak_persen'      => 'nullable|numeric|min:0|max:100',
-        ]);
+            $data = $this->calculateReservation($data, false);
 
-        DB::beginTransaction();
+            // 🔥 DOUBLE BOOKING CHECK (lebih aman)
+            $isBooked = Reservasi::where('id_kamar', $data['id_kamar'])
+                ->whereIn('status_reservasi', ['pending', 'confirmed', 'checkin'])
+                ->where(function ($q) use ($data) {
+                    $q->whereBetween('check_in', [$data['check_in'], $data['check_out']])
+                      ->orWhereBetween('check_out', [$data['check_in'], $data['check_out']]);
+                })
+                ->exists();
 
-        try {
-
-            // =========================
-            // SAFE INTEGER
-            // =========================
-            $lama = (int) $data['lama_menginap'];
-
-            // =========================
-            // CHECK IN / OUT SAFE
-            // =========================
-            $checkIn = Carbon::parse($data['check_in']);
-            $checkOut = (clone $checkIn)->addDays($lama);
-
-            $data['check_out'] = $checkOut->toDateString();
-
-            // =========================
-            // AMBIL KAMAR
-            // =========================
-            $kamar = Kamar::with('tipe_kamar')->findOrFail($data['id_kamar']);
-
-            $harga = (float) ($kamar->tipe_kamar->harga_per_malam ?? 0);
-
-            // =========================
-            // HITUNG
-            // =========================
-            $subtotal = $harga * $lama;
-
-            $diskonPersen = (float) ($data['diskon_persen'] ?? 0);
-            $pajakPersen  = (float) ($data['pajak_persen'] ?? 0);
-
-            $diskonNominal = $subtotal * $diskonPersen / 100;
-            $afterDiskon   = $subtotal - $diskonNominal;
-
-            $pajakNominal  = $afterDiskon * $pajakPersen / 100;
-
-            $total = $afterDiskon + $pajakNominal;
-
-            // =========================
-            // AUTO KODE (SAFE UNIQUE)
-            // =========================
-            $last = Reservasi::latest('id_reservasi')->first();
-
-            if ($last && $last->kode_reservasi) {
-                preg_match('/(\d+)$/', $last->kode_reservasi, $m);
-                $number = isset($m[1]) ? ((int)$m[1] + 1) : 1;
-            } else {
-                $number = 1;
+            if ($isBooked) {
+                throw new \Exception('Kamar sudah dibooking pada tanggal tersebut');
             }
 
-            $data['kode_reservasi'] = 'RSV' . str_pad($number, 4, '0', STR_PAD_LEFT);
+            $reservasi = Reservasi::create($data);
 
-            // =========================
-            // SAVE DATA
-            // =========================
-            $data['harga_per_malam'] = $harga;
-            $data['diskon_nominal']  = $diskonNominal;
-            $data['total_harga']     = $total;
-            $data['tanggal_pesan']   = now();
+            // ✅ FIX: pakai ENUM yang benar
+            Kamar::where('id_kamar', $data['id_kamar'])
+                ->update(['status_kamar' => 'terisi']);
 
-            Reservasi::create($data);
-
-            DB::commit();
-
-            return redirect()->route('reservasi.index')
+            return redirect()
+                ->route('reservasi.index')
                 ->with('success', 'Reservasi berhasil dibuat');
-
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            return back()->withErrors(['error' => $e->getMessage()]);
-        }
+        });
     }
 
-    // =========================
-    // UPDATE
-    // =========================
-   public function update(Request $request, $id)
+    public function update(Request $request, $id)
+    {
+        $reservasi = Reservasi::findOrFail($id);
+
+        $data = $this->validateData($request);
+
+        return DB::transaction(function () use ($reservasi, $data) {
+
+            $data = $this->calculateReservation($data, true);
+
+            $reservasi->update($data);
+
+            return redirect()
+                ->route('reservasi.index')
+                ->with('success', 'Reservasi berhasil diperbarui');
+        });
+    }
+
+    public function show($id)
 {
-    $reservasi = Reservasi::findOrFail($id);
+    $reservasi = Reservasi::with(['pelanggan.user', 'kamar.tipe_kamar'])
+        ->findOrFail($id);
 
-    $data = $request->validate([
-        'id_pelanggan'      => 'required|exists:pelanggan,id_pelanggan',
-        'id_kamar'          => 'required|exists:kamar,id_kamar',
-        'check_in'          => 'required|date',
-        'lama_menginap'     => 'required|integer|min:1',
+    return view('pages.reservasi.show', compact('reservasi'));
+}
 
-        'status_reservasi'  => 'required|string',
-        'status_pembayaran' => 'required|string',
-        'metode_pembayaran' => 'nullable|string|max:50',
+    public function approve($id)
+    {
+        Reservasi::findOrFail($id)->update([
+            'approval_admin' => 'approved',
+            'status_reservasi' => 'confirmed'
+        ]);
 
-        'diskon_persen'     => 'nullable|numeric|min:0|max:100',
-        'pajak_persen'      => 'nullable|numeric|min:0|max:100',
-    ]);
+        return back()->with('success', 'Reservasi disetujui');
+    }
 
-    DB::beginTransaction();
+    public function reject($id)
+    {
+        Reservasi::findOrFail($id)->update([
+            'approval_admin' => 'rejected',
+            'status_reservasi' => 'cancelled'
+        ]);
 
-    try {
+        return back()->with('success', 'Reservasi ditolak');
+    }
 
-        // =========================
-        // HITUNG ULANG CHECKOUT
-        // =========================
-        $lama = (int) $data['lama_menginap'];
+    public function destroy($id)
+    {
+        $reservasi = Reservasi::findOrFail($id);
 
+        // 🔥 release kamar saat delete
+        Kamar::where('id_kamar', $reservasi->id_kamar)
+            ->update(['status_kamar' => 'tersedia']);
+
+        $reservasi->delete();
+
+        return back()->with('success', 'Data berhasil dihapus');
+    }
+
+    private function validateData(Request $request)
+    {
+        return $request->validate([
+            'id_pelanggan' => 'required|exists:pelanggan,id_pelanggan',
+            'id_kamar' => 'required|exists:kamar,id_kamar',
+
+            'check_in' => 'required|date',
+            'check_out' => 'required|date|after_or_equal:check_in',
+
+            'jumlah_dewasa' => 'nullable|integer|min:1',
+            'jumlah_anak' => 'nullable|integer|min:0',
+
+            'diskon_persen' => 'nullable|numeric|min:0|max:100',
+            'pajak_persen' => 'nullable|numeric|min:0|max:100',
+
+            'status_pembayaran' => 'required|in:unpaid,partial,paid,refunded',
+            'metode_pembayaran' => 'nullable|string|max:50',
+            'catatan' => 'nullable|string|max:500',
+        ]);
+    }
+
+    private function calculateReservation(array $data, $isUpdate = false)
+    {
         $checkIn = Carbon::parse($data['check_in']);
-        $checkOut = (clone $checkIn)->addDays($lama);
+        $checkOut = Carbon::parse($data['check_out']);
 
-        $data['check_out'] = $checkOut->toDateString();
+        $lama = max(1, $checkIn->diffInDays($checkOut));
 
-        // =========================
-        // AMBIL KAMAR
-        // =========================
         $kamar = Kamar::with('tipe_kamar')
             ->findOrFail($data['id_kamar']);
 
-        $harga = (float) ($kamar->tipe_kamar->harga_per_malam ?? 0);
+        $harga = $kamar->harga_per_malam
+            ?? $kamar->tipe_kamar?->harga_per_malam
+            ?? 250000;
 
-        // =========================
-        // HITUNG ULANG TOTAL
-        // =========================
+        $diskon = $data['diskon_persen'] ?? 0;
+        $pajak = $data['pajak_persen'] ?? 0;
+
         $subtotal = $harga * $lama;
+        $diskonNominal = $subtotal * ($diskon / 100);
+        $afterDiskon = $subtotal - $diskonNominal;
+        $pajakNominal = $afterDiskon * ($pajak / 100);
 
-        $diskonPersen = (float) ($data['diskon_persen'] ?? 0);
-        $pajakPersen  = (float) ($data['pajak_persen'] ?? 0);
-
-        $diskonNominal = $subtotal * $diskonPersen / 100;
-        $afterDiskon   = $subtotal - $diskonNominal;
-
-        $pajakNominal  = $afterDiskon * $pajakPersen / 100;
-
-        $total = $afterDiskon + $pajakNominal;
-
-        // =========================
-        // UPDATE DATA RESERVASI
-        // =========================
+        $data['lama_menginap'] = $lama;
         $data['harga_per_malam'] = $harga;
-        $data['diskon_nominal']  = $diskonNominal;
-        $data['total_harga']     = $total;
+        $data['diskon_nominal'] = $diskonNominal;
+        $data['pajak_nominal'] = $pajakNominal;
+        $data['total_harga'] = $afterDiskon + $pajakNominal;
 
-        $reservasi->update($data);
+        $data['jumlah_dewasa'] = $data['jumlah_dewasa'] ?? 1;
+        $data['jumlah_anak'] = $data['jumlah_anak'] ?? 0;
 
-        DB::commit();
+        if (!$isUpdate) {
+            $data['kode_reservasi'] = 'RSV-' . now()->format('YmdHis') . rand(100, 999);
+            $data['status_reservasi'] = 'pending';
+            $data['approval_admin'] = 'pending';
+            $data['tanggal_pesan'] = now();
+        }
 
-        return redirect()->route('reservasi.index')
-            ->with('success', 'Reservasi berhasil diupdate');
-
-    } catch (\Exception $e) {
-        DB::rollBack();
-
-        return back()->withErrors(['error' => $e->getMessage()]);
-    }
-}
-
-    // =========================
-    // SHOW
-    // =========================
-    public function show($id)
-    {
-        $reservasi = Reservasi::with(['pelanggan', 'kamar.tipe_kamar'])
-            ->findOrFail($id);
-
-        return view('pages.reservasi.show', compact('reservasi'));
-    }
-
-    // =========================
-    // DELETE
-    // =========================
-    public function destroy($id)
-    {
-        Reservasi::findOrFail($id)->delete();
-
-        return redirect()->route('reservasi.index')
-            ->with('success', 'Data berhasil dihapus');
+        return $data;
     }
 }

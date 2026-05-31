@@ -21,28 +21,28 @@ class Reservasi extends Model
     | Mass Assignment
     |----------------------------------------------------------------------
     */
-    protected $fillable = [
-        'kode_reservasi',
-        'id_pelanggan',
-        'id_kamar',
-        'tanggal_pesan',
-        'check_in',
-        'check_out',
-        'lama_menginap',
-        'harga_per_malam',
-        'total_harga',
-        'diskon_persen',
-        'diskon_nominal',
-        'pajak_persen',
-        'jumlah_dewasa',
-        'jumlah_anak',
-        'status_reservasi',
-        'status_pembayaran',
-        'metode_pembayaran',
-        'bukti_pembayaran',
-        'catatan',
-        'alasan_cancel',
-    ];
+ protected $fillable = [
+    'kode_reservasi',
+    'id_pelanggan',
+    'id_kamar',
+    'tanggal_pesan',
+    'check_in',
+    'check_out',
+    'lama_menginap',
+    'harga_per_malam',
+    'diskon_persen',
+    'diskon_nominal',
+    'pajak_persen',
+    'pajak_nominal',
+    'total_harga',
+    'jumlah_dewasa',
+    'jumlah_anak',
+    'status_reservasi',
+    'status_pembayaran',
+    'approval_admin',
+    'metode_pembayaran',
+    'catatan',
+];
 
     /*
     |----------------------------------------------------------------------

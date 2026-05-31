@@ -17,12 +17,7 @@ return new class extends Migration
 
             $table->integer('lantai');
 
-            $table->enum('status_kamar', [
-                'tersedia',
-                'dipesan',
-                'terisi',
-                'maintenance'
-            ])->default('tersedia');
+           $table->enum('status_kamar', ['available', 'occupied', 'maintenance'])->change();
 
             $table->timestamps();
 
