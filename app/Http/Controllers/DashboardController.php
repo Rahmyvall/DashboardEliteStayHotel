@@ -6,13 +6,16 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Pelanggan;
-use App\Models\TipeKamar;
 use App\Models\Kamar;
+use App\Models\TipeKamar;
 use App\Models\TipeKamarFasilitas;
 use App\Models\Reservasi;
 
 class DashboardController extends Controller
 {
+    /**
+     * Dashboard Admin
+     */
     public function index()
     {
         $user = Auth::user();
@@ -21,18 +24,10 @@ class DashboardController extends Controller
             abort(403, 'Akses ditolak');
         }
 
-        // =========================
-        // TOTAL DATA
-        // =========================
-        $totalUser = User::count();
-        $totalKamar = Kamar::count();
-        $totalTipeKamar = TipeKamar::count();
-        $totalTipeKamarFasilitas = TipeKamarFasilitas::count();
+        // ====================== TOTAL DATA ======================
         $totalReservasi = Reservasi::count();
 
-        // =========================
-        // STATUS RESERVASI
-        // =========================
+        // Status Reservasi (Satu query saja)
         $statusReservasi = Reservasi::selectRaw("
             SUM(CASE WHEN status_reservasi = 'pending' THEN 1 ELSE 0 END) as pending,
             SUM(CASE WHEN status_reservasi = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
@@ -42,56 +37,55 @@ class DashboardController extends Controller
             SUM(CASE WHEN status_reservasi = 'no_show' THEN 1 ELSE 0 END) as no_show
         ")->first();
 
-        // =========================
-        // DATA UNTUK VIEW
-        // =========================
+        // ====================== RETURN DATA TO VIEW ======================
         return view('pages.dashboard', [
             'title' => 'Dashboard Admin',
             'user'  => $user,
 
-            // USERS
-            'totalUsers' => $totalUser,
-            'adminCount' => User::where('role', 'admin')->count(),
+            // Users
+            'totalUsers'       => User::count(),
+            'adminCount'       => User::where('role', 'admin')->count(),
             'resepsionisCount' => User::where('role', 'resepsionis')->count(),
-            'pelangganUser' => User::where('role', 'pelanggan')->count(),
-            'userAktif' => User::where('status', 'aktif')->count(),
-            'userBaruHariIni' => User::whereDate('created_at', today())->count(),
-            'userBulanIni' => User::whereMonth('created_at', now()->month)->count(),
+            'pelangganUser'    => User::where('role', 'pelanggan')->count(),
+            'userAktif'        => User::where('status', 'aktif')->count(),
+            'userBaruHariIni'  => User::whereDate('created_at', today())->count(),
+            'userBulanIni'     => User::whereMonth('created_at', now()->month)->count(),
 
-            // KAMAR
-            'totalKamar' => $totalKamar,
-            'kamarTersedia' => Kamar::where('status_kamar', 'tersedia')->count(),
-            'kamarTerisi' => Kamar::where('status_kamar', 'terisi')->count(),
-            'kamarDipesan' => Kamar::where('status_kamar', 'dipesan')->count(),
+            // Kamar
+            'totalKamar'      => Kamar::count(),
+            'kamarTersedia'   => Kamar::where('status_kamar', 'tersedia')->count(),
+            'kamarTerisi'     => Kamar::where('status_kamar', 'terisi')->count(),
+            'kamarDipesan'    => Kamar::where('status_kamar', 'dipesan')->count(),
 
-            // TIPE KAMAR
-            'tipeKamarCount' => $totalTipeKamar,
-            'tipeKamarFasilitasCount' => $totalTipeKamarFasilitas,
+            // Tipe Kamar
+            'tipeKamarCount'         => TipeKamar::count(),
+            'tipeKamarFasilitasCount'=> TipeKamarFasilitas::count(),
 
-            // RESERVASI
-            'totalReservasi' => $totalReservasi,
-            'reservasiPending' => $statusReservasi->pending ?? 0,
+            // Reservasi
+            'totalReservasi'     => $totalReservasi,
+            'reservasiPending'   => $statusReservasi->pending ?? 0,
             'reservasiConfirmed' => $statusReservasi->confirmed ?? 0,
-            'reservasiCheckin' => $statusReservasi->checkin ?? 0,
-            'reservasiCheckout' => $statusReservasi->checkout ?? 0,
+            'reservasiCheckin'   => $statusReservasi->checkin ?? 0,
+            'reservasiCheckout'  => $statusReservasi->checkout ?? 0,
             'reservasiCancelled' => $statusReservasi->cancelled ?? 0,
+            'reservasiNoShow'    => $statusReservasi->no_show ?? 0,
 
-            'reservasiHariIni' => Reservasi::whereDate('tanggal_pesan', today())->count(),
-            'reservasiBulanIni' => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
+            'reservasiHariIni'   => Reservasi::whereDate('tanggal_pesan', today())->count(),
+            'reservasiBulanIni'  => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
 
             'totalPendapatan' => Reservasi::whereIn('status_reservasi', ['confirmed', 'checkin', 'checkout'])
                                 ->sum('total_harga'),
 
-            // PELANGGAN
-            'totalPelanggan' => Pelanggan::count(),
-            'pelangganLaki' => Pelanggan::where('jenis_kelamin', 'L')->count(),
-            'pelangganPerempuan' => Pelanggan::where('jenis_kelamin', 'P')->count(),
+            // Pelanggan
+            'totalPelanggan'    => Pelanggan::count(),
+            'pelangganLaki'     => Pelanggan::where('jenis_kelamin', 'L')->count(),
+            'pelangganPerempuan'=> Pelanggan::where('jenis_kelamin', 'P')->count(),
         ]);
     }
 
-    // =========================
-    // LINE CHART RESERVASI (Baru)
-    // =========================
+    /**
+     * Line Chart - Tren Reservasi (untuk AJAX)
+     */
     public function getReservasiLineChart()
     {
         $user = Auth::user();
@@ -109,26 +103,26 @@ class DashboardController extends Controller
                     SUM(CASE WHEN status_reservasi = "confirmed" THEN 1 ELSE 0 END) as confirmed,
                     SUM(CASE WHEN status_reservasi = "checkin" THEN 1 ELSE 0 END) as checkin
                 ')
-                ->where('tanggal_pesan', '>=', Carbon::now()->subDays(7))
+                ->where('tanggal_pesan', '>=', Carbon::now()->subDays(6)) // 7 hari termasuk hari ini
                 ->groupBy('tanggal')
                 ->orderBy('tanggal')
                 ->get();
 
             $labels = $data->pluck('tanggal')->map(fn($date) => Carbon::parse($date)->format('d M'));
         } else {
-            // Bulanan (12 bulan terakhir)
+            // 12 Bulan Terakhir
             $data = Reservasi::selectRaw('
                     DATE_FORMAT(tanggal_pesan, "%Y-%m") as bulan,
                     COUNT(*) as total_reservasi,
                     SUM(CASE WHEN status_reservasi = "confirmed" THEN 1 ELSE 0 END) as confirmed,
                     SUM(CASE WHEN status_reservasi = "checkin" THEN 1 ELSE 0 END) as checkin
                 ')
-                ->where('tanggal_pesan', '>=', Carbon::now()->subMonths(12))
+                ->where('tanggal_pesan', '>=', Carbon::now()->subMonths(11))
                 ->groupBy('bulan')
                 ->orderBy('bulan')
                 ->get();
 
-            $labels = $data->pluck('bulan')->map(fn($bulan) => Carbon::parse($bulan)->format('M Y'));
+            $labels = $data->pluck('bulan')->map(fn($bulan) => Carbon::parse($bulan . '-01')->format('M Y'));
         }
 
         return response()->json([
@@ -139,9 +133,30 @@ class DashboardController extends Controller
         ]);
     }
 
-    // =========================
-    // PELANGGAN DASHBOARD
-    // =========================
+    /**
+     * Chart Pelanggan berdasarkan Gender (untuk Pie/Donut Chart)
+     */
+    public function pelangganChart()
+    {
+        $user = Auth::user();
+        if (!$user || $user->role !== 'admin') {
+            abort(403, 'Akses ditolak');
+        }
+
+        $laki = Pelanggan::where('jenis_kelamin', 'L')->count();
+        $perempuan = Pelanggan::where('jenis_kelamin', 'P')->count();
+        $total = $laki + $perempuan;
+
+        return response()->json([
+            'total'      => $total,
+            'laki_laki'  => $laki,
+            'perempuan'  => $perempuan,
+        ]);
+    }
+
+    /**
+     * Dashboard Pelanggan (jika diperlukan)
+     */
     public function pelanggan()
     {
         $user = Auth::user();
@@ -153,31 +168,10 @@ class DashboardController extends Controller
         return view('pages.pelanggan.dashboard', [
             'title' => 'Dashboard Pelanggan',
             'user'  => $user,
-            'totalKamar' => Kamar::count(),
-            'kamarTersedia' => Kamar::where('status_kamar', 'tersedia')->count(),
-            'tipeKamar' => TipeKamar::count(),
+            'totalKamar'     => Kamar::count(),
+            'kamarTersedia'  => Kamar::where('status_kamar', 'tersedia')->count(),
+            'tipeKamar'      => TipeKamar::count(),
             'tipeKamarFasilitas' => TipeKamarFasilitas::count(),
-        ]);
-    }
-
-    // =========================
-    // CHART PELANGGAN (Gender)
-    // =========================
-    public function pelangganChart()
-    {
-        $user = Auth::user();
-
-        if (!$user || $user->role !== 'admin') {
-            abort(403, 'Akses ditolak');
-        }
-
-        $laki = Pelanggan::where('jenis_kelamin', 'L')->count();
-        $perempuan = Pelanggan::where('jenis_kelamin', 'P')->count();
-
-        return response()->json([
-            'total' => $laki + $perempuan,
-            'laki_laki' => $laki,
-            'perempuan' => $perempuan,
         ]);
     }
 }

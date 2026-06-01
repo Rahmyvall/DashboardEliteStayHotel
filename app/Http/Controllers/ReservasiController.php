@@ -83,6 +83,22 @@ class ReservasiController extends Controller
         });
     }
 
+    public function edit($id)
+{
+    $reservasi = Reservasi::with(['pelanggan.user', 'kamar.tipe_kamar'])
+        ->findOrFail($id);
+
+    $pelanggan = Pelanggan::with('user')->get();
+
+    $kamar = Kamar::with('tipe_kamar')
+        ->where('status_kamar', 'tersedia')
+        ->orWhere('id_kamar', $reservasi->id_kamar) // biar kamar lama tetap muncul
+        ->orderBy('nomor_kamar')
+        ->get();
+
+    return view('pages.reservasi.edit', compact('reservasi', 'pelanggan', 'kamar'));
+}
+
     public function show($id)
 {
     $reservasi = Reservasi::with(['pelanggan.user', 'kamar.tipe_kamar'])

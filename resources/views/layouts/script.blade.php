@@ -1,79 +1,50 @@
+<!-- Vendor Scripts -->
 <script src="{{ asset('dashtrap/admin/dist/assets/js/vendor.min.js') }}"></script>
-
-<!-- App js -->
 <script src="{{ asset('dashtrap/admin/dist/assets/js/app.js') }}"></script>
 
-<!-- Knob charts js -->
-<script src="{{ asset('dashtrap/admin/dist/assets/libs/jquery-knob/jquery.knob.min.js') }}"></script>
-
-<!-- Sparkline Js-->
-<script src="{{ asset('dashtrap/admin/dist/assets/libs/jquery-sparkline/jquery.sparkline.min.js') }}"></script>
-
-<script src="{{ asset('dashtrap/admin/dist/assets/libs/morris.js/morris.min.js') }}"></script>
-
-<script src="{{ asset('dashtrap/admin/dist/assets/libs/raphael/raphael.min.js') }}"></script>
+<!-- Chart Libraries -->
 <script src="{{ asset('dashtrap/admin/dist/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
-<script src="https://apexcharts.com/samples/assets/irregular-data-series.js"></script>
-<script src="https://apexcharts.com/samples/assets/ohlc.js"></script>
 
-
-<!-- Demo js -->
-<script src="{{ asset('dashtrap/admin/dist/assets/js/pages/apexcharts.js') }}"></script>
-
-<!-- Dashboard init-->
-<script src="{{ asset('dashtrap/admin/dist/assets/js/pages/dashboard.js') }}"></script>
-
-<!-- OPTIONAL: Bootstrap only jika vendor.min.js belum include bootstrap -->
-{{--
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
---}}
+<!-- Custom Scripts -->
 <script>
-    document.getElementById('btnLogout')
-        .addEventListener('click', function() {
+    // Logout Handler
+    document.getElementById('btnLogout')?.addEventListener('click', function() {
+        const loading = document.getElementById('logoutLoading');
+        if (loading) loading.classList.remove('d-none');
 
-            // tampilkan loading
-            document.getElementById('logoutLoading')
-                .classList.remove('d-none');
+        this.disabled = true;
+        this.innerHTML = 'Logging out...';
 
-            // disable tombol
-            this.disabled = true;
+        setTimeout(() => {
+            document.getElementById('logoutForm').submit();
+        }, 600);
+    });
 
-            this.innerHTML = 'Logging out...';
-
-            // delay sedikit agar loading terlihat
-            setTimeout(() => {
-
-                document.getElementById('logoutForm')
-                    .submit();
-
-            }, 500);
-        });
-</script>
-<script>
+    // ==================== PIE CHART - PELANGGAN ====================
     document.addEventListener('DOMContentLoaded', function() {
-
-        const chartElement = document.querySelector("#apex-pie-pelanggan");
-
-        if (!chartElement) {
-            console.error("Element #apex-pie-pelanggan tidak ditemukan!");
-            return;
-        }
+        const chartEl = document.querySelector("#apex-pie-pelanggan");
+        if (!chartEl) return;
 
         fetch('{{ route('admin.dashboard.pelanggan.chart') }}')
             .then(response => {
-                if (!response.ok) throw new Error('Gagal mengambil data');
+                if (!response.ok) throw new Error('Network error');
                 return response.json();
             })
             .then(data => {
-                document.getElementById('total-pelanggan').textContent = data.total;
-                document.getElementById('count-laki').textContent = data.laki_laki;
-                document.getElementById('count-perempuan').textContent = data.perempuan;
+                const laki = data.laki_laki ?? 0;
+                const perempuan = data.perempuan ?? 0;
+                const total = laki + perempuan;
 
+                // Update angka
+                document.getElementById('total-pelanggan').textContent = total;
+                document.getElementById('count-laki').textContent = laki;
+                document.getElementById('count-perempuan').textContent = perempuan;
+
+                // Chart Options (Donut - lebih modern)
                 const options = {
-                    series: [data.laki_laki, data.perempuan],
+                    series: [laki, perempuan],
                     chart: {
-                        type: 'pie',
+                        type: 'donut',
                         height: 280,
                         toolbar: {
                             show: false
@@ -83,13 +54,32 @@
                     colors: ['#3b82f6', '#ec4899'],
                     legend: {
                         position: 'bottom',
-                        fontSize: '14px'
+                        fontSize: '14px',
+                        markers: {
+                            width: 10,
+                            height: 10,
+                            radius: 2
+                        }
+                    },
+                    plotOptions: {
+                        pie: {
+                            donut: {
+                                size: '72%',
+                                labels: {
+                                    show: true,
+                                    total: {
+                                        show: true,
+                                        label: 'Total',
+                                        fontSize: '14px',
+                                        fontWeight: 600
+                                    }
+                                }
+                            }
+                        }
                     },
                     dataLabels: {
                         enabled: true,
-                        formatter: function(val) {
-                            return val.toFixed(1) + "%";
-                        }
+                        formatter: (val) => val.toFixed(1) + '%'
                     },
                     tooltip: {
                         y: {
@@ -98,73 +88,19 @@
                     }
                 };
 
-                const chart = new ApexCharts(chartElement, options);
+                const chart = new ApexCharts(chartEl, options);
                 chart.render();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                chartElement.innerHTML = `<p class="text-center text-danger mt-5">Gagal memuat grafik</p>`;
-            });
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const el = document.querySelector("#apex-pie-pelanggan");
-        if (!el) return;
-
-        fetch("{{ route('admin.dashboard.pelanggan.chart') }}")
-            .then(res => res.json())
-            .then(data => {
-
-                const laki = data.laki_laki ?? 0;
-                const perempuan = data.perempuan ?? 0;
-                const total = laki + perempuan;
-
-                // update angka
-                document.getElementById("total-pelanggan").innerText = total;
-                document.getElementById("count-laki").innerText = laki;
-                document.getElementById("count-perempuan").innerText = perempuan;
-
-                // clear container (IMPORTANT)
-                el.innerHTML = "";
-
-                const options = {
-                    series: [laki, perempuan],
-                    chart: {
-                        type: 'donut',
-                        height: 280
-                    },
-                    labels: ['Laki-laki', 'Perempuan'],
-                    colors: ['#0d6efd', '#dc3545'],
-                    legend: {
-                        position: 'bottom'
-                    },
-                    plotOptions: {
-                        pie: {
-                            donut: {
-                                size: '70%'
-                            }
-                        }
-                    }
-                };
-
-                const chart = new ApexCharts(el, options);
-                chart.render();
-
             })
             .catch(err => {
-                console.error("Chart error:", err);
-                el.innerHTML = "<div class='text-danger text-center'>Gagal load chart</div>";
+                console.error(err);
+                chartEl.innerHTML =
+                    `<p class="text-center text-danger mt-4">Gagal memuat grafik pelanggan</p>`;
             });
-
     });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
 
-        var options = {
-
+    // ==================== BAR CHART - STATUS RESERVASI ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        const options = {
             series: [{
                 name: 'Jumlah Reservasi',
                 data: [
@@ -186,38 +122,22 @@
 
             plotOptions: {
                 bar: {
-                    borderRadius: 6,
-                    columnWidth: '50%',
+                    borderRadius: 8,
+                    columnWidth: '55%',
                     distributed: true
                 }
             },
 
-            colors: [
-                '#ffc107', // pending
-                '#198754', // confirmed
-                '#0dcaf0', // checkin
-                '#6c757d', // checkout
-                '#dc3545' // cancelled
-            ],
-
+            colors: ['#ffc107', '#198754', '#0dcaf0', '#6c757d', '#dc3545'],
             dataLabels: {
                 enabled: true
             },
 
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-
             xaxis: {
-                categories: [
-                    'Pending',
-                    'Confirmed',
-                    'Check In',
-                    'Check Out',
-                    'Cancelled'
-                ]
+                categories: ['Pending', 'Confirmed', 'Check In', 'Check Out', 'Cancelled'],
+                axisBorder: {
+                    show: false
+                }
             },
 
             yaxis: {
@@ -226,121 +146,121 @@
                 }
             },
 
-            fill: {
-                opacity: 1
-            },
-
             tooltip: {
                 y: {
-                    formatter: function(val) {
-                        return val + " reservasi";
-                    }
+                    formatter: val => val + " reservasi"
                 }
-            },
-
-            noData: {
-                text: 'Belum ada data reservasi'
             }
         };
 
-        var chart = new ApexCharts(
-            document.querySelector("#apex-column-1"),
-            options
-        );
-
+        const chart = new ApexCharts(document.querySelector("#apex-column-1"), options);
         chart.render();
-
     });
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
 
-        let chart;
+    // ==================== LINE CHART - TREN RESERVASI ====================
+    let reservasiChart;
 
-        function loadReservasiChart(periode = 'monthly') {
-            $.ajax({
-                url: "{{ route('dashboard.reservasi-line') }}", // sesuaikan route
-                method: 'GET',
-                data: {
-                    periode: periode
-                },
-                success: function(response) {
+    function loadReservasiChart(periode = 'monthly') {
+        $.ajax({
+            url: "{{ route('dashboard.reservasi-line') }}",
+            method: 'GET',
+            data: {
+                periode: periode
+            },
+            success: function(response) {
 
-                    if (chart) chart.destroy();
+                if (reservasiChart) reservasiChart.destroy();
 
-                    const options = {
-                        series: [{
-                                name: 'Total Reservasi',
-                                data: response.total
-                            },
-                            {
-                                name: 'Confirmed',
-                                data: response.confirmed
-                            },
-                            {
-                                name: 'Check-in',
-                                data: response.checkin
-                            }
-                        ],
-                        chart: {
-                            type: 'line',
-                            height: 350,
-                            toolbar: {
-                                show: true
-                            },
-                            zoom: {
-                                enabled: false
-                            }
+                const options = {
+                    series: [{
+                            name: 'Total Reservasi',
+                            data: response.total
                         },
-                        colors: ['#3b82f6', '#10b981', '#8b5cf6'],
-                        stroke: {
-                            curve: 'smooth',
-                            width: 3
+                        {
+                            name: 'Confirmed',
+                            data: response.confirmed
                         },
-                        markers: {
-                            size: 5,
-                            hover: {
-                                size: 7
-                            }
-                        },
-                        xaxis: {
-                            categories: response.labels,
-                            tickPlacement: 'on'
-                        },
-                        yaxis: {
-                            title: {
-                                text: 'Jumlah Reservasi'
-                            },
-                            min: 0
-                        },
-                        legend: {
-                            position: 'top',
-                            horizontalAlign: 'right'
-                        },
-                        tooltip: {
-                            shared: true,
-                            intersect: false,
-                        },
-                        grid: {
-                            borderColor: '#e5e7eb'
+                        {
+                            name: 'Check-in',
+                            data: response.checkin
                         }
-                    };
+                    ],
+                    chart: {
+                        type: 'line',
+                        height: 350,
+                        toolbar: {
+                            show: true
+                        },
+                        zoom: {
+                            enabled: false
+                        }
+                    },
+                    colors: ['#3b82f6', '#10b981', '#8b5cf6'],
+                    stroke: {
+                        curve: 'smooth',
+                        width: 3
+                    },
+                    markers: {
+                        size: 5,
+                        strokeColors: '#fff',
+                        strokeWidth: 2,
+                        hover: {
+                            size: 7
+                        }
+                    },
+                    xaxis: {
+                        categories: response.labels,
+                        tickPlacement: 'on'
+                    },
+                    yaxis: {
+                        min: 0,
+                        title: {
+                            text: 'Jumlah Reservasi'
+                        }
+                    },
+                    legend: {
+                        position: 'top',
+                        horizontalAlign: 'right'
+                    },
+                    grid: {
+                        borderColor: '#f1f5f9',
+                        strokeDashArray: 3
+                    },
+                    tooltip: {
+                        shared: true,
+                        intersect: false
+                    }
+                };
 
-                    chart = new ApexCharts(document.querySelector("#apex-line-reservasi"), options);
-                    chart.render();
-                }
-            });
-        }
+                reservasiChart = new ApexCharts(document.querySelector("#apex-line-reservasi"), options);
+                reservasiChart.render();
+            },
+            error: function() {
+                console.error("Gagal memuat data tren reservasi");
+            }
+        });
+    }
 
-        // Load default
-        loadReservasiChart();
+    // Event Listener untuk Line Chart
+    document.addEventListener('DOMContentLoaded', function() {
+        loadReservasiChart(); // default
 
-        // Event change periode
         $('#periode-reservasi').on('change', function() {
             loadReservasiChart(this.value);
         });
     });
+
+    // ==================== TABLE CLICKABLE ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.table-row-clickable').forEach(row => {
+            row.addEventListener('click', function() {
+                const href = this.getAttribute('data-href');
+                if (href) window.location.href = href;
+            });
+        });
+    });
 </script>
+
 @push('styles')
     <style>
         .card-clickable {
@@ -362,17 +282,4 @@
             background-color: #f8f9fa;
         }
     </style>
-@endpush
-@push('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Klik pada baris tabel
-            document.querySelectorAll('.table-row-clickable').forEach(row => {
-                row.addEventListener('click', function() {
-                    const href = this.getAttribute('data-href');
-                    if (href) window.location.href = href;
-                });
-            });
-        });
-    </script>
 @endpush

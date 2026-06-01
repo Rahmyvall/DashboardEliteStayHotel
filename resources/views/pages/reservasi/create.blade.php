@@ -120,14 +120,13 @@
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Diskon (%)</label>
                                     <input type="number" name="diskon_persen" id="diskon_persen"
-                                        class="form-control rounded-3" min="0" max="100" value="5"
-                                        step="0.01">
+                                        class="form-control rounded-3" value="5" readonly>
                                 </div>
+
                                 <div class="col-md-6">
                                     <label class="form-label fw-semibold">Pajak (%)</label>
                                     <input type="number" name="pajak_persen" id="pajak_persen"
-                                        class="form-control rounded-3" min="0" max="100" value="11"
-                                        step="0.01">
+                                        class="form-control rounded-3" value="11" readonly>
                                 </div>
                             </div>
 
@@ -202,14 +201,7 @@
                                     <td>Subtotal</td>
                                     <td class="text-end fw-medium">Rp <span id="subtotal">0</span></td>
                                 </tr>
-                                <tr>
-                                    <td>Diskon</td>
-                                    <td class="text-end text-danger">- Rp <span id="diskon">0</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Pajak (11%)</td>
-                                    <td class="text-end">Rp <span id="pajak">0</span></td>
-                                </tr>
+
                                 <tr class="border-top border-2">
                                     <td class="fs-5 fw-bold">Total</td>
                                     <td class="text-end fs-5 fw-bold text-success">Rp <span id="total">0</span></td>

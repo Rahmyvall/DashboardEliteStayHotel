@@ -39,12 +39,16 @@ Route::post('/logout', [AuthController::class, 'logout'])
 | DASHBOARD REDIRECT
 |--------------------------------------------------------------------------
 */
+/*
+|--------------------------------------------------------------------------
+| DASHBOARD REDIRECT
+|--------------------------------------------------------------------------
+*/
 Route::get('/dashboard', function () {
-
     $user = auth()->user();
 
     if ($user->role == 'admin') {
-        return view('pages.dashboard');
+        return redirect()->route('pages.dashboard');   // ← Ubah jadi ini
     }
 
     if ($user->role == 'resepsionis') {
@@ -56,7 +60,6 @@ Route::get('/dashboard', function () {
     }
 
     abort(403);
-
 })->middleware('auth')->name('dashboard');
 
 /*
@@ -67,7 +70,7 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
-        ->name('pages.dashboard');
+    ->name('pages.dashboard');   // ← Ubah jadi ini
 
     Route::resource('/pages/users', UserController::class)
         ->names('users');
