@@ -155,4 +155,9 @@ class Reservasi extends Model
     {
         return $query->whereBetween('check_in', [$start, $end]);
     }
+
+     public function pembayaran()
+    {
+        return $this->hasMany(Pembayaran::class, 'id_reservasi', 'id_reservasi');
+    }
 }

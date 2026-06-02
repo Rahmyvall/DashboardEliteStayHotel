@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\FasilitasController;
 use App\Http\Controllers\Api\PelangganApiController;
+use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\Resepsionis\ResepsionisKamarApiController;
 use App\Http\Controllers\Api\Resepsionis\ResepsionisPelangganApiController;
 use App\Http\Controllers\Api\ReservasiController;
@@ -27,6 +28,7 @@ Route::prefix('v1')->group(function () {
             Route::apiResource('fasilitas', FasilitasController::class);
             Route::apiResource('tipe-kamar-fasilitas',TipeKamarFasilitasController::class);
             Route::apiResource('reservasi', ReservasiController::class);
+            Route::apiResource('pembayaran', PembayaranController::class);
         });
 
     /*

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\TipeKamarController;
 use App\Http\Controllers\KamarController;
+use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\ResepsionisKamarController;
 use App\Http\Controllers\ResepsionisPelangganController;
 use App\Http\Controllers\ReservasiController;
@@ -69,21 +70,52 @@ Route::get('/dashboard', function () {
 */
 Route::middleware(['auth', 'role:admin'])->group(function () {
 
+    /*
+    |--------------------------------------------------------------------------
+    | Dashboard
+    |--------------------------------------------------------------------------
+    */
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
-    ->name('pages.dashboard');   // ← Ubah jadi ini
+        ->name('pages.dashboard');
 
+    Route::get('/dashboard/reservasi-line', [DashboardController::class, 'getReservasiLineChart'])
+        ->name('dashboard.reservasi-line');
+
+    Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
+        ->name('admin.dashboard.pelanggan.chart');
+
+    Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
+        ->name('dashboard.pendapatan.chart');
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Management
+    |--------------------------------------------------------------------------
+    */
     Route::resource('/pages/users', UserController::class)
         ->names('users');
 
     Route::resource('/pages/pelanggan1', PelangganController::class)
         ->names('pelanggan1');
 
-    Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
-        ->name('admin.dashboard.pelanggan.chart');
-
+    /*
+    |--------------------------------------------------------------------------
+    | Tipe Kamar
+    |--------------------------------------------------------------------------
+    */
     Route::resource('/pages/tipe-kamar', TipeKamarController::class)
         ->names('tipe-kamar');
 
+    Route::resource(
+        '/pages/tipe-kamar-fasilitas',
+        TipeKamarFasilitasController::class
+    )->names('tipe-kamar-fasilitas');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Kamar
+    |--------------------------------------------------------------------------
+    */
     Route::resource('/pages/kamar', KamarController::class)
         ->names('kamar');
 
@@ -93,22 +125,35 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/pages/kamar/generate-floor', [KamarController::class, 'generateFloorRooms'])
         ->name('kamar.generateFloor');
 
+    /*
+    |--------------------------------------------------------------------------
+    | Fasilitas
+    |--------------------------------------------------------------------------
+    */
     Route::resource('/pages/fasilitas', FasilitasController::class)
         ->names('fasilitas');
 
-    Route::resource(
-        '/pages/tipe-kamar-fasilitas',
-        TipeKamarFasilitasController::class
-    )->names('tipe-kamar-fasilitas');
+    /*
+    |--------------------------------------------------------------------------
+    | Reservasi
+    |--------------------------------------------------------------------------
+    */
     Route::resource('reservasi', ReservasiController::class);
-    Route::get('/dashboard/reservasi-line', [DashboardController::class, 'getReservasiLineChart'])
-     ->name('dashboard.reservasi-line');
 
     Route::patch('/reservasi/{id}/approve', [ReservasiController::class, 'approve'])
-    ->name('reservasi.approve');
+        ->name('reservasi.approve');
 
     Route::patch('/reservasi/{id}/reject', [ReservasiController::class, 'reject'])
-    ->name('reservasi.reject');
+        ->name('reservasi.reject');
+
+    /*
+    |--------------------------------------------------------------------------
+    | Pembayaran
+    |--------------------------------------------------------------------------
+    */
+    Route::resource('pembayaran', PembayaranController::class);
+    Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
+    ->name('dashboard.pendapatan.chart');
 });
 
 /*

@@ -262,74 +262,190 @@
         {{-- CHART SECTION --}}
         <div class="row mt-4 g-4">
 
-            <div class="col-lg-5">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-body p-4">
+            <div class="row g-4">
 
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h6 class="fw-semibold mb-0">
-                                Tren Reservasi
-                            </h6>
-                            <select id="periode-reservasi" class="form-select form-select-sm w-auto">
-                                <option value="monthly">Bulanan</option>
-                                <option value="daily">Harian (7 Hari Terakhir)</option>
-                            </select>
-                        </div>
+                <!-- Tren Reservasi -->
+                <div class="col-lg-7">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-4">
 
-                        <div id="apex-line-reservasi" class="apex-charts"></div>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-semibold mb-0">
+                                    Tren Reservasi
+                                </h6>
 
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-body p-4">
-
-                        <!-- Header -->
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h6 class="fw-semibold mb-0">Distribusi Pelanggan</h6>
-
-                            <span class="badge bg-primary fs-6">
-                                Total: <span id="total-pelanggan" class="fw-bold">0</span>
-                            </span>
-                        </div>
-
-                        <!-- Chart (IMPORTANT: kasih height fix + centering) -->
-                        <div id="apex-pie-pelanggan"
-                            style="min-height: 280px; display:flex; align-items:center; justify-content:center;">
-                        </div>
-
-                        <!-- Legend -->
-                        <div class="row text-center mt-4">
-
-                            <div class="col-6">
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <span class="text-primary fs-4">●</span>
-                                    <span class="text-muted">Laki-laki</span>
-                                </div>
-                                <h5 id="count-laki" class="fw-bold text-primary mb-0">0</h5>
+                                <select id="periode-reservasi" class="form-select form-select-sm w-auto">
+                                    <option value="monthly">Bulanan</option>
+                                    <option value="daily">Harian (7 Hari Terakhir)</option>
+                                </select>
                             </div>
 
-                            <div class="col-6">
-                                <div class="d-flex align-items-center justify-content-center gap-2">
-                                    <span class="text-danger fs-4">●</span>
-                                    <span class="text-muted">Perempuan</span>
+                            <div id="apex-line-reservasi" class="apex-charts"></div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Distribusi Pelanggan -->
+                <div class="col-lg-5">
+                    <div class="card border-0 shadow-sm rounded-4 h-100">
+                        <div class="card-body p-4">
+
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <h6 class="fw-semibold mb-0">Distribusi Pelanggan</h6>
+
+                                <span class="badge bg-primary fs-6">
+                                    Total: <span id="total-pelanggan" class="fw-bold">0</span>
+                                </span>
+                            </div>
+
+                            <div id="apex-pie-pelanggan" class="d-flex justify-content-center align-items-center"
+                                style="min-height:280px;">
+                            </div>
+
+                            <div class="row text-center mt-4">
+
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <span class="text-primary fs-4">●</span>
+                                        <span class="text-muted">Laki-laki</span>
+                                    </div>
+                                    <h5 id="count-laki" class="fw-bold text-primary mb-0">0</h5>
                                 </div>
-                                <h5 id="count-perempuan" class="fw-bold text-danger mb-0">0</h5>
+
+                                <div class="col-6">
+                                    <div class="d-flex align-items-center justify-content-center gap-2">
+                                        <span class="text-danger fs-4">●</span>
+                                        <span class="text-muted">Perempuan</span>
+                                    </div>
+                                    <h5 id="count-perempuan" class="fw-bold text-danger mb-0">0</h5>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="row mt-4">
+                <div class="col-12">
+
+                    <div class="card border-0 shadow-sm rounded-4">
+
+                        {{-- HEADER --}}
+                        <div class="card-header bg-white border-0 py-3">
+
+                            <div class="d-flex justify-content-between align-items-center">
+
+                                <div>
+                                    <h5 class="fw-bold mb-1">
+                                        <i class="bi bi-bar-chart-line-fill text-primary me-2"></i>
+                                        Pendapatan Bulanan
+                                    </h5>
+
+                                    <small class="text-muted">
+                                        Grafik pendapatan hotel per bulan
+                                    </small>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-2">
+
+                                    <span class="badge bg-primary-subtle text-primary px-3 py-2">
+                                        Tahun
+                                    </span>
+
+                                    <select id="yearFilter" class="form-select form-select-sm shadow-none"
+                                        style="width:120px">
+
+                                        @for ($y = date('Y') - 2; $y <= date('Y'); $y++)
+                                            <option value="{{ $y }}" {{ $y == date('Y') ? 'selected' : '' }}>
+                                                {{ $y }}
+                                            </option>
+                                        @endfor
+
+                                    </select>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {{-- CHART --}}
+                        <div class="card-body pt-0">
+
+                            <div style="height:350px;">
+                                <canvas id="pendapatanChart"></canvas>
+                            </div>
+
+                        </div>
+
+                        {{-- FOOTER STATISTIC --}}
+                        <div class="card-footer bg-light border-0 py-3">
+
+                            <div class="row g-3">
+
+                                <div class="col-md-4">
+
+                                    <div class="bg-white rounded-3 shadow-sm p-3 border-start border-4 border-primary">
+
+                                        <small class="text-muted d-block">
+                                            Total Pendapatan
+                                        </small>
+
+                                        <h5 class="fw-bold text-primary mb-0 mt-1" id="totalTahun">
+
+                                            Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}
+
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="bg-white rounded-3 shadow-sm p-3 border-start border-4 border-success">
+
+                                        <small class="text-muted d-block">
+                                            Rata-rata Bulanan
+                                        </small>
+
+                                        <h5 class="fw-bold text-success mb-0 mt-1" id="rataRata">
+
+                                            Rp {{ number_format(($totalPendapatan ?? 0) / 12, 0, ',', '.') }}
+
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="bg-white rounded-3 shadow-sm p-3 border-start border-4 border-warning">
+
+                                        <small class="text-muted d-block">
+                                            Total Transaksi
+                                        </small>
+
+                                        <h5 class="fw-bold text-warning mb-0 mt-1" id="totalTransaksi">
+
+                                            {{ $totalTransaksi ?? 0 }}
+
+                                        </h5>
+
+                                    </div>
+
+                                </div>
+
                             </div>
 
                         </div>
 
                     </div>
-                </div>
-            </div>
-            <div class="col-lg-3">
-                <div class="card border-0 shadow-sm rounded-4 h-100">
-                    <div class="card-body p-4">
-                        <h6 class="fw-semibold mb-3">Candlestick</h6>
-                        <div id="apex-candlestick-1" class="apex-charts"></div>
-                    </div>
+
                 </div>
             </div>
 

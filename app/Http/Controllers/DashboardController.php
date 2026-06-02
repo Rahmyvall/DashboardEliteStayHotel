@@ -38,49 +38,56 @@ class DashboardController extends Controller
         ")->first();
 
         // ====================== RETURN DATA TO VIEW ======================
-        return view('pages.dashboard', [
-            'title' => 'Dashboard Admin',
-            'user'  => $user,
+       // ====================== PENDAPATAN ======================
+$pendapatan = Reservasi::whereIn(
+    'status_reservasi',
+    ['confirmed', 'checkin', 'checkout']
+)->sum('total_harga');
 
-            // Users
-            'totalUsers'       => User::count(),
-            'adminCount'       => User::where('role', 'admin')->count(),
-            'resepsionisCount' => User::where('role', 'resepsionis')->count(),
-            'pelangganUser'    => User::where('role', 'pelanggan')->count(),
-            'userAktif'        => User::where('status', 'aktif')->count(),
-            'userBaruHariIni'  => User::whereDate('created_at', today())->count(),
-            'userBulanIni'     => User::whereMonth('created_at', now()->month)->count(),
+// ====================== RETURN DATA TO VIEW ======================
+return view('pages.dashboard', [
+    'title' => 'Dashboard Admin',
+    'user'  => $user,
 
-            // Kamar
-            'totalKamar'      => Kamar::count(),
-            'kamarTersedia'   => Kamar::where('status_kamar', 'tersedia')->count(),
-            'kamarTerisi'     => Kamar::where('status_kamar', 'terisi')->count(),
-            'kamarDipesan'    => Kamar::where('status_kamar', 'dipesan')->count(),
+    // Users
+    'totalUsers'       => User::count(),
+    'adminCount'       => User::where('role', 'admin')->count(),
+    'resepsionisCount' => User::where('role', 'resepsionis')->count(),
+    'pelangganUser'    => User::where('role', 'pelanggan')->count(),
+    'userAktif'        => User::where('status', 'aktif')->count(),
+    'userBaruHariIni'  => User::whereDate('created_at', today())->count(),
+    'userBulanIni'     => User::whereMonth('created_at', now()->month)->count(),
 
-            // Tipe Kamar
-            'tipeKamarCount'         => TipeKamar::count(),
-            'tipeKamarFasilitasCount'=> TipeKamarFasilitas::count(),
+    // Kamar
+    'totalKamar'      => Kamar::count(),
+    'kamarTersedia'   => Kamar::where('status_kamar', 'tersedia')->count(),
+    'kamarTerisi'     => Kamar::where('status_kamar', 'terisi')->count(),
+    'kamarDipesan'    => Kamar::where('status_kamar', 'dipesan')->count(),
 
-            // Reservasi
-            'totalReservasi'     => $totalReservasi,
-            'reservasiPending'   => $statusReservasi->pending ?? 0,
-            'reservasiConfirmed' => $statusReservasi->confirmed ?? 0,
-            'reservasiCheckin'   => $statusReservasi->checkin ?? 0,
-            'reservasiCheckout'  => $statusReservasi->checkout ?? 0,
-            'reservasiCancelled' => $statusReservasi->cancelled ?? 0,
-            'reservasiNoShow'    => $statusReservasi->no_show ?? 0,
+    // Tipe Kamar
+    'tipeKamarCount'          => TipeKamar::count(),
+    'tipeKamarFasilitasCount' => TipeKamarFasilitas::count(),
 
-            'reservasiHariIni'   => Reservasi::whereDate('tanggal_pesan', today())->count(),
-            'reservasiBulanIni'  => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
+    // Reservasi
+    'totalReservasi'     => $totalReservasi,
+    'reservasiPending'   => $statusReservasi->pending ?? 0,
+    'reservasiConfirmed' => $statusReservasi->confirmed ?? 0,
+    'reservasiCheckin'   => $statusReservasi->checkin ?? 0,
+    'reservasiCheckout'  => $statusReservasi->checkout ?? 0,
+    'reservasiCancelled' => $statusReservasi->cancelled ?? 0,
+    'reservasiNoShow'    => $statusReservasi->no_show ?? 0,
 
-            'totalPendapatan' => Reservasi::whereIn('status_reservasi', ['confirmed', 'checkin', 'checkout'])
-                                ->sum('total_harga'),
+    'reservasiHariIni'  => Reservasi::whereDate('tanggal_pesan', today())->count(),
+    'reservasiBulanIni' => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
 
-            // Pelanggan
-            'totalPelanggan'    => Pelanggan::count(),
-            'pelangganLaki'     => Pelanggan::where('jenis_kelamin', 'L')->count(),
-            'pelangganPerempuan'=> Pelanggan::where('jenis_kelamin', 'P')->count(),
-        ]);
+    // Pendapatan
+    'pendapatan' => $pendapatan,
+
+    // Pelanggan
+    'totalPelanggan'     => Pelanggan::count(),
+    'pelangganLaki'      => Pelanggan::where('jenis_kelamin', 'L')->count(),
+    'pelangganPerempuan' => Pelanggan::where('jenis_kelamin', 'P')->count(),
+]);
     }
 
     /**
@@ -133,6 +140,51 @@ class DashboardController extends Controller
         ]);
     }
 
+  public function pendapatanChart()
+{
+    $tahun = request('year', date('Y'));
+
+    $labels = [];
+    $pendapatan = [];
+    $totalPendapatan = 0;
+    $totalTransaksi = 0;
+
+    for ($bulan = 1; $bulan <= 12; $bulan++) {
+
+        $total = Reservasi::whereYear('tanggal_pesan', $tahun)
+            ->whereMonth('tanggal_pesan', $bulan)
+            ->whereIn('status_reservasi', [
+                'confirmed',
+                'checkin',
+                'checkout'
+            ])
+            ->sum('total_harga');
+
+        $transaksi = Reservasi::whereYear('tanggal_pesan', $tahun)
+            ->whereMonth('tanggal_pesan', $bulan)
+            ->whereIn('status_reservasi', [
+                'confirmed',
+                'checkin',
+                'checkout'
+            ])
+            ->count();
+
+        $labels[] = Carbon::create()->month($bulan)->translatedFormat('M');
+
+        $pendapatan[] = $total;
+
+        $totalPendapatan += $total;
+        $totalTransaksi += $transaksi;
+    }
+
+    return response()->json([
+        'labels'           => $labels,
+        'pendapatan'       => $pendapatan,
+        'totalPendapatan'  => $totalPendapatan,
+        'rataRata'         => round($totalPendapatan / 12),
+        'totalTransaksi'   => $totalTransaksi,
+    ]);
+}
     /**
      * Chart Pelanggan berdasarkan Gender (untuk Pie/Donut Chart)
      */

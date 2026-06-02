@@ -1,6 +1,7 @@
 <!-- Vendor Scripts -->
 <script src="{{ asset('dashtrap/admin/dist/assets/js/vendor.min.js') }}"></script>
 <script src="{{ asset('dashtrap/admin/dist/assets/js/app.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!-- Chart Libraries -->
 <script src="{{ asset('dashtrap/admin/dist/assets/libs/apexcharts/apexcharts.min.js') }}"></script>
@@ -261,6 +262,109 @@
     });
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+
+        const canvas = document.getElementById('pendapatanChart');
+
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+
+        let pendapatanChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Pendapatan (Rp)',
+                    data: [],
+                    backgroundColor: 'rgba(25, 135, 84, 0.8)',
+                    borderColor: 'rgba(25, 135, 84, 1)',
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    maxBarThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return 'Rp ' + Number(context.raw || 0)
+                                    .toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                },
+
+                scales: {
+                    x: {
+                        grid: {
+                            display: false
+                        }
+                    },
+
+                    y: {
+                        beginAtZero: true,
+
+                        ticks: {
+                            callback: function(value) {
+                                return 'Rp ' + Number(value)
+                                    .toLocaleString('id-ID');
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        function loadPendapatan(year) {
+
+            fetch(`/dashboard/pendapatan-chart?year=${year}`)
+                .then(response => response.json())
+                .then(data => {
+
+                    pendapatanChart.data.labels = data.labels;
+                    pendapatanChart.data.datasets[0].data = data.pendapatan;
+                    pendapatanChart.update();
+
+                    document.getElementById('totalTahun').innerHTML =
+                        'Rp ' + Number(data.totalPendapatan || 0)
+                        .toLocaleString('id-ID');
+
+                    document.getElementById('rataRata').innerHTML =
+                        'Rp ' + Number(data.rataRata || 0)
+                        .toLocaleString('id-ID');
+
+                    document.getElementById('totalTransaksi').innerHTML =
+                        Number(data.totalTransaksi || 0)
+                        .toLocaleString('id-ID');
+                })
+                .catch(error => {
+                    console.error('Gagal memuat data pendapatan:', error);
+                });
+        }
+
+        const yearFilter = document.getElementById('yearFilter');
+
+        if (yearFilter) {
+
+            loadPendapatan(yearFilter.value);
+
+            yearFilter.addEventListener('change', function() {
+                loadPendapatan(this.value);
+            });
+        }
+
+    });
+</script>
 @push('styles')
     <style>
         .card-clickable {

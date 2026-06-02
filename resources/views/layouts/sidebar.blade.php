@@ -115,7 +115,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" class="menu-link">
+                                <a href="{{ route('pembayaran.index') }}" class="menu-link">
                                     <i class="bx bx-credit-card me-1"></i> Pembayaran
                                 </a>
                             </li>

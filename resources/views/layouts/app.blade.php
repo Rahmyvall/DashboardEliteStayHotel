@@ -158,7 +158,7 @@
 
             @include('layouts.footer')
             @include('layouts.script')
-
+            @stack('scripts')
         </div>
 
     </div>
