@@ -84,50 +84,72 @@
 
                         <!-- User -->
                         <li class="dropdown">
+                            <a class="nav-link dropdown-toggle nav-user d-flex align-items-center"
+                                data-bs-toggle="dropdown" href="#">
 
-                            <a class="nav-link dropdown-toggle nav-user" data-bs-toggle="dropdown" href="#">
+                                <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{ urlencode(Auth::user()->name ?? 'Admin') }}"
+                                    alt="User" class="rounded-circle shadow-sm" width="38" height="38">
 
-                                <img src="https://ui-avatars.com/api/?background=random&name={{ urlencode(Auth::user()->name ?? 'Admin') }}"
-                                    alt="User" class="rounded-circle" width="35">
-
-                                <span class="d-none d-md-inline-block ms-1">
-                                    {{ Auth::user()->name ?? 'Administrator' }}
-                                    <i class="mdi mdi-chevron-down"></i>
-                                </span>
-
+                                <div class="ms-2 d-none d-md-block text-start">
+                                    <div class="fw-semibold">
+                                        {{ Auth::user()->name ?? 'Administrator' }}
+                                    </div>
+                                    <small class="text-muted">
+                                        {{ ucfirst(Auth::user()->role ?? 'Admin') }}
+                                    </small>
+                                </div>
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-end profile-dropdown">
+                            <div class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3 profile-dropdown"
+                                style="min-width: 280px;">
 
-                                <div class="dropdown-header">
-                                    <h6 class="m-0">
-                                        {{ Auth::user()->name ?? 'Administrator' }}
-                                    </h6>
+                                <!-- User Info -->
+                                <div class="px-3 py-3">
 
-                                    <small class="text-muted">
-                                        {{ Auth::user()->email ?? '' }}
-                                    </small>
+                                    <div class="d-flex align-items-center">
+
+                                        <img src="https://ui-avatars.com/api/?background=0D8ABC&color=fff&name={{ urlencode(Auth::user()->name ?? 'Admin') }}"
+                                            class="rounded-circle me-3" width="50">
+
+                                        <div>
+                                            <h6 class="mb-0">
+                                                {{ Auth::user()->name ?? 'Administrator' }}
+                                            </h6>
+
+                                            <small class="text-muted">
+                                                {{ Auth::user()->email ?? '' }}
+                                            </small>
+
+                                            <div class="mt-1">
+                                                <span class="badge bg-primary">
+                                                    {{ strtoupper(Auth::user()->role ?? 'ADMIN') }}
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
                                 </div>
 
                                 <div class="dropdown-divider"></div>
 
-                                <a href="#" class="dropdown-item">
-                                    <i class="mdi mdi-account-circle-outline me-1"></i>
-                                    Profile
+                                <a href="#" class="dropdown-item py-2">
+                                    <i class="mdi mdi-account-outline me-2"></i>
+                                    My Profile
                                 </a>
 
-                                <a href="#" class="dropdown-item">
-                                    <i class="mdi mdi-cog-outline me-1"></i>
+                                <a href="#" class="dropdown-item py-2">
+                                    <i class="mdi mdi-cog-outline me-2"></i>
                                     Settings
                                 </a>
 
                                 <div class="dropdown-divider"></div>
 
-                                <a href="{{ route('logout') }}" class="dropdown-item text-danger"
+                                <a href="{{ route('logout') }}" class="dropdown-item text-danger py-2"
                                     onclick="event.preventDefault();
-                               document.getElementById('logout-form').submit();">
+                     document.getElementById('logout-form').submit();">
 
-                                    <i class="mdi mdi-logout me-1"></i>
+                                    <i class="mdi mdi-logout me-2"></i>
                                     Logout
                                 </a>
 
@@ -136,10 +158,7 @@
                                 </form>
 
                             </div>
-
                         </li>
-
-                    </ul>
 
                 </div>
             </div>

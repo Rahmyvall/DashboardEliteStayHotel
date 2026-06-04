@@ -14,16 +14,54 @@ class PembayaranController extends Controller
      * Daftar pembayaran
      */
     public function index()
-    {
-        $pembayaran = Pembayaran::with([
-                'reservasi',
-                'reservasi.pelanggan'
-            ])
-            ->latest('id_pembayaran')
-            ->paginate(10);
+{
+    $pembayaran = Pembayaran::with('reservasi')->paginate(10);
 
-        return view('pages.pembayaran.index', compact('pembayaran'));
+    $totalPembayaran = Pembayaran::count();
+
+    $paid = Pembayaran::where('status_pembayaran', 'paid')->count();
+    $pending = Pembayaran::where('status_pembayaran', 'pending')->count();
+    $failed = Pembayaran::where('status_pembayaran', 'failed')->count();
+
+    $totalPendapatan = Pembayaran::where('status_pembayaran', 'paid')
+        ->sum('jumlah_bayar');
+
+    // 📊 DATA GRAFIK BULANAN
+    $monthlyData = Pembayaran::selectRaw('
+            MONTH(tanggal_bayar) as bulan,
+            SUM(jumlah_bayar) as total
+        ')
+        ->where('status_pembayaran', 'paid')
+        ->whereNotNull('tanggal_bayar')
+        ->groupByRaw('MONTH(tanggal_bayar)')
+        ->orderByRaw('MONTH(tanggal_bayar)')
+        ->get();
+
+    $bulanNama = [
+        1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
+        5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agu',
+        9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
+    ];
+
+    $monthlyLabels = [];
+    $monthlyRevenue = [];
+
+    foreach ($monthlyData as $data) {
+        $monthlyLabels[] = $bulanNama[$data->bulan];
+        $monthlyRevenue[] = (int) $data->total;
     }
+
+    return view('pages.pembayaran.index', compact(
+        'pembayaran',
+        'totalPembayaran',
+        'paid',
+        'pending',
+        'failed',
+        'totalPendapatan',
+        'monthlyLabels',
+        'monthlyRevenue'
+    ));
+}
 
     /**
      * Form tambah pembayaran
@@ -269,5 +307,7 @@ class PembayaranController extends Controller
             'success',
             'Data pembayaran berhasil dihapus.'
         );
+
 }
+
 }
