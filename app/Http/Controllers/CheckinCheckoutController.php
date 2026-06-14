@@ -155,11 +155,11 @@ class CheckinCheckoutController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
-    public function show($id)
+   public function show($id)
 {
     $checkin = CheckinCheckout::with([
         'reservasi.pelanggan',
-        'reservasi.kamar.tipe_kamar',
+        'reservasi.kamar.tipeKamar',
         'createdBy',
         'checkedInBy',
         'checkedOutBy'
@@ -167,6 +167,7 @@ class CheckinCheckoutController extends Controller
 
     return view('pages.checkin_checkout.show', compact('checkin'));
 }
+
 
 public function edit($id)
 {

@@ -13,85 +13,93 @@ use App\Models\Reservasi;
 
 class DashboardController extends Controller
 {
-    /**
-     * Dashboard Admin
-     */
     public function index()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if (!$user || $user->role !== 'admin') {
-            abort(403, 'Akses ditolak');
-        }
-
-        // ====================== TOTAL DATA ======================
-        $totalReservasi = Reservasi::count();
-
-        // Status Reservasi (Satu query saja)
-        $statusReservasi = Reservasi::selectRaw("
-            SUM(CASE WHEN status_reservasi = 'pending' THEN 1 ELSE 0 END) as pending,
-            SUM(CASE WHEN status_reservasi = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
-            SUM(CASE WHEN status_reservasi = 'checkin' THEN 1 ELSE 0 END) as checkin,
-            SUM(CASE WHEN status_reservasi = 'checkout' THEN 1 ELSE 0 END) as checkout,
-            SUM(CASE WHEN status_reservasi = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
-            SUM(CASE WHEN status_reservasi = 'no_show' THEN 1 ELSE 0 END) as no_show
-        ")->first();
-
-        // ====================== RETURN DATA TO VIEW ======================
-       // ====================== PENDAPATAN ======================
-$pendapatan = Reservasi::whereIn(
-    'status_reservasi',
-    ['confirmed', 'checkin', 'checkout']
-)->sum('total_harga');
-
-// ====================== RETURN DATA TO VIEW ======================
-return view('pages.dashboard', [
-    'title' => 'Dashboard Admin',
-    'user'  => $user,
-
-    // Users
-    'totalUsers'       => User::count(),
-    'adminCount'       => User::where('role', 'admin')->count(),
-    'resepsionisCount' => User::where('role', 'resepsionis')->count(),
-    'pelangganUser'    => User::where('role', 'pelanggan')->count(),
-    'userAktif'        => User::where('status', 'aktif')->count(),
-    'userBaruHariIni'  => User::whereDate('created_at', today())->count(),
-    'userBulanIni'     => User::whereMonth('created_at', now()->month)->count(),
-
-    // Kamar
-    'totalKamar'      => Kamar::count(),
-    'kamarTersedia'   => Kamar::where('status_kamar', 'tersedia')->count(),
-    'kamarTerisi'     => Kamar::where('status_kamar', 'terisi')->count(),
-    'kamarDipesan'    => Kamar::where('status_kamar', 'dipesan')->count(),
-
-    // Tipe Kamar
-    'tipeKamarCount'          => TipeKamar::count(),
-    'tipeKamarFasilitasCount' => TipeKamarFasilitas::count(),
-
-    // Reservasi
-    'totalReservasi'     => $totalReservasi,
-    'reservasiPending'   => $statusReservasi->pending ?? 0,
-    'reservasiConfirmed' => $statusReservasi->confirmed ?? 0,
-    'reservasiCheckin'   => $statusReservasi->checkin ?? 0,
-    'reservasiCheckout'  => $statusReservasi->checkout ?? 0,
-    'reservasiCancelled' => $statusReservasi->cancelled ?? 0,
-    'reservasiNoShow'    => $statusReservasi->no_show ?? 0,
-
-    'reservasiHariIni'  => Reservasi::whereDate('tanggal_pesan', today())->count(),
-    'reservasiBulanIni' => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
-
-    // Pendapatan
-    'pendapatan' => $pendapatan,
-
-    // Pelanggan
-    'totalPelanggan'     => Pelanggan::count(),
-    'pelangganLaki'      => Pelanggan::where('jenis_kelamin', 'L')->count(),
-    'pelangganPerempuan' => Pelanggan::where('jenis_kelamin', 'P')->count(),
-]);
+    if (!$user || $user->role !== 'admin') {
+        abort(403, 'Akses ditolak');
     }
 
+    // ======================
+    // DATA PELANGGAN
+    // ======================
+    $lakiLaki = Pelanggan::where('jenis_kelamin', 'L')->count();
+    $perempuan = Pelanggan::where('jenis_kelamin', 'P')->count();
+    $totalPelanggan = $lakiLaki + $perempuan;
+
+    // ======================
+    // DATA RESERVASI
+    // ======================
+    $totalReservasi = Reservasi::count();
+
+    $statusReservasi = Reservasi::selectRaw("
+        SUM(CASE WHEN status_reservasi = 'pending' THEN 1 ELSE 0 END) as pending,
+        SUM(CASE WHEN status_reservasi = 'confirmed' THEN 1 ELSE 0 END) as confirmed,
+        SUM(CASE WHEN status_reservasi = 'checkin' THEN 1 ELSE 0 END) as checkin,
+        SUM(CASE WHEN status_reservasi = 'checkout' THEN 1 ELSE 0 END) as checkout,
+        SUM(CASE WHEN status_reservasi = 'cancelled' THEN 1 ELSE 0 END) as cancelled,
+        SUM(CASE WHEN status_reservasi = 'no_show' THEN 1 ELSE 0 END) as no_show
+    ")->first();
+
+    // ======================
+    // PENDAPATAN
+    // ======================
+    $pendapatan = Reservasi::whereIn(
+        'status_reservasi',
+        ['confirmed', 'checkin', 'checkout']
+    )->sum('total_harga');
+
+    // ======================
+    // RETURN VIEW
+    // ======================
+    return view('pages.dashboard', [
+        'title' => 'Dashboard Admin',
+        'user' => $user,
+
+        // User
+        'totalUsers' => User::count(),
+        'adminCount' => User::where('role', 'admin')->count(),
+        'resepsionisCount' => User::where('role', 'resepsionis')->count(),
+        'pelangganUser' => User::where('role', 'pelanggan')->count(),
+        'userAktif' => User::where('status', 'aktif')->count(),
+        'userBaruHariIni' => User::whereDate('created_at', today())->count(),
+        'userBulanIni' => User::whereMonth('created_at', now()->month)->count(),
+
+        // Kamar
+        'totalKamar' => Kamar::count(),
+        'kamarTersedia' => Kamar::where('status_kamar', 'tersedia')->count(),
+        'kamarTerisi' => Kamar::where('status_kamar', 'terisi')->count(),
+        'kamarDipesan' => Kamar::where('status_kamar', 'dipesan')->count(),
+
+        // Tipe Kamar
+        'tipeKamarCount' => TipeKamar::count(),
+        'tipeKamarFasilitasCount' => TipeKamarFasilitas::count(),
+
+        // Reservasi
+        'totalReservasi' => $totalReservasi,
+        'reservasiPending' => $statusReservasi->pending ?? 0,
+        'reservasiConfirmed' => $statusReservasi->confirmed ?? 0,
+        'reservasiCheckin' => $statusReservasi->checkin ?? 0,
+        'reservasiCheckout' => $statusReservasi->checkout ?? 0,
+        'reservasiCancelled' => $statusReservasi->cancelled ?? 0,
+        'reservasiNoShow' => $statusReservasi->no_show ?? 0,
+
+        'reservasiHariIni' => Reservasi::whereDate('tanggal_pesan', today())->count(),
+        'reservasiBulanIni' => Reservasi::whereMonth('tanggal_pesan', now()->month)->count(),
+
+        // Pendapatan
+        'pendapatan' => $pendapatan,
+
+        // Pelanggan
+        'totalPelanggan' => $totalPelanggan,
+        'lakiLaki' => $lakiLaki,
+        'perempuan' => $perempuan,
+    ]);
+}
     /**
-     * Line Chart - Tren Reservasi (untuk AJAX)
+     * Dashboard Admin
+        * Line Chart - Tren Reservasi (untuk AJAX)
      */
     public function getReservasiLineChart()
     {

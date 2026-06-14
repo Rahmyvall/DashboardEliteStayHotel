@@ -83,7 +83,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         ->name('dashboard.reservasi-line');
 
     Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
-        ->name('admin.dashboard.pelanggan.chart');
+        ->name('dashboard.pelanggan.chart');
 
     Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
         ->name('dashboard.pendapatan.chart');
@@ -156,17 +156,15 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
     ->name('dashboard.pendapatan.chart');
 
-    Route::resource(
-    'checkin-checkout',
-    CheckinCheckoutController::class
-);
-
 /*
 |--------------------------------------------------------------------------
 | Check In / Check Out
 |--------------------------------------------------------------------------
 */
- Route::resource('checkin-checkout', CheckinCheckoutController::class);
+ Route::resource(
+    'checkin-checkout',
+    CheckinCheckoutController::class
+);
 
     Route::get('checkin-checkout/staying', [CheckinCheckoutController::class, 'staying'])
         ->name('checkin-checkout.staying');
