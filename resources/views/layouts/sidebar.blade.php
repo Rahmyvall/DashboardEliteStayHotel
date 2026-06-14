@@ -121,7 +121,7 @@
                             </li>
 
                             <li>
-                                <a href="#" class="menu-link">
+                                <a href="{{ route('checkin-checkout.index') }}" class="menu-link">
                                     <i class="bx bx-log-in-circle me-1"></i> Check-in & Check-out
                                 </a>
                             </li>

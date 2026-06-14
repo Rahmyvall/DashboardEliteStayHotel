@@ -2,33 +2,24 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * Nama tabel
-     */
     protected $table = 'users';
 
-    /**
-     * Primary key custom
-     */
     protected $primaryKey = 'id_user';
 
-    /**
-     * Disable timestamps jika tidak ada created_at & updated_at
-     * Kalau ada kolomnya, hapus baris ini
-     */
-    // public $timestamps = false;
+    public $incrementing = true;
 
-    /**
-     * Mass assignable
-     */
+    protected $keyType = 'int';
+
     protected $fillable = [
         'nama_lengkap',
         'email',
@@ -39,24 +30,78 @@ class User extends Authenticatable
         'status',
     ];
 
-    /**
-     * Hidden attributes
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Attribute casting
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
 
-    public function pelanggan()
+    /*
+    |--------------------------------------------------------------------------
+    | RELATIONSHIP
+    |--------------------------------------------------------------------------
+    */
+
+    public function pelanggan(): HasOne
     {
-        return $this->hasOne(Pelanggan::class, 'id_user', 'id_user');
+        return $this->hasOne(
+            Pelanggan::class,
+            'id_user',
+            'id_user'
+        );
+    }
+
+    public function createdCheckins(): HasMany
+    {
+        return $this->hasMany(
+            CheckinCheckout::class,
+            'created_by',
+            'id_user'
+        );
+    }
+
+    public function checkedInCheckins(): HasMany
+    {
+        return $this->hasMany(
+            CheckinCheckout::class,
+            'checked_in_by',
+            'id_user'
+        );
+    }
+
+    public function checkedOutCheckins(): HasMany
+    {
+        return $this->hasMany(
+            CheckinCheckout::class,
+            'checked_out_by',
+            'id_user'
+        );
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | ACCESSOR
+    |--------------------------------------------------------------------------
+    */
+
+    public function getNamaRoleAttribute(): string
+    {
+        return match ($this->role) {
+            'admin' => 'Administrator',
+            'resepsionis' => 'Resepsionis',
+            'manager' => 'Manager',
+            default => ucfirst($this->role ?? ''),
+        };
+    }
+
+    public function getStatusLabelAttribute(): string
+    {
+        return $this->status
+            ? 'Aktif'
+            : 'Non Aktif';
     }
 }

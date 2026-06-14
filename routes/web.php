@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckinCheckoutController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\FasilitasController;
 use App\Http\Controllers\UserController;
@@ -154,7 +155,24 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('pembayaran', PembayaranController::class);
     Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
     ->name('dashboard.pendapatan.chart');
-});
+
+    Route::resource(
+    'checkin-checkout',
+    CheckinCheckoutController::class
+);
+
+/*
+|--------------------------------------------------------------------------
+| Check In / Check Out
+|--------------------------------------------------------------------------
+*/
+ Route::resource('checkin-checkout', CheckinCheckoutController::class);
+
+    Route::get('checkin-checkout/staying', [CheckinCheckoutController::class, 'staying'])
+        ->name('checkin-checkout.staying');
+
+    Route::get('checkin-checkout/history', [CheckinCheckoutController::class, 'history'])
+        ->name('checkin-checkout.history');
 
 /*
 |--------------------------------------------------------------------------
@@ -218,3 +236,4 @@ Route::middleware(['auth', 'role:pelanggan'])
             ->name('dashboard');
 
     });
+});
