@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Halaman Login
+    | LOGIN PAGE
     |--------------------------------------------------------------------------
     */
     public function login()
@@ -25,57 +25,64 @@ class AuthController extends Controller
 
     /*
     |--------------------------------------------------------------------------
-    | Proses Login
+    | AUTHENTICATION
     |--------------------------------------------------------------------------
     */
     public function authenticate(Request $request)
     {
         $validated = $request->validate([
-            'email'    => 'required|email:rfc,dns',
-            'password' => 'required|string|min:8|max:100',
+            'email'    => 'required|email',
+            'password' => 'required|string|min:8',
         ]);
 
-        $throttleKey =
-            Str::lower($validated['email']) . '|' . $request->ip();
+        $key = Str::lower($validated['email']) . '|' . $request->ip();
 
-        if (RateLimiter::tooManyAttempts($throttleKey, 5)) {
-            $seconds = RateLimiter::availableIn($throttleKey);
+        // LIMIT LOGIN ATTEMPT
+        if (RateLimiter::tooManyAttempts($key, 5)) {
+            $seconds = RateLimiter::availableIn($key);
 
-            return back()
-                ->withInput()
-                ->with('error', "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik.");
+            return back()->withInput()->with(
+                'error',
+                "Terlalu banyak percobaan login. Coba lagi dalam {$seconds} detik."
+            );
         }
 
+        // LOGIN
         if (Auth::attempt([
-            'email'    => $validated['email'],
+            'email'  => $validated['email'],
             'password' => $validated['password'],
-            'status'   => 'aktif',
+            'status' => 'aktif',
         ])) {
 
-            RateLimiter::clear($throttleKey);
+            RateLimiter::clear($key);
 
             $request->session()->regenerate();
+
+            $user = Auth::user();
+
+            // OPTIONAL AUTO HASH FIX
+            if ($user && !Str::startsWith($user->password, '$2y$')) {
+                $user->password = bcrypt($validated['password']);
+                $user->save();
+            }
 
             session([
                 'ip_address' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]);
 
-            return $this->redirectByRole(Auth::user())
+            return $this->redirectByRole($user)
                 ->with('success', 'Login berhasil');
         }
 
-        RateLimiter::hit($throttleKey, 60);
-        sleep(1);
+        RateLimiter::hit($key, 60);
 
-        return back()
-            ->withInput()
-            ->with('error', 'Email atau password salah');
+        return back()->withInput()->with('error', 'Email atau password salah');
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Logout
+    | LOGOUT
     |--------------------------------------------------------------------------
     */
     public function logout(Request $request)
@@ -85,27 +92,33 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()
-            ->route('login')
+        return redirect()->route('login')
             ->with('success', 'Berhasil logout');
     }
 
     /*
     |--------------------------------------------------------------------------
-    | Redirect sesuai role
+    | REDIRECT BY ROLE (FIX UTAMA)
     |--------------------------------------------------------------------------
     */
     private function redirectByRole($user)
     {
         return match ($user->role) {
 
-            'admin' => redirect()->route('admin.dashboard'),
+            // ADMIN + INTERNAL ROLE
+            'admin',
+            'resepsionis',
+            'pelayanan'
+                => redirect()->route('pages.dashboard'),
 
-            'resepsionis' => redirect()->route('resepsionis.dashboard'),
+            // PELANGGAN
+            'pelanggan'
+                => redirect()->route('pelanggan.dashboard'),
 
-            'pelanggan' => redirect()->route('pelanggan.dashboard'),
-
-            default => redirect()->route('login')->with('error', 'Role tidak valid'),
+            // DEFAULT SAFE
+            default
+                => redirect()->route('login')
+                    ->with('error', 'Role tidak valid'),
         };
     }
 }

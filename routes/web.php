@@ -1,19 +1,22 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CheckinCheckoutController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\FasilitasController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\PelangganController;
-use App\Http\Controllers\TipeKamarController;
-use App\Http\Controllers\KamarController;
-use App\Http\Controllers\PembayaranController;
-use App\Http\Controllers\ResepsionisKamarController;
-use App\Http\Controllers\ResepsionisPelangganController;
-use App\Http\Controllers\ReservasiController;
-use App\Http\Controllers\TipeKamarFasilitasController;
+use App\Http\Controllers\{
+    AuthController,
+    DashboardController,
+    CheckinCheckoutController,
+    FasilitasController,
+    UserController,
+    PelangganController,
+    TipeKamarController,
+    KamarController,
+    PembayaranController,
+    ResepsionisKamarController,
+    ResepsionisPelangganController,
+    ReservasiController,
+    ReviewController,
+    TipeKamarFasilitasController
+};
 
 /*
 |--------------------------------------------------------------------------
@@ -21,12 +24,12 @@ use App\Http\Controllers\TipeKamarFasilitasController;
 |--------------------------------------------------------------------------
 */
 Route::middleware('guest')->group(function () {
-
     Route::get('/', [AuthController::class, 'login'])->name('login');
 
     Route::post('/login', [AuthController::class, 'authenticate'])
         ->name('login.process');
 });
+
 /*
 |--------------------------------------------------------------------------
 | LOGOUT
@@ -38,87 +41,53 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 /*
 |--------------------------------------------------------------------------
-| DASHBOARD REDIRECT
-|--------------------------------------------------------------------------
-*/
-/*
-|--------------------------------------------------------------------------
-| DASHBOARD REDIRECT
+| DASHBOARD REDIRECT (SEMUA ROLE)
 |--------------------------------------------------------------------------
 */
 Route::get('/dashboard', function () {
     $user = auth()->user();
 
-    if ($user->role == 'admin') {
-        return redirect()->route('pages.dashboard');   // ← Ubah jadi ini
-    }
-
-    if ($user->role == 'resepsionis') {
-        return redirect()->route('resepsionis.dashboard');
-    }
-
-    if ($user->role == 'pelanggan') {
-        return redirect()->route('pelanggan.dashboard');
-    }
-
-    abort(403);
+    return match ($user->role) {
+        'pelanggan' => redirect()->route('pelanggan.dashboard'),
+        default => redirect()->route('pages.dashboard'),
+    };
 })->middleware('auth')->name('dashboard');
 
 /*
 |--------------------------------------------------------------------------
-| ADMIN
+| DASHBOARD UTAMA + CHART (ADMIN + RESEPSIONIS + PELANGGAN)
 |--------------------------------------------------------------------------
 */
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:admin,resepsionis,pelayanan,pelanggan'])->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Dashboard
-    |--------------------------------------------------------------------------
-    */
     Route::get('/pages/dashboard', [DashboardController::class, 'index'])
         ->name('pages.dashboard');
 
+    // CHART GLOBAL (SUPAYA BISA DIPAKAI SEMUA ROLE TERMASUK PELANGGAN)
     Route::get('/dashboard/reservasi-line', [DashboardController::class, 'getReservasiLineChart'])
         ->name('dashboard.reservasi-line');
-
-    Route::get('/pages/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
-        ->name('dashboard.pelanggan.chart');
 
     Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
         ->name('dashboard.pendapatan.chart');
 
-    /*
-    |--------------------------------------------------------------------------
-    | User Management
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('/pages/users', UserController::class)
-        ->names('users');
+    Route::get('/dashboard/pelanggan-chart', [DashboardController::class, 'pelangganChart'])
+        ->name('dashboard.pelanggan.chart');
+});
 
-    Route::resource('/pages/pelanggan1', PelangganController::class)
-        ->names('pelanggan1');
+/*
+|--------------------------------------------------------------------------
+| ADMIN ONLY
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth', 'role:admin'])->group(function () {
 
-    /*
-    |--------------------------------------------------------------------------
-    | Tipe Kamar
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('/pages/tipe-kamar', TipeKamarController::class)
-        ->names('tipe-kamar');
+    Route::resource('/pages/users', UserController::class);
+    Route::resource('/pages/pelanggan1', PelangganController::class);
 
-    Route::resource(
-        '/pages/tipe-kamar-fasilitas',
-        TipeKamarFasilitasController::class
-    )->names('tipe-kamar-fasilitas');
+    Route::resource('/pages/tipe-kamar', TipeKamarController::class);
+    Route::resource('/pages/tipe-kamar-fasilitas', TipeKamarFasilitasController::class);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Kamar
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('/pages/kamar', KamarController::class)
-        ->names('kamar');
+    Route::resource('/pages/kamar', KamarController::class);
 
     Route::put('/kamar/{kamar}/konfirmasi', [KamarController::class, 'konfirmasi'])
         ->name('kamar.konfirmasi');
@@ -126,51 +95,14 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/pages/kamar/generate-floor', [KamarController::class, 'generateFloorRooms'])
         ->name('kamar.generateFloor');
 
-    /*
-    |--------------------------------------------------------------------------
-    | Fasilitas
-    |--------------------------------------------------------------------------
-    */
-    Route::resource('/pages/fasilitas', FasilitasController::class)
-        ->names('fasilitas');
+    Route::resource('/pages/fasilitas', FasilitasController::class);
 
-    /*
-    |--------------------------------------------------------------------------
-    | Reservasi
-    |--------------------------------------------------------------------------
-    */
     Route::resource('reservasi', ReservasiController::class);
-
-    Route::patch('/reservasi/{id}/approve', [ReservasiController::class, 'approve'])
-        ->name('reservasi.approve');
-
-    Route::patch('/reservasi/{id}/reject', [ReservasiController::class, 'reject'])
-        ->name('reservasi.reject');
-
-    /*
-    |--------------------------------------------------------------------------
-    | Pembayaran
-    |--------------------------------------------------------------------------
-    */
     Route::resource('pembayaran', PembayaranController::class);
-    Route::get('/dashboard/pendapatan-chart', [DashboardController::class, 'pendapatanChart'])
-    ->name('dashboard.pendapatan.chart');
+    Route::resource('checkin-checkout', CheckinCheckoutController::class);
 
-/*
-|--------------------------------------------------------------------------
-| Check In / Check Out
-|--------------------------------------------------------------------------
-*/
- Route::resource(
-    'checkin-checkout',
-    CheckinCheckoutController::class
-);
-
-    Route::get('checkin-checkout/staying', [CheckinCheckoutController::class, 'staying'])
-        ->name('checkin-checkout.staying');
-
-    Route::get('checkin-checkout/history', [CheckinCheckoutController::class, 'history'])
-        ->name('checkin-checkout.history');
+    Route::resource('review', ReviewController::class);
+});
 
 /*
 |--------------------------------------------------------------------------
@@ -182,9 +114,8 @@ Route::middleware(['auth', 'role:resepsionis'])
     ->name('resepsionis.')
     ->group(function () {
 
-        Route::get('/dashboard', function () {
-            return redirect()->route('resepsionis.pelanggan.index');
-        })->name('dashboard');
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
 
         Route::get('/pelanggan', [ResepsionisPelangganController::class, 'index'])
             ->name('pelanggan.index');
@@ -197,9 +128,6 @@ Route::middleware(['auth', 'role:resepsionis'])
 
         Route::delete('/pelanggan/{pelanggan}', [ResepsionisPelangganController::class, 'destroy'])
             ->name('pelanggan.destroy');
-
-        Route::get('/dashboard/pelanggan/chart', [DashboardController::class, 'pelangganChart'])
-            ->name('pelanggan.chart');
 
         Route::get('/kamar', [ResepsionisKamarController::class, 'index'])
             ->name('kamar.index');
@@ -232,6 +160,4 @@ Route::middleware(['auth', 'role:pelanggan'])
 
         Route::get('/dashboard', [DashboardController::class, 'pelanggan'])
             ->name('dashboard');
-
     });
-});

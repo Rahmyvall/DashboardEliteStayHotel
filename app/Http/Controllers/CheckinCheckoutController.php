@@ -6,6 +6,8 @@ use App\Models\CheckinCheckout;
 use App\Models\Reservasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Milon\Barcode\Facades\DNS1DFacade;
+
 
 class CheckinCheckoutController extends Controller
 {
@@ -160,6 +162,7 @@ class CheckinCheckoutController extends Controller
     $checkin = CheckinCheckout::with([
         'reservasi.pelanggan',
         'reservasi.kamar.tipeKamar',
+        'reservasi.kamar',
         'createdBy',
         'checkedInBy',
         'checkedOutBy'
@@ -256,4 +259,33 @@ public function edit($id)
             return back()->with('error', $e->getMessage());
         }
     }
+
+    public function print($id)
+{
+    $checkin = CheckinCheckout::with([
+        'reservasi',
+        'reservasi.pelanggan',
+        'reservasi.kamar',
+        'reservasi.kamar.tipeKamar',
+        'createdBy',
+        'checkedInBy',
+        'checkedOutBy',
+    ])->findOrFail($id);
+
+    $barcode = DNS1DFacade::getBarcodeHTML(
+        $checkin->reservasi?->kode_reservasi ?? $checkin->id_check,
+        'C128',
+        1.5,
+        40
+    );
+
+    return view('pages.checkin_checkout.print', [
+        'checkin'   => $checkin,
+        'reservasi' => $checkin->reservasi,
+        'pelanggan' => $checkin->reservasi?->pelanggan,
+        'kamar'     => $checkin->reservasi?->kamar,
+        'tipeKamar' => $checkin->reservasi?->kamar?->tipeKamar,
+        'barcode'   => $barcode,
+    ]);
+}
 }

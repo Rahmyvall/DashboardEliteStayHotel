@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\TipeKamar;
+use App\Models\Reservasi;
 
 class Kamar extends Model
 {
@@ -11,6 +13,8 @@ class Kamar extends Model
 
     protected $table = 'kamar';
     protected $primaryKey = 'id_kamar';
+    public $incrementing = true;
+    protected $keyType = 'int';
 
     protected $fillable = [
         'nomor_kamar',
@@ -29,10 +33,11 @@ class Kamar extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | RELASI
+    | RELASI YANG BENAR (WAJIB KONSISTEN)
     |--------------------------------------------------------------------------
     */
 
+    // FIX UTAMA: ini yang dipakai di seluruh project
     public function tipeKamar()
     {
         return $this->belongsTo(
@@ -42,6 +47,17 @@ class Kamar extends Model
         );
     }
 
+    // ALIAS (BIAR TIDAK ERROR KALAU MASIH ADA CODE LAMA)
+    public function tipe_kamar()
+    {
+        return $this->tipeKamar();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RELASI RESERVASI
+    |--------------------------------------------------------------------------
+    */
     public function reservasi()
     {
         return $this->hasMany(
@@ -53,10 +69,9 @@ class Kamar extends Model
 
     /*
     |--------------------------------------------------------------------------
-    | SCOPES
+    | SCOPE
     |--------------------------------------------------------------------------
     */
-
     public function scopeTersedia($query)
     {
         return $query->where('status_kamar', 'tersedia');
@@ -67,7 +82,6 @@ class Kamar extends Model
     | ACCESSOR
     |--------------------------------------------------------------------------
     */
-
     public function getStatusLabelAttribute()
     {
         return match ($this->status_kamar) {
@@ -75,7 +89,7 @@ class Kamar extends Model
             'terisi' => 'Terisi',
             'maintenance' => 'Maintenance',
             'cleaning' => 'Dalam Pembersihan',
-            default => ucfirst($this->status_kamar ?? '-'),
+            default => '-',
         };
     }
 }

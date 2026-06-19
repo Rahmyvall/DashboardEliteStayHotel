@@ -10,6 +10,13 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
+        // HAPUS DATA LAMA BIAR TIDAK BENTROK (PENTING)
+        User::whereIn('email', [
+            'admin@gmail.com',
+            'resepsionis@gmail.com',
+            'pelanggan@gmail.com',
+        ])->delete();
+
         // ADMIN
         User::create([
             'nama_lengkap' => 'Admin',
@@ -17,7 +24,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('admin12345'),
             'no_hp' => '081111111111',
             'role' => 'admin',
-            'status' => 'aktif'
+            'status' => 'aktif',
         ]);
 
         // RESEPSIONIS
@@ -27,7 +34,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('resepsionis12345'),
             'no_hp' => '082222222222',
             'role' => 'resepsionis',
-            'status' => 'aktif'
+            'status' => 'aktif',
         ]);
 
         // PELANGGAN
@@ -37,7 +44,7 @@ class UserSeeder extends Seeder
             'password' => Hash::make('pelanggan12345'),
             'no_hp' => '083333333333',
             'role' => 'pelanggan',
-            'status' => 'aktif'
+            'status' => 'aktif',
         ]);
     }
 }

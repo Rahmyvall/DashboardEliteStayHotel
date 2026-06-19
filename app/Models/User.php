@@ -35,9 +35,17 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    /*
+    |--------------------------------------------------------------------------
+    | CASTS (FIX IMPORTANT)
+    |--------------------------------------------------------------------------
+    |
+    | ❗ HAPUS 'password' => 'hashed'
+    | karena bisa bentrok dengan data lama (MD5 / plaintext)
+    |
+    */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
     ];
 
     /*

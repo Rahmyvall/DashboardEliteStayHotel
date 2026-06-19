@@ -141,7 +141,7 @@
                     <ul class="sub-menu">
 
                         <li>
-                            <a href="#" class="menu-link">
+                            <a href="{{ route('review.index') }}" class="menu-link">
                                 <i class="bx bx-star me-1"></i> Review
                             </a>
                         </li>

@@ -65,6 +65,16 @@ class CheckinCheckout extends Model
         );
     }
 
+    public function pelanggan()
+    {
+        return $this->belongsTo(Pelanggan::class, 'id_pelanggan');
+    }
+
+    public function kamar()
+    {
+        return $this->belongsTo(Kamar::class, 'id_kamar');
+    }
+
     public function createdBy(): BelongsTo
     {
         return $this->belongsTo(

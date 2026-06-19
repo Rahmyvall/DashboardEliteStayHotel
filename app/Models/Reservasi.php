@@ -15,25 +15,13 @@ class Reservasi extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'reservasi';
-
     protected $primaryKey = 'id_reservasi';
-
-    protected $appends = [
-        'total_tamu',
-        'total_dibayar',
-        'sisa_pembayaran',
-        'sudah_lunas',
-        'status_reservasi_label',
-        'status_pembayaran_label',
-        'status_reservasi_badge',
-    ];
 
     /*
     |--------------------------------------------------------------------------
-    | STATUS
+    | STATUS RESERVASI
     |--------------------------------------------------------------------------
     */
-
     public const STATUS_PENDING   = 'pending';
     public const STATUS_CONFIRMED = 'confirmed';
     public const STATUS_CHECKIN   = 'checkin';
@@ -41,16 +29,15 @@ class Reservasi extends Model
     public const STATUS_CANCELLED = 'cancelled';
     public const STATUS_NOSHOW    = 'no_show';
 
+    /*
+    |--------------------------------------------------------------------------
+    | STATUS PEMBAYARAN (FIX UTAMA BIAR TIDAK ERROR LAGI)
+    |--------------------------------------------------------------------------
+    */
     public const PAYMENT_UNPAID   = 'unpaid';
     public const PAYMENT_PARTIAL  = 'partial';
     public const PAYMENT_PAID     = 'paid';
     public const PAYMENT_REFUNDED = 'refunded';
-
-    /*
-    |--------------------------------------------------------------------------
-    | FILLABLE
-    |--------------------------------------------------------------------------
-    */
 
     protected $fillable = [
         'kode_reservasi',
@@ -84,20 +71,12 @@ class Reservasi extends Model
         'catatan',
     ];
 
-    /*
-    |--------------------------------------------------------------------------
-    | CASTS
-    |--------------------------------------------------------------------------
-    */
-
     protected $casts = [
         'tanggal_pesan' => 'datetime',
-
         'check_in'  => 'date',
         'check_out' => 'date',
 
         'lama_menginap' => 'integer',
-
         'jumlah_dewasa' => 'integer',
         'jumlah_anak'   => 'integer',
 
@@ -116,41 +95,29 @@ class Reservasi extends Model
     | RELATIONSHIP
     |--------------------------------------------------------------------------
     */
-
     public function pelanggan(): BelongsTo
     {
-        return $this->belongsTo(
-            Pelanggan::class,
-            'id_pelanggan',
-            'id_pelanggan'
-        );
+        return $this->belongsTo(Pelanggan::class, 'id_pelanggan', 'id_pelanggan');
     }
 
     public function kamar(): BelongsTo
     {
-        return $this->belongsTo(
-            Kamar::class,
-            'id_kamar',
-            'id_kamar'
-        );
+        return $this->belongsTo(Kamar::class, 'id_kamar', 'id_kamar');
     }
 
     public function pembayaran(): HasMany
     {
-        return $this->hasMany(
-            Pembayaran::class,
-            'id_reservasi',
-            'id_reservasi'
-        );
+        return $this->hasMany(Pembayaran::class, 'id_reservasi', 'id_reservasi');
     }
 
     public function checkinCheckout(): HasOne
     {
-        return $this->hasOne(
-            CheckinCheckout::class,
-            'id_reservasi',
-            'id_reservasi'
-        );
+        return $this->hasOne(CheckinCheckout::class, 'id_reservasi', 'id_reservasi');
+    }
+
+    public function review(): HasOne
+    {
+        return $this->hasOne(Review::class, 'id_reservasi', 'id_reservasi');
     }
 
     /*
@@ -158,32 +125,37 @@ class Reservasi extends Model
     | ACCESSOR
     |--------------------------------------------------------------------------
     */
-
     public function getTotalTamuAttribute(): int
     {
-        return (int) $this->jumlah_dewasa
-             + (int) $this->jumlah_anak;
+        return (int) $this->jumlah_dewasa + (int) $this->jumlah_anak;
     }
 
     public function getTotalDibayarAttribute(): float
     {
         return (float) $this->pembayaran()
-            ->where('status_pembayaran', 'paid')
+            ->where('status_pembayaran', self::PAYMENT_PAID)
             ->sum('jumlah_bayar');
     }
 
     public function getSisaPembayaranAttribute(): float
     {
-        return max(
-            0,
-            (float) $this->total_harga -
-            (float) $this->total_dibayar
-        );
+        return max(0, (float) $this->total_harga - (float) $this->total_dibayar);
     }
 
     public function getSudahLunasAttribute(): bool
     {
         return $this->sisa_pembayaran <= 0;
+    }
+
+    public function getStatusPembayaranLabelAttribute(): string
+    {
+        return match ($this->status_pembayaran) {
+            self::PAYMENT_UNPAID   => 'Belum Dibayar',
+            self::PAYMENT_PARTIAL  => 'Dibayar Sebagian',
+            self::PAYMENT_PAID     => 'Lunas',
+            self::PAYMENT_REFUNDED => 'Refund',
+            default => '-',
+        };
     }
 
     public function getStatusReservasiLabelAttribute(): string
@@ -195,17 +167,6 @@ class Reservasi extends Model
             self::STATUS_CHECKOUT  => 'Check Out',
             self::STATUS_CANCELLED => 'Cancelled',
             self::STATUS_NOSHOW    => 'No Show',
-            default => '-',
-        };
-    }
-
-    public function getStatusPembayaranLabelAttribute(): string
-    {
-        return match ($this->status_pembayaran) {
-            self::PAYMENT_PAID     => 'Lunas',
-            self::PAYMENT_PARTIAL  => 'Dibayar Sebagian',
-            self::PAYMENT_UNPAID   => 'Belum Dibayar',
-            self::PAYMENT_REFUNDED => 'Refund',
             default => '-',
         };
     }
@@ -228,10 +189,14 @@ class Reservasi extends Model
     | HELPER
     |--------------------------------------------------------------------------
     */
-
-    public function sudahCheckin(): bool
+    public function isPending(): bool
     {
-        return $this->checkinCheckout()->exists();
+        return $this->status_reservasi === self::STATUS_PENDING;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->status_reservasi === self::STATUS_CONFIRMED;
     }
 
     public function isCheckin(): bool
@@ -244,19 +209,14 @@ class Reservasi extends Model
         return $this->status_reservasi === self::STATUS_CHECKOUT;
     }
 
-    public function isPending(): bool
-    {
-        return $this->status_reservasi === self::STATUS_PENDING;
-    }
-
-    public function isConfirmed(): bool
-    {
-        return $this->status_reservasi === self::STATUS_CONFIRMED;
-    }
-
     public function isCancelled(): bool
     {
         return $this->status_reservasi === self::STATUS_CANCELLED;
+    }
+
+    public function sudahCheckin(): bool
+    {
+        return $this->checkinCheckout()->exists();
     }
 
     /*
@@ -264,59 +224,37 @@ class Reservasi extends Model
     | SCOPE
     |--------------------------------------------------------------------------
     */
-
     public function scopeActive(Builder $query): Builder
     {
-        return $query->whereIn(
-            'status_reservasi',
-            [
-                self::STATUS_PENDING,
-                self::STATUS_CONFIRMED,
-                self::STATUS_CHECKIN,
-            ]
-        );
+        return $query->whereIn('status_reservasi', [
+            self::STATUS_PENDING,
+            self::STATUS_CONFIRMED,
+            self::STATUS_CHECKIN,
+        ]);
     }
 
     public function scopeConfirmed(Builder $query): Builder
     {
-        return $query->where(
-            'status_reservasi',
-            self::STATUS_CONFIRMED
-        );
+        return $query->where('status_reservasi', self::STATUS_CONFIRMED);
     }
 
     public function scopeCheckin(Builder $query): Builder
     {
-        return $query->where(
-            'status_reservasi',
-            self::STATUS_CHECKIN
-        );
+        return $query->where('status_reservasi', self::STATUS_CHECKIN);
     }
 
     public function scopeCheckout(Builder $query): Builder
     {
-        return $query->where(
-            'status_reservasi',
-            self::STATUS_CHECKOUT
-        );
+        return $query->where('status_reservasi', self::STATUS_CHECKOUT);
     }
 
     public function scopeCancelled(Builder $query): Builder
     {
-        return $query->where(
-            'status_reservasi',
-            self::STATUS_CANCELLED
-        );
+        return $query->where('status_reservasi', self::STATUS_CANCELLED);
     }
 
-    public function scopeByDateRange(
-        Builder $query,
-        $start,
-        $end
-    ): Builder {
-        return $query->whereBetween(
-            'check_in',
-            [$start, $end]
-        );
+    public function scopeByDateRange(Builder $query, $start, $end): Builder
+    {
+        return $query->whereBetween('check_in', [$start, $end]);
     }
 }

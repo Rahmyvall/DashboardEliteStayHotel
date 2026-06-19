@@ -8,6 +8,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (Schema::hasTable('checkin_checkout')) {
+            return;
+        }
+
         Schema::create('checkin_checkout', function (Blueprint $table) {
             $table->id('id_check');
 
@@ -29,10 +33,10 @@ return new class extends Migration
             ])->default('pending');
 
             // Keuangan
-            $table->decimal('deposit', 12, 2)->default(0.00);
-            $table->decimal('biaya_tambahan', 12, 2)->default(0.00);
-            $table->decimal('denda_late_checkout', 12, 2)->default(0.00);
-            $table->decimal('total_bayar', 12, 2)->default(0.00);
+            $table->decimal('deposit', 12, 2)->default(0);
+            $table->decimal('biaya_tambahan', 12, 2)->default(0);
+            $table->decimal('denda_late_checkout', 12, 2)->default(0);
+            $table->decimal('total_bayar', 12, 2)->default(0);
 
             // Informasi Operasional
             $table->integer('jumlah_tamu_aktual')->nullable();
@@ -44,9 +48,20 @@ return new class extends Migration
             $table->text('catatan_checkout')->nullable();
 
             // Audit Trail
-            $table->foreignId('created_by')->nullable()->constrained('users');
-            $table->foreignId('checked_in_by')->nullable()->constrained('users');
-            $table->foreignId('checked_out_by')->nullable()->constrained('users');
+            $table->foreignId('created_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+            $table->foreignId('checked_in_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+            $table->foreignId('checked_out_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
 
             $table->timestamps();
             $table->softDeletes();
@@ -55,8 +70,8 @@ return new class extends Migration
             $table->foreign('id_reservasi')
                 ->references('id_reservasi')
                 ->on('reservasi')
-                ->onDelete('cascade')
-                ->onUpdate('cascade');
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
 
             // Index
             $table->index(['status', 'waktu_checkin']);

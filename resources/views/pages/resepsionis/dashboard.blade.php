@@ -492,11 +492,9 @@
 
                             <tbody>
 
-                                {{-- CEK DATA DULU BIAR TIDAK ERROR --}}
-                                @forelse($reviews as $review)
+                                @forelse($reviews ?? [] as $review)
 
                                 <tr>
-
                                     <!-- Customer -->
                                     <td>
                                         <div class="d-flex align-items-center gap-2">
@@ -514,9 +512,9 @@
                                     <!-- Rating -->
                                     <td>
                                         <span class="text-warning">
-                                            {{ str_repeat('⭐', $review->rating) }}
+                                            {{ str_repeat('⭐', $review->rating ?? 0) }}
                                         </span>
-                                        <small class="text-muted">({{ $review->rating }}/5)</small>
+                                        <small class="text-muted">({{ $review->rating ?? 0 }}/5)</small>
                                     </td>
 
                                     <!-- Comment -->
@@ -530,7 +528,6 @@
                                     <td class="text-end text-muted small">
                                         {{ optional($review->created_at)->format('Y-m-d') }}
                                     </td>
-
                                 </tr>
 
                                 @empty

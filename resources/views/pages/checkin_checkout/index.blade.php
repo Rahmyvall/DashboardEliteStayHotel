@@ -146,7 +146,6 @@
                     <thead class="table-light">
                         <tr>
                             <th>ID</th>
-                            <th>Tamu</th>
                             <th>Kamar</th>
                             <th>Check In</th>
                             <th>Check Out</th>
@@ -173,19 +172,6 @@
                             </td>
 
                             <td>
-                                <div class="fw-bold">
-                                    {{ $pelanggan?->nama_lengkap ?? '-' }}
-                                </div>
-
-                                <small class="text-muted">
-                                    {{ $reservasi?->kode_reservasi ?? '-' }}
-                                </small>
-                            </td>
-
-                            <td>
-                                <div class="fw-bold">
-                                    {{ $kamar?->nomor_kamar ?? '-' }}
-                                </div>
 
                                 <small class="text-muted">
                                     {{ $kamar?->tipeKamar?->nama_tipe ?? '-' }}
